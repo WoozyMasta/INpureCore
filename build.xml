@@ -1,0 +1,147 @@
+<!-- MAKE SURE TO RENAME THE PROJECT -->
+<project name="INpureCore" default="main">
+	<property environment="env"/>
+	<property name="src.dir" value="src/main/java"/>
+	<property name="api.dir" value="src/api/java"/>
+	<property name="utils.dir" value="utils"/>
+	<property name="deps.dir" value="deps"/>
+	<property name="download.dir" value="downloads"/>
+	<property name="build.dir" value="."/>
+	<property name="gradle.output.dir" value="${build.dir}/build/libs"/>
+	<property name="gradle.output" value="${gradle.output.dir}/modid-1.0.jar"/>
+	<property name="reobf.dir" value="${build.dir}/reobf"/>
+	<property name="bin.dir" value="${build.dir}/bin"/>
+	<property name="lib.dir" value="${build.dir}/lib"/>
+	
+	<target name="properties">
+		<available property="has.folders" type="dir" file="${download.dir}"/>
+		<available property="has.jarjar" file="${download.dir}/jarjar.jar"/>
+		<available property="has.h2" file="${lib.dir}/h2.jar"/>
+		<available property="has.forge" file="${build.dir}/build/unpacked/conf/packaged.srg"/>
+		<available property="has.commons" file="${lib.dir}/commons_io.jar"/>
+		<available property="has.rhino" file="${lib.dir}/js.jar"/>
+	</target>
+	
+	<target name="make.dirs" unless="has.folders" depends="properties">
+		<mkdir dir="${deps.dir}"/>
+		<mkdir dir="${api.dir}"/>
+		<mkdir dir="${download.dir}"/>
+		<mkdir dir="${reobf.dir}"/>
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${lib.dir}"/>
+	</target>
+	
+	<target name="get.jarjar" depends="make.dirs" unless="has.jarjar">
+		<get src="https://jarjar.googlecode.com/files/jarjar-1.4.jar" dest="${download.dir}/jarjar.jar"/>
+	</target>
+	
+	<target name="get.h2" depends="get.jarjar" unless="has.h2">
+		<get src="http://www.h2database.com/h2-2014-05-02.zip" dest="${download.dir}/h2.zip"/>
+		<unzip src="${download.dir}/h2.zip" dest="${download.dir}"/>
+		<copy file="${download.dir}/h2/bin/h2-1.4.178.jar" tofile="${lib.dir}/h2.jar"/>
+		<delete dir="${download.dir}/h2"/>
+	</target>
+	
+	<target name="get.commons" depends="get.h2" unless="has.commons">
+		<echo message="Getting IO..."/>
+		<get src="http://www.webhostingjams.com/mirror/apache//commons/io/binaries/commons-io-2.4-bin.zip" dest="${download.dir}/commons_io.zip"/>
+		<unzip src="${download.dir}/commons_io.zip" dest="${download.dir}"/>
+		<copy file="${download.dir}/commons-io-2.4/commons-io-2.4.jar" tofile="${lib.dir}/commons_io.jar"/>
+		<delete dir="${download.dir}/commons-io-2.4"/>
+		<echo message="Getting Codec..."/>
+		<get src="http://apache.mirror.quintex.com//commons/codec/binaries/commons-codec-1.9-bin.zip" dest="${download.dir}/commons_codec.zip"/>
+		<unzip src="${download.dir}/commons_codec.zip" dest="${download.dir}"/>
+		<copy file="${download.dir}/commons-codec-1.9/commons-codec-1.9.jar" tofile="${lib.dir}/commons_codec.jar"/>
+		<delete dir="${download.dir}/commons-codec-1.9"/>
+	</target>
+	
+	<target name="get.rhino" depends="get.commons" unless="has.rhino">
+		<echo message="Getting Rhino..."/>
+		<get src="https://cloud.github.com/downloads/mozilla/rhino/rhino1_7R4.zip" dest="${download.dir}/rhino.zip"/>
+		<unzip src="${download.dir}/rhino.zip" dest="${download.dir}"/>
+		<copy file="${download.dir}/rhino1_7R4/js.jar" tofile="${lib.dir}/js.jar"/>
+		<delete dir="${download.dir}/rhino1_7R4"/>
+	</target>
+	
+	<target name="setup.forge" depends="get.rhino" unless="has.forge">
+
+	</target>
+	
+	<target name="setup" depends="setup.forge">
+		<echo message="Setup: Complete."/>
+	</target>
+	
+	<target name="compile" depends="setup">
+
+	</target>
+	
+	<target name="reobf" depends="compile">
+
+	</target>
+	
+	<target name="jar" depends="reobf">
+		<mkdir dir="${build.dir}/src/main/resources/META-INF"/>
+		<manifest file="${build.dir}/src/main/resources/META-INF/MANIFEST.MF"/>
+		<delete includeEmptyDirs="true">
+			<fileset dir="${bin.dir}" includes="**/*" defaultexcludes="no"/>
+		</delete>
+		<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${download.dir}/jarjar.jar"/>
+		<jarjar jarfile="${bin.dir}/${ant.project.name}_polluted.jar" manifest="${build.dir}/src/main/resources/META-INF/MANIFEST.MF">
+			<fileset dir="${reobf.dir}"/>
+			<zipfileset src="${lib.dir}/h2.jar"/>
+			<zipfileset src="${lib.dir}/commons_io.jar"/>
+			<zipfileset src="${lib.dir}/commons_codec.jar"/>
+			<zipfileset src="${lib.dir}/js.jar"/>
+			<rule pattern="org.h2.**" result="info.inpureprojects.libs.h2.@1"/>
+			<rule pattern="org.apache.commons.io.**" result="info.inpureprojects.libs.apache.commons.io.@1"/>
+			<rule pattern="org.apache.commons.codec.**" result="info.inpureprojects.libs.apache.commons.codec.@1"/>
+			<rule pattern="org.mozilla.**" result="info.inpureprojects.libs.mozilla.@1"/>
+		</jarjar>
+		<mkdir dir="${reobf.dir}/explode"/>
+		<mkdir dir="${reobf.dir}/unpollute"/>
+		<unzip src="${bin.dir}/${ant.project.name}_polluted.jar" dest="${reobf.dir}/explode"/>
+		<copy includeemptydirs="false" todir="${reobf.dir}/unpollute">
+			<fileset dir="${reobf.dir}/explode"/>
+		</copy>
+		<jar destfile="${bin.dir}/${ant.project.name}_alldeps.jar" manifest="${build.dir}/src/main/resources/META-INF/MANIFEST.MF">
+			<fileset dir="${reobf.dir}/unpollute"/>
+		</jar>
+		<jar destfile="${bin.dir}/${ant.project.name}.jar" manifest="${build.dir}/src/main/resources/META-INF/MANIFEST.MF">
+			<fileset dir="${reobf.dir}">
+				<exclude name="**/explode/**"/>
+				<exclude name="**/unpollute/**"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="backup">
+		<delete file="./Backup.zip"/>
+		<zip basedir="." destfile="./Backup.zip"/>
+	</target>
+	
+	<target name="main" depends="jar">
+		<echo message="Build script execution complete."/>
+	</target>
+	
+	<target name="clean">
+
+		<delete dir="${deps.dir}"/>
+		<delete dir="${api.dir}"/>
+		<delete dir="${download.dir}"/>
+		<delete dir="${build.dir}/.gradle"/>
+		<delete dir="${build.dir}/build"/>
+		<delete dir="${build.dir}/eclipse"/>
+		<delete dir="${build.dir}/gradle"/>
+		<delete file="${build.dir}/gradlew"/>
+		<delete file="${build.dir}/gradlew.bat"/>
+		<delete dir="${reobf.dir}"/>
+		<delete dir="${bin.dir}"/>
+		<delete dir="${lib.dir}"/>
+		<delete>
+			<fileset dir="." includes="**/*.iml"/>
+			<fileset dir="." includes="**/*.ipr"/>
+			<fileset dir="." includes="**/*.iws"/>
+		</delete>
+	</target>
+
+</project>
