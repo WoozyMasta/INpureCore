@@ -1,6 +1,5 @@
 package info.inpureprojects.core;
 
-import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -23,19 +22,19 @@ public class INpureCore {
     public static ScriptingCore core;
 
     @Mod.EventHandler
-    public void preinit(FMLPreInitializationEvent evt){
+    public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent evt){
+    public void init(FMLInitializationEvent evt) {
         core = new ScriptingCore();
         core.bus.register(new INpureHandler());
         core.doSetup();
     }
 
     @Mod.EventHandler
-    public void postinit(FMLPostInitializationEvent evt){
+    public void postinit(FMLPostInitializationEvent evt) {
     }
 
 }

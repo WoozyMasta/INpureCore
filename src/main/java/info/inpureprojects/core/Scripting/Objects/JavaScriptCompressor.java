@@ -40,51 +40,32 @@ public class JavaScriptCompressor {
     private static final char CARRIAGE_RETURN = '\r';
     private static final char SPACE = ' ';
     private static final char TAB = '\t';
-
-    /**
-     * Compresses a String containing JavaScript by removing comments and
-     * whitespace.
-     *
-     * @param script the String to compress
-     * @return a compressed version
-     */
-    public static String compress(String script) {
-        JavaScriptCompressor jsc = new JavaScriptCompressor(script);
-        return jsc.outputBuffer.toString();
-    }
-
     /**
      * Original JavaScript text.
      */
     private String script;
-
     /**
      * Compressed output buffer.
      * This buffer may only be modified by invoking the <code>append()</code>
      * method.
      */
     private StringBuffer outputBuffer;
-
     /**
      * Current parser cursor position in original text.
      */
     private int pos;
-
     /**
      * Character at parser cursor position.
      */
     private char ch;
-
     /**
      * Last character appended to buffer.
      */
     private char lastAppend;
-
     /**
      * Flag indicating if end-of-buffer has been reached.
      */
     private boolean endReached;
-
     /**
      * Flag indicating whether content has been appended after last identifier.
      */
@@ -128,6 +109,18 @@ public class JavaScriptCompressor {
                 nextChar();
             }
         }
+    }
+
+    /**
+     * Compresses a String containing JavaScript by removing comments and
+     * whitespace.
+     *
+     * @param script the String to compress
+     * @return a compressed version
+     */
+    public static String compress(String script) {
+        JavaScriptCompressor jsc = new JavaScriptCompressor(script);
+        return jsc.outputBuffer.toString();
     }
 
     /**

@@ -19,7 +19,7 @@ public class INpureHandler {
     }
 
     @Subscribe
-    public void onExposure(EventExposeObjects evt){
+    public void onExposure(EventExposeObjects evt) {
         evt.getExposedObjects().addAll(objs);
     }
 

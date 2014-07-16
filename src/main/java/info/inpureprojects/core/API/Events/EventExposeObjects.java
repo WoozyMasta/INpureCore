@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by den on 7/16/2014.
  */
-public class EventExposeObjects extends INpureEvent{
+public class EventExposeObjects extends INpureEvent {
 
     private ArrayList<ExposedObject> exposedObjects;
 

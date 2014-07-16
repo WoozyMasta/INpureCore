@@ -1,6 +1,7 @@
 package info.inpureprojects.core.Scripting;
 
 import info.inpureprojects.core.Events.INpureHandler;
+import info.inpureprojects.core.Utils.Timer;
 import junit.framework.TestCase;
 
 import java.io.InputStream;
@@ -18,13 +19,14 @@ public class ScriptingCoreTest extends TestCase {
     }
 
     public void testImportStream() throws Exception {
-        InputStream s = this.getClass().getClassLoader().getResourceAsStream("scripts/javascript_test.js");
-        core.importStream(s, "scripts/javascript_test.js");
-        //
-        s = this.getClass().getClassLoader().getResourceAsStream("scripts/typescript_test.ts");
-        core.importStream(s, "scripts/typescript_test.ts");
-        //
-        s = this.getClass().getClassLoader().getResourceAsStream("scripts/lua_test.lua");
-        core.importStream(s, "scripts/lua_test.lua");
+        String[] args = new String[]{"scripts/javascript_test.js", "scripts/typescript_test.ts", "scripts/lua_test.lua", "scripts/typescript_test2.ts"};
+        Timer t = new Timer();
+        for (String s : args) {
+            t.start();
+            InputStream st = this.getClass().getClassLoader().getResourceAsStream(s);
+            core.importStream(st, s);
+            t.stop();
+            t.announce("Test: " + s);
+        }
     }
 }
