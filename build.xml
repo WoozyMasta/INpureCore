@@ -1,5 +1,5 @@
 <!-- MAKE SURE TO RENAME THE PROJECT -->
-<project name="INpureCore" default="main">
+<project name="DungeonsAndEnderdragons" default="main">
 	<property environment="env"/>
 	<property name="src.dir" value="src/main/java"/>
 	<property name="api.dir" value="src/api/java"/>
@@ -11,15 +11,12 @@
 	<property name="gradle.output" value="${gradle.output.dir}/modid-1.0.jar"/>
 	<property name="reobf.dir" value="${build.dir}/reobf"/>
 	<property name="bin.dir" value="${build.dir}/bin"/>
-	<property name="lib.dir" value="${build.dir}/lib"/>
+	<property name="lib.dir" value="${build.dir}/libs"/>
+	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.2-10.12.2.1121/forge-1.7.2-10.12.2.1121-src.zip"/>
 	
 	<target name="properties">
 		<available property="has.folders" type="dir" file="${download.dir}"/>
-		<available property="has.jarjar" file="${download.dir}/jarjar.jar"/>
-		<available property="has.h2" file="${lib.dir}/h2.jar"/>
-		<available property="has.forge" file="${build.dir}/build/unpacked/conf/packaged.srg"/>
-		<available property="has.commons" file="${lib.dir}/commons_io.jar"/>
-		<available property="has.rhino" file="${lib.dir}/js.jar"/>
+		<available property="has.forge" file="${download.dir}/forge.zip"/>
 	</target>
 	
 	<target name="make.dirs" unless="has.folders" depends="properties">
@@ -31,40 +28,30 @@
 		<mkdir dir="${lib.dir}"/>
 	</target>
 	
-	<target name="get.jarjar" depends="make.dirs" unless="has.jarjar">
-		<get src="https://jarjar.googlecode.com/files/jarjar-1.4.jar" dest="${download.dir}/jarjar.jar"/>
-	</target>
-	
-	<target name="get.h2" depends="get.jarjar" unless="has.h2">
-		<get src="http://www.h2database.com/h2-2014-05-02.zip" dest="${download.dir}/h2.zip"/>
-		<unzip src="${download.dir}/h2.zip" dest="${download.dir}"/>
-		<copy file="${download.dir}/h2/bin/h2-1.4.178.jar" tofile="${lib.dir}/h2.jar"/>
-		<delete dir="${download.dir}/h2"/>
-	</target>
-	
-	<target name="get.commons" depends="get.h2" unless="has.commons">
-		<echo message="Getting IO..."/>
-		<get src="http://www.webhostingjams.com/mirror/apache//commons/io/binaries/commons-io-2.4-bin.zip" dest="${download.dir}/commons_io.zip"/>
-		<unzip src="${download.dir}/commons_io.zip" dest="${download.dir}"/>
-		<copy file="${download.dir}/commons-io-2.4/commons-io-2.4.jar" tofile="${lib.dir}/commons_io.jar"/>
-		<delete dir="${download.dir}/commons-io-2.4"/>
-		<echo message="Getting Codec..."/>
-		<get src="http://apache.mirror.quintex.com//commons/codec/binaries/commons-codec-1.9-bin.zip" dest="${download.dir}/commons_codec.zip"/>
-		<unzip src="${download.dir}/commons_codec.zip" dest="${download.dir}"/>
-		<copy file="${download.dir}/commons-codec-1.9/commons-codec-1.9.jar" tofile="${lib.dir}/commons_codec.jar"/>
-		<delete dir="${download.dir}/commons-codec-1.9"/>
-	</target>
-	
-	<target name="get.rhino" depends="get.commons" unless="has.rhino">
-		<echo message="Getting Rhino..."/>
-		<get src="https://cloud.github.com/downloads/mozilla/rhino/rhino1_7R4.zip" dest="${download.dir}/rhino.zip"/>
-		<unzip src="${download.dir}/rhino.zip" dest="${download.dir}"/>
-		<copy file="${download.dir}/rhino1_7R4/js.jar" tofile="${lib.dir}/js.jar"/>
-		<delete dir="${download.dir}/rhino1_7R4"/>
-	</target>
-	
-	<target name="setup.forge" depends="get.rhino" unless="has.forge">
-
+	<target name="setup.forge" depends="make.dirs" unless="has.forge">
+		<echo message="Downloading ForgeGradle..."/>
+		<get dest="${download.dir}/forge.zip">
+			<url url="${forge.url}"/>
+		</get>
+		<echo message="Unzipping ForgeGradle..."/>
+		<unzip src="${download.dir}/forge.zip" dest="${build.dir}"/>
+		<echo message="Cleaning up ForgeGradle files..."/>
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="*.txt"/>
+			</fileset>
+		</delete>
+		<delete dir="${build.dir}/eclipse"/>
+		<delete dir="${build.dir}/src/main/java/com"/>
+		<delete file="${build.dir}/src/main/resources/mcmod.info"/>
+		<echo message="Running ForgeGradle Setup..."/>
+		<chmod dir="${build.dir}" perm="ugo+rx" includes="gradlew"/>
+		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c gradlew.bat setupDecompWorkspace setupDevWorkspace idea --refresh-dependencies"/>
+		</exec>
+		<exec dir="${build.dir}" executable="sh" osfamily="unix">
+			<arg line="gradlew setupDecompWorkspace setupDevWorkspace idea --refresh-dependencies"/>
+		</exec>
 	</target>
 	
 	<target name="setup" depends="setup.forge">
@@ -72,15 +59,12 @@
 	</target>
 	
 	<target name="compile" depends="setup">
-
-	</target>
-	
-	<target name="reobf" depends="compile">
-
-	</target>
-	
-	<target name="jar" depends="reobf">
-
+		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c gradlew.bat build"/>
+		</exec>
+		<exec dir="${build.dir}" executable="sh" osfamily="unix">
+			<arg line="gradlew build"/>
+		</exec>
 	</target>
 	
 	<target name="backup">
@@ -88,12 +72,17 @@
 		<zip basedir="." destfile="./Backup.zip"/>
 	</target>
 	
-	<target name="main" depends="jar">
+	<target name="main" depends="compile">
 		<echo message="Build script execution complete."/>
 	</target>
 	
 	<target name="clean">
-
+		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c gradlew.bat cleanCache"/>
+		</exec>
+		<exec dir="${build.dir}" executable="sh" osfamily="unix">
+			<arg line="gradlew cleanCache"/>
+		</exec>
 		<delete dir="${deps.dir}"/>
 		<delete dir="${api.dir}"/>
 		<delete dir="${download.dir}"/>
@@ -105,7 +94,6 @@
 		<delete file="${build.dir}/gradlew.bat"/>
 		<delete dir="${reobf.dir}"/>
 		<delete dir="${bin.dir}"/>
-		<delete dir="${lib.dir}"/>
 		<delete>
 			<fileset dir="." includes="**/*.iml"/>
 			<fileset dir="." includes="**/*.ipr"/>
