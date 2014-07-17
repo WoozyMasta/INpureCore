@@ -4,14 +4,15 @@ import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Utils.Timer;
 import junit.framework.TestCase;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class ScriptingCoreTest extends TestCase {
 
-    private ScriptingCore core = new ScriptingCore();
+    private static ScriptingCore core = new ScriptingCore();
 
-    public ScriptingCoreTest() {
-        core.bus.register(new INpureHandler());
+    static {
+        core.bus.register(new INpureHandler(new File(".")));
         core.doSetup();
     }
 
@@ -19,7 +20,7 @@ public class ScriptingCoreTest extends TestCase {
     }
 
     public void testImportStream() throws Exception {
-        String[] args = new String[]{"scripts/javascript_test.js", "scripts/typescript_test.ts", "scripts/lua_test.lua", "scripts/typescript_test2.ts"};
+        String[] args = new String[]{"scripts/javascript_test.js", "scripts/typescript_test.ts", "scripts/lua_test.lua"};
         Timer t = new Timer();
         for (String s : args) {
             t.start();

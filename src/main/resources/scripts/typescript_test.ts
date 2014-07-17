@@ -1,5 +1,4 @@
-// You need to define any global stuff injected from java.
-var out;
+/// <reference path="imports.d.ts"/>
 
 class Greeter {
     constructor(public greeting: string) { }

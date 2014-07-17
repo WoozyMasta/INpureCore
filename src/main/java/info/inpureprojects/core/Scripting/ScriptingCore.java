@@ -2,6 +2,7 @@ package info.inpureprojects.core.Scripting;
 
 import com.google.common.eventbus.EventBus;
 import info.inpureprojects.core.API.Events.EventExposeObjects;
+import info.inpureprojects.core.API.Events.EventSetScriptFolder;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
 
 import javax.script.ScriptEngine;
@@ -19,14 +20,31 @@ public class ScriptingCore {
     public EventBus bus = new EventBus();
     private HashMap<String, ScriptEngine> engines = new HashMap();
     private ArrayList<ExposedObject> exposedObjects = new ArrayList();
+    private File scriptFolder;
+
+    public ScriptingCore() {
+    }
 
     public void doSetup() {
         this.setupObjects();
         this.setupSupportedEngines();
+        this.setupLibraries();
+    }
+
+    private void setupLibraries() {
+        this.runInternalScript("scripts/extract_imports.js");
+    }
+
+    public void runInternalScript(String path) {
+        InputStream st = this.getClass().getClassLoader().getResourceAsStream(path);
+        this.importStream(st, path);
     }
 
     private void setupObjects() {
         bus.post(new EventExposeObjects(exposedObjects));
+        EventSetScriptFolder event = new EventSetScriptFolder();
+        bus.post(event);
+        this.scriptFolder = event.getFolder();
     }
 
     private void setupSupportedEngines() {
@@ -52,7 +70,7 @@ public class ScriptingCore {
     public void importStream(InputStream stream, String fileName) {
         for (EnumScripting s : EnumScripting.values()) {
             if (s.isCompatible(fileName)) {
-                String script = s.getHandler().Import(stream);
+                String script = s.getHandler().Import(stream, this.scriptFolder);
                 try {
                     engines.get(s.getEngine()).eval(script);
                 } catch (Throwable t) {
