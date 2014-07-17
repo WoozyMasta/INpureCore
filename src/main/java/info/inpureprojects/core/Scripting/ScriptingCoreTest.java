@@ -20,7 +20,7 @@ public class ScriptingCoreTest extends TestCase {
     }
 
     public void testImportStream() throws Exception {
-        String[] args = new String[]{"scripts/javascript_test.js", "scripts/typescript_test.ts", "scripts/lua_test.lua"};
+        String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua"};
         Timer t = new Timer();
         for (String s : args) {
             t.start();

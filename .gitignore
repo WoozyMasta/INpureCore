@@ -30,4 +30,4 @@ mods/
 *.gradle
 *.lck
 gradlew
-Scripts/
+Script_Cache/

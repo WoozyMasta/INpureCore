@@ -20,7 +20,7 @@ public class INpureHandler {
 
     public INpureHandler(File folder) {
 
-        this.folder = new File(folder, "Scripts");
+        this.folder = new File(folder, "Script_Cache");
         objs.add(new ExposedObject("out", new Console()));
         objs.add(new ExposedObject("io", new FileIO()));
         objs.add(new ExposedObject("scriptFolder", this.folder));
