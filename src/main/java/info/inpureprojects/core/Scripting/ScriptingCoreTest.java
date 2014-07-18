@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Scripting;
 
+import info.inpureprojects.core.Events.EventSave;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Utils.Timer;
 import junit.framework.TestCase;
@@ -16,11 +17,8 @@ public class ScriptingCoreTest extends TestCase {
         core.doSetup();
     }
 
-    public void testImportFile() throws Exception {
-    }
-
     public void testImportStream() throws Exception {
-        String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua"};
+        String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua", "scripts/tests/interface_test.ts"};
         Timer t = new Timer();
         for (String s : args) {
             t.start();
@@ -29,5 +27,9 @@ public class ScriptingCoreTest extends TestCase {
             t.stop();
             t.announce("Test: " + s);
         }
+        // interface test
+        EventSave s = new EventSave();
+        core.bus.post(s);
+        System.out.println(s.getMap().get("interfaceTest").get("something").toString());
     }
 }

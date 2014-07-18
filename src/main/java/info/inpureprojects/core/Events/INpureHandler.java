@@ -4,6 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import info.inpureprojects.core.API.Events.EventExposeObjects;
 import info.inpureprojects.core.API.Events.EventSetScriptFolder;
 import info.inpureprojects.core.Scripting.Objects.Exposed.Console;
+import info.inpureprojects.core.Scripting.Objects.Exposed.DataTypes;
+import info.inpureprojects.core.Scripting.Objects.Exposed.EventBus;
 import info.inpureprojects.core.Scripting.Objects.Exposed.FileIO;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
 
@@ -24,6 +26,8 @@ public class INpureHandler {
         objs.add(new ExposedObject("out", new Console()));
         objs.add(new ExposedObject("io", new FileIO()));
         objs.add(new ExposedObject("scriptFolder", this.folder));
+        objs.add(new ExposedObject("utils", new DataTypes()));
+        objs.add(new ExposedObject("bus", new EventBus()));
     }
 
     @Subscribe
