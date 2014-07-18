@@ -18,7 +18,8 @@ public class ScriptingCoreTest extends TestCase {
     }
 
     public void testImportStream() throws Exception {
-        String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua", "scripts/tests/interface_test.ts"};
+        String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua", "scripts/tests/interface_test.ts",
+                "scripts/tests/interface_test.lua"};
         Timer t = new Timer();
         for (String s : args) {
             t.start();
@@ -29,7 +30,10 @@ public class ScriptingCoreTest extends TestCase {
         }
         // interface test
         EventSave s = new EventSave();
+        System.out.println("Posting event!");
         core.bus.post(s);
+        System.out.println("Test complete.");
         System.out.println(s.getMap().get("interfaceTest").get("something").toString());
+        System.out.println(s.getMap().get("lua_interface_test").get("fromLua").toString());
     }
 }

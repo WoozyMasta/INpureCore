@@ -10,13 +10,8 @@ declare var utils;
 declare var bus;
 declare var scriptingCore;
 
-declare class EventSave{
-    save(tag : string, map : any) : void;
-}
-
-// Remember that the strict typing goes out the window once we get passed the compiler.
 interface IEvents{
-    onSave(evt : EventSave) : void;
+    onSave(evt : any) : void;
 }
 
 declare function registerEventHandler(handler : any);

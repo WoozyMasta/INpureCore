@@ -47,6 +47,7 @@ public class ScriptingCore {
     private void setupLibraries() {
         this.runInternalScript("scripts/extract_imports.js");
         this.runInternalScript("scripts/globals.js");
+        this.runInternalScript("scripts/globals.lua");
     }
 
     public void runInternalScript(String path) {

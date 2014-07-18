@@ -20,7 +20,7 @@ public class FileIO {
             out.close();
             i.close();
             if (f.exists()) {
-                System.out.println("File extraction was successful!");
+                System.out.println("File extraction: " + path  + " was successful!");
             }
         } catch (Throwable t) {
             t.printStackTrace();

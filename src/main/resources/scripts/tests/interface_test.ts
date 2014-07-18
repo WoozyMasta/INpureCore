@@ -2,7 +2,7 @@
 
 class interface_test implements IEvents{
 
-    onSave(evt : EventSave){
+    onSave(evt : any){
         out.print("save!");
         var saveData = utils.newMap();
         saveData.put("something", "hi");
