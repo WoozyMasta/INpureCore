@@ -30,7 +30,7 @@ public class INpureCore {
         instance = this;
         configFolder = new File(evt.getModConfigurationDirectory(), "INpureCore");
         core = new ScriptingCore();
-        core.bus.register(new INpureHandler(configFolder));
+        proxy.registerOnAllBuses(new INpureHandler(configFolder));
         proxy.registerOnAllBuses(new MinecraftHandler());
         core.doSetup();
         proxy.extractCore();

@@ -92,13 +92,15 @@ public enum EnumScripting {
                         System.out.println("Warning: The typescript compiler can take a while to process each file.");
                         typescript_warning = true;
                     }
+                    System.out.println("Compiling...");
                     t.compile(in, scriptPath, out);
                     FileInputStream s = new FileInputStream(out);
                     conv = IOUtils.toString(s);
                     s.close();
                     compressed = JavaScriptCompressor.compress(conv);
+                    System.out.println("Compiled to cache as " + out.getName());
                 } else {
-                    System.out.println("Found cached script. Skipping compile.");
+                    //System.out.println("Found cached script. Skipping compile.");
                     FileInputStream s = new FileInputStream(out);
                     conv = IOUtils.toString(s);
                     s.close();
