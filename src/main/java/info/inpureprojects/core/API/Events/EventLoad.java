@@ -1,6 +1,4 @@
-package info.inpureprojects.core.Events;
-
-import info.inpureprojects.core.API.Events.INpureEvent;
+package info.inpureprojects.core.API.Events;
 
 import java.util.HashMap;
 

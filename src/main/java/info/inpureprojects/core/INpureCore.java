@@ -38,6 +38,8 @@ public class INpureCore {
         core = new ScriptingCore();
         core.bus.register(new INpureHandler(configFolder));
         core.doSetup();
+        // Put script init here. TODO
+        core.doLoad();
     }
 
     @Mod.EventHandler

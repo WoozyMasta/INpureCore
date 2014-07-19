@@ -1,8 +1,7 @@
 package info.inpureprojects.core.Scripting;
 
 import com.google.common.eventbus.EventBus;
-import info.inpureprojects.core.API.Events.EventExposeObjects;
-import info.inpureprojects.core.API.Events.EventSetScriptFolder;
+import info.inpureprojects.core.API.Events.*;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
 
 import javax.script.Invocable;
@@ -22,6 +21,7 @@ public class ScriptingCore {
     private HashMap<String, ScriptEngine> engines = new HashMap();
     private ArrayList<ExposedObject> exposedObjects = new ArrayList();
     private File scriptFolder;
+    private File saveFolder;
 
     public ScriptingCore() {
     }
@@ -34,6 +34,20 @@ public class ScriptingCore {
         this.setupObjects();
         this.setupSupportedEngines();
         this.setupLibraries();
+    }
+
+    public void doSave() {
+        EventSave s = new EventSave();
+        bus.post(s);
+        EventSaveComplete s2 = new EventSaveComplete(s.getMap());
+        bus.post(s2);
+    }
+
+    public void doLoad() {
+        EventStartLoad s = new EventStartLoad();
+        bus.post(s);
+        EventLoad s2 = new EventLoad(s.getMap());
+        bus.post(s2);
     }
 
     public Object getVariable_debug(String engine, String var) {
@@ -58,9 +72,14 @@ public class ScriptingCore {
     private void setupObjects() {
         exposedObjects.add(new ExposedObject("scriptingCore", this));
         bus.post(new EventExposeObjects(exposedObjects));
+        //---------------
         EventSetScriptFolder event = new EventSetScriptFolder();
         bus.post(event);
         this.scriptFolder = event.getFolder();
+        //----------------
+        EventSetSaveFolder event2 = new EventSetSaveFolder();
+        bus.post(event2);
+        this.saveFolder = event2.getFolder();
     }
 
     private void setupSupportedEngines() {

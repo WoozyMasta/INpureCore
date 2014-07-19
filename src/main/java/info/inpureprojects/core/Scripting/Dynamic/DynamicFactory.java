@@ -20,7 +20,6 @@ public class DynamicFactory {
 
     public IEvents create(ScriptingCore core, String engine, Object obj) {
         try {
-            System.out.println(obj.getClass().getName());
             DynamicHandler h = new DynamicHandler(core, engine, obj);
             IEvents wrapped = (IEvents) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{IEvents.class}, h);
             return wrapped;
@@ -73,7 +72,7 @@ public class DynamicFactory {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (core.getEngine(engine) instanceof Invocable) {
-                Invocable invoc = (Invocable) core.getEngine(engine);
+                Invocable invoc = core.getInvocable(engine);
                 invoc.invokeMethod(this.scriptClass, method.getName(), args);
             } else {
                 // The lua engine does not implement Invocable.

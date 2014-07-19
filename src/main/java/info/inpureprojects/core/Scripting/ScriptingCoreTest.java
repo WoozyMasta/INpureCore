@@ -1,7 +1,5 @@
 package info.inpureprojects.core.Scripting;
 
-import info.inpureprojects.core.Events.EventLoad;
-import info.inpureprojects.core.Events.EventSave;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Utils.Timer;
 import junit.framework.TestCase;
@@ -31,11 +29,8 @@ public class ScriptingCoreTest extends TestCase {
             t.announce("Test: " + s);
         }
         // Save test
-        EventSave s = new EventSave();
-        System.out.println("Posting events!");
-        core.bus.post(s);
+        core.doSave();
         // Load test
-        EventLoad l = new EventLoad(s.getMap());
-        core.bus.post(l);
+        core.doLoad();
     }
 }

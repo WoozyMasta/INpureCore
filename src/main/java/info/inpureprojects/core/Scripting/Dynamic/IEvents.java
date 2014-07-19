@@ -1,8 +1,8 @@
 package info.inpureprojects.core.Scripting.Dynamic;
 
 import com.google.common.eventbus.Subscribe;
-import info.inpureprojects.core.Events.EventLoad;
-import info.inpureprojects.core.Events.EventSave;
+import info.inpureprojects.core.API.Events.EventLoad;
+import info.inpureprojects.core.API.Events.EventSave;
 
 /**
  * Created by den on 7/18/2014.

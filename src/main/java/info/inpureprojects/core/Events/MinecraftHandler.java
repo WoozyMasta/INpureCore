@@ -12,5 +12,4 @@ public class MinecraftHandler {
     public void onBlockBreak(BlockEvent.BreakEvent evt) {
 
     }
-
 }
