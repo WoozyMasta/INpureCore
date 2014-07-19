@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Scripting;
 
+import info.inpureprojects.core.Events.EventLoad;
 import info.inpureprojects.core.Events.EventSave;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Utils.Timer;
@@ -21,6 +22,7 @@ public class ScriptingCoreTest extends TestCase {
         String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua", "scripts/tests/interface_test.ts",
                 "scripts/tests/interface_test.lua"};
         Timer t = new Timer();
+        // Script init test
         for (String s : args) {
             t.start();
             InputStream st = this.getClass().getClassLoader().getResourceAsStream(s);
@@ -28,12 +30,12 @@ public class ScriptingCoreTest extends TestCase {
             t.stop();
             t.announce("Test: " + s);
         }
-        // interface test
+        // Save test
         EventSave s = new EventSave();
-        System.out.println("Posting event!");
+        System.out.println("Posting events!");
         core.bus.post(s);
-        System.out.println("Test complete.");
-        System.out.println(s.getMap().get("interfaceTest").get("something").toString());
-        System.out.println(s.getMap().get("lua_interface_test").get("fromLua").toString());
+        // Load test
+        EventLoad l = new EventLoad(s.getMap());
+        core.bus.post(l);
     }
 }

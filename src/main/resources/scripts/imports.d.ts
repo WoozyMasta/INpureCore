@@ -12,6 +12,7 @@ declare var scriptingCore;
 
 interface IEvents{
     onSave(evt : any) : void;
+    onLoad(evt : any) : void;
 }
 
 declare function registerEventHandler(handler : any);

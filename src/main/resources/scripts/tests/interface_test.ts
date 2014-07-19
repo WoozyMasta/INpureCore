@@ -9,6 +9,13 @@ class interface_test implements IEvents{
         evt.save("interfaceTest", saveData);
     }
 
+    onLoad(evt : any){
+        out.print("load!");
+        var saveData = evt.load("interfaceTest");
+        var s = saveData.get("something");
+        out.print(s);
+    }
+
 }
 
 registerEventHandler(new interface_test());

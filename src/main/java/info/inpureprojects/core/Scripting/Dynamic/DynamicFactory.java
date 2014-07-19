@@ -30,46 +30,7 @@ public class DynamicFactory {
         return null;
     }
 
-    public static class DynamicHandler implements InvocationHandler {
-
-        private ScriptingCore core;
-        private String engine;
-        private Object scriptClass;
-
-        public DynamicHandler(ScriptingCore core, String engine, Object scriptClass) {
-            this.core = core;
-            this.engine = engine;
-            this.scriptClass = scriptClass;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (core.getEngine(engine) instanceof Invocable){
-                Invocable invoc = (Invocable) core.getEngine(engine);
-                invoc.invokeMethod(this.scriptClass, method.getName(), args);
-            }else{
-                // The lua engine does not implement Invocable.
-                // I've made this extendable via an enum in case of supporting more languages later.
-                for (specialHandlers h : specialHandlers.values()){
-                    if (h.getHandler().isObjectCompatible(this.scriptClass)){
-                        h.getHandler().handle(this.scriptClass, method.getName(), args[0]);
-                        break;
-                    }
-                }
-            }
-            return null;
-        }
-    }
-
-    public static abstract class specialHandler{
-
-        public abstract void handle(Object o, String target, Object arg);
-
-        public abstract boolean isObjectCompatible(Object o);
-
-    }
-
-    public static enum specialHandlers{
+    public static enum specialHandlers {
 
         LuaTable(new specialHandler() {
             @Override
@@ -95,6 +56,50 @@ public class DynamicFactory {
         public specialHandler getHandler() {
             return handler;
         }
+    }
+
+    public static class DynamicHandler implements InvocationHandler {
+
+        private ScriptingCore core;
+        private String engine;
+        private Object scriptClass;
+
+        public DynamicHandler(ScriptingCore core, String engine, Object scriptClass) {
+            this.core = core;
+            this.engine = engine;
+            this.scriptClass = scriptClass;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (core.getEngine(engine) instanceof Invocable) {
+                Invocable invoc = (Invocable) core.getEngine(engine);
+                invoc.invokeMethod(this.scriptClass, method.getName(), args);
+            } else {
+                // The lua engine does not implement Invocable.
+                // I've made this extendable via an enum in case of supporting more languages later.
+                for (specialHandlers h : specialHandlers.values()) {
+                    if (h.getHandler().isObjectCompatible(this.scriptClass)) {
+                        try {
+                            h.getHandler().handle(this.scriptClass, method.getName(), args[0]);
+                        } catch (Throwable t) {
+                            // This should only throw in theory when the specified function is not found. This is ok just ignore it.
+                            //t.printStackTrace();
+                        }
+                        break;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    public static abstract class specialHandler {
+
+        public abstract void handle(Object o, String target, Object arg);
+
+        public abstract boolean isObjectCompatible(Object o);
+
     }
 
 
