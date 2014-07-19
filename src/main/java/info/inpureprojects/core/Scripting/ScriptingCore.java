@@ -75,6 +75,13 @@ public class ScriptingCore {
         this.importStream(st, path);
     }
 
+    public void manuallyExposeObjectToAll(ExposedObject o) {
+        this.exposedObjects.add(o);
+        for (ScriptEngine e : this.engines.values()) {
+            e.put(o.getIdentifier(), o.getObj());
+        }
+    }
+
     private void setupObjects() {
         exposedObjects.add(new ExposedObject("scriptingCore", this));
         bus.post(new EventExposeObjects(exposedObjects));

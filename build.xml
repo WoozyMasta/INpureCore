@@ -12,7 +12,7 @@
 	<property name="reobf.dir" value="${build.dir}/reobf"/>
 	<property name="bin.dir" value="${build.dir}/bin"/>
 	<property name="lib.dir" value="${build.dir}/libs"/>
-	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.2-10.12.2.1121/forge-1.7.2-10.12.2.1121-src.zip"/>
+	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.2-10.12.2.1147/forge-1.7.2-10.12.2.1147-src.zip"/>
 	
 	<target name="properties">
 		<available property="has.folders" type="dir" file="${download.dir}"/>

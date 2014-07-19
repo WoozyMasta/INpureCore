@@ -37,7 +37,7 @@ public class TocManager {
     }
 
     private String clean(String s) {
-        return s.split(":")[1].trim();
+        return s.split(":")[1].trim().replaceAll("\\s", "").toLowerCase();
     }
 
     private TableofContents parse(List<String> lines) {

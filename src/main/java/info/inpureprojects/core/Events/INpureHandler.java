@@ -100,6 +100,7 @@ public class INpureHandler {
                     for (String s : c.getScripts()) {
                         System.out.println("Loading: " + s);
                         File file = new File(f.getParent() + "/" + s);
+                        evt.getCore().manuallyExposeObjectToAll(new ExposedObject(c.getTitle() + "_workspace", new File(f.getParent())));
                         evt.getCore().importFile(file);
                     }
                 }

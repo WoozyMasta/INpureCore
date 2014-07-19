@@ -18,11 +18,10 @@ public class DynamicFactory {
 
     public static final DynamicFactory instance = new DynamicFactory();
 
-    public IEvents create(ScriptingCore core, String engine, Object obj) {
+    public Object create(ScriptingCore core, String engine, Object obj, Class Interface) {
         try {
             DynamicHandler h = new DynamicHandler(core, engine, obj);
-            IEvents wrapped = (IEvents) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{IEvents.class}, h);
-            return wrapped;
+            return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{Interface}, h);
         } catch (Throwable t) {
             t.printStackTrace();
         }
