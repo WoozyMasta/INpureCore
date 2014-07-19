@@ -17,6 +17,9 @@ public class ScriptingCoreTest extends TestCase {
     }
 
     public void testImportStream() throws Exception {
+        System.out.println("---------------------------------------");
+        System.out.println("Starting script core unit test...");
+        System.out.println("---------------------------------------");
         String[] args = new String[]{"scripts/tests/javascript_test.js", "scripts/tests/typescript_test.ts", "scripts/tests/lua_test.lua", "scripts/tests/interface_test.ts",
                 "scripts/tests/interface_test.lua"};
         Timer t = new Timer();
@@ -38,8 +41,7 @@ public class ScriptingCoreTest extends TestCase {
         System.out.println("---------------------------------------");
         System.out.println("Starting table of contents unit test...");
         System.out.println("---------------------------------------");
-        core.runInternalScript("scripts/tests/setup_toc_test.js");
+        core.runInternalScript("scripts/tests/toc_test/setup_toc_test.js");
         core.loadScripts();
-        System.out.println("---------------------------------------");
     }
 }
