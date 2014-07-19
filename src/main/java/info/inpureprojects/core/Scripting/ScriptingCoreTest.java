@@ -12,7 +12,7 @@ public class ScriptingCoreTest extends TestCase {
     private static ScriptingCore core = new ScriptingCore();
 
     static {
-        core.bus.register(new INpureHandler(new File(".")));
+        core.bus.register(new INpureHandler(new File(System.getProperty("user.dir"))));
         core.doSetup();
     }
 
@@ -32,5 +32,14 @@ public class ScriptingCoreTest extends TestCase {
         core.doSave();
         // Load test
         core.doLoad();
+    }
+
+    public void testLoadTocs() throws Exception {
+        System.out.println("---------------------------------------");
+        System.out.println("Starting table of contents unit test...");
+        System.out.println("---------------------------------------");
+        core.runInternalScript("scripts/tests/setup_toc_test.js");
+        core.loadScripts();
+        System.out.println("---------------------------------------");
     }
 }

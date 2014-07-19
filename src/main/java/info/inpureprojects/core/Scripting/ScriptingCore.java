@@ -21,6 +21,7 @@ public class ScriptingCore {
     private HashMap<String, ScriptEngine> engines = new HashMap();
     private ArrayList<ExposedObject> exposedObjects = new ArrayList();
     private File scriptFolder;
+    private File scriptCache;
     private File saveFolder;
 
     public ScriptingCore() {
@@ -34,6 +35,11 @@ public class ScriptingCore {
         this.setupObjects();
         this.setupSupportedEngines();
         this.setupLibraries();
+    }
+
+    public void loadScripts() {
+        EventLoadScripts s = new EventLoadScripts(this);
+        bus.post(s);
     }
 
     public void doSave() {
@@ -76,10 +82,12 @@ public class ScriptingCore {
         EventSetScriptFolder event = new EventSetScriptFolder();
         bus.post(event);
         this.scriptFolder = event.getFolder();
+        this.scriptCache = new File(this.scriptFolder, "cache");
+        this.scriptCache.mkdirs();
+        exposedObjects.add(new ExposedObject("cache", this.scriptCache));
         //----------------
         EventSetSaveFolder event2 = new EventSetSaveFolder();
         bus.post(event2);
-        this.saveFolder = event2.getFolder();
     }
 
     private void setupSupportedEngines() {
@@ -106,7 +114,7 @@ public class ScriptingCore {
     public void importStream(InputStream stream, String fileName) {
         for (EnumScripting s : EnumScripting.values()) {
             if (s.isCompatible(fileName)) {
-                String script = s.getHandler().Import(stream, this.scriptFolder);
+                String script = s.getHandler().Import(stream, this.scriptCache);
                 try {
                     engines.get(s.getEngine()).eval(script);
                 } catch (Throwable t) {

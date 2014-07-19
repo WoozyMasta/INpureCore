@@ -9,6 +9,9 @@ import info.inpureprojects.core.Scripting.Objects.Exposed.DataTypes;
 import info.inpureprojects.core.Scripting.Objects.Exposed.EventBus;
 import info.inpureprojects.core.Scripting.Objects.Exposed.FileIO;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
+import info.inpureprojects.core.Scripting.Toc.TocManager;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -27,12 +30,12 @@ public class INpureHandler {
     private Gson json = new GsonBuilder().setPrettyPrinting().create();
 
     public INpureHandler(File scriptFolder) {
-        this.scriptFolder = new File(scriptFolder, "Script_Cache");
-        this.saveFolder = new File(scriptFolder, "Script_Saves");
+        this.scriptFolder = new File(scriptFolder, "Scripts");
+        this.saveFolder = new File(this.scriptFolder, "Saves");
         objs.add(new ExposedObject("out", new Console()));
         objs.add(new ExposedObject("io", new FileIO()));
         objs.add(new ExposedObject("scriptFolder", this.scriptFolder));
-        objs.add(new ExposedObject("saveFolder", this.scriptFolder));
+        objs.add(new ExposedObject("saveFolder", this.saveFolder));
         objs.add(new ExposedObject("utils", new DataTypes()));
         objs.add(new ExposedObject("bus", new EventBus()));
     }
@@ -81,6 +84,23 @@ public class INpureHandler {
                         r.close();
                     } catch (Throwable t) {
                         t.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    @Subscribe
+    public void loadScripts(EventLoadScripts evt) {
+        for (File f : FileUtils.listFiles(this.scriptFolder, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
+            if (!f.isDirectory()) {
+                if (f.getName().contains(".toc")) {
+                    TocManager.TableofContents c = TocManager.instance.read(f);
+                    System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
+                    for (String s : c.getScripts()) {
+                        System.out.println("Loading: " + s);
+                        File file = new File(f.getParent() + "/" + s);
+                        evt.getCore().importFile(file);
                     }
                 }
             }

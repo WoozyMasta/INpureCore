@@ -1,4 +1,4 @@
-package.path = scriptFolder:getAbsolutePath() .. '/?.lua;' .. package.path
+package.path = cache:getAbsolutePath() .. '/?.lua;' .. package.path
 
 class = require 'middleclass'
 

@@ -27,4 +27,9 @@ public class FileIO {
         }
     }
 
+    public void mkdir(String path) {
+        File f = new File(path);
+        f.mkdirs();
+    }
+
 }
