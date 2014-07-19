@@ -3,6 +3,8 @@
 
 // lang holds what scripting language is being used.
 declare var lang : string;
+declare var scriptFolder;
+declare var saveFolder;
 
 declare var out;
 declare var io;

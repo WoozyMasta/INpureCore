@@ -28,8 +28,8 @@ public class INpureCore {
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
-        proxy.downloadLibs();
         configFolder = new File(evt.getModConfigurationDirectory(), "INpureCore");
+        proxy.downloadLibs();
         core = new ScriptingCore();
         proxy.registerOnAllBuses(new INpureHandler(configFolder));
         proxy.registerOnAllBuses(new MinecraftHandler());
