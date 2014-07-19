@@ -1,5 +1,7 @@
 package info.inpureprojects.core.Proxy;
 
+import java.io.File;
+
 /**
  * Created by den on 7/16/2014.
  */
@@ -14,5 +16,9 @@ public abstract class Proxy {
     public abstract void registerOnAllBuses(Object o);
 
     public abstract void extractCore();
+
+    public abstract void loadJar(File file);
+
+    public abstract void downloadLibs();
 
 }

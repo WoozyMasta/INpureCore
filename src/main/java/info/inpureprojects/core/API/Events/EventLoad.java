@@ -14,7 +14,11 @@ public class EventLoad extends INpureEvent {
     }
 
     public HashMap load(String tag) {
-        return map.get(tag);
+        if (map.containsKey(tag)){
+            return map.get(tag);
+        }else{
+            return new HashMap();
+        }
     }
 
 }

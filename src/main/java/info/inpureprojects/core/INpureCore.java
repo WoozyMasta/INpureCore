@@ -28,6 +28,7 @@ public class INpureCore {
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
+        proxy.downloadLibs();
         configFolder = new File(evt.getModConfigurationDirectory(), "INpureCore");
         core = new ScriptingCore();
         proxy.registerOnAllBuses(new INpureHandler(configFolder));
@@ -47,6 +48,7 @@ public class INpureCore {
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent evt) {
         core.bus.post(evt);
+        core.doSave();
     }
 
 }

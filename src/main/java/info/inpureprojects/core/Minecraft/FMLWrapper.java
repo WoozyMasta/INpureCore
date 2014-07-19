@@ -19,6 +19,10 @@ import java.util.List;
  */
 public class FMLWrapper {
 
+    public void loadJar(String path){
+        INpureCore.proxy.loadJar(new File(path));
+    }
+
     public void registerModLoadEvents(ScriptingCore core, String engine, Object o) {
         core.bus.register(DynamicFactory.instance.create(core, engine, o, IFML.class));
     }

@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Scripting.Objects.Exposed;
 
+import info.inpureprojects.core.Utils.Downloader;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -28,16 +29,7 @@ public class FileIO {
     }
 
     public void downloadFile(String url, String fileName){
-        try{
-            URL download = new URL(url);
-            File f = new File(fileName);
-            if (!f.exists()){
-                System.out.println("Downloading: " + url);
-                FileUtils.copyURLToFile(download, f);
-            }
-        }catch(Throwable t){
-            t.printStackTrace();
-        }
+        Downloader.instance.download(url, fileName);
     }
 
     public void extractFileFromJar(String path, String fileName) {
