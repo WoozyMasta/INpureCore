@@ -10,6 +10,7 @@ import javax.script.ScriptEngineManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Date;
 
 /**
  * Created by den on 7/16/2014.
@@ -94,18 +95,13 @@ public enum EnumScripting {
                     }
                     System.out.println("Compiling...");
                     t.compile(in, scriptPath, out);
-                    FileInputStream s = new FileInputStream(out);
-                    conv = IOUtils.toString(s);
-                    s.close();
-                    compressed = JavaScriptCompressor.compress(conv);
                     System.out.println("Compiled to cache as " + out.getName());
-                } else {
-                    //System.out.println("Found cached script. Skipping compile.");
-                    FileInputStream s = new FileInputStream(out);
-                    conv = IOUtils.toString(s);
-                    s.close();
-                    compressed = JavaScriptCompressor.compress(conv);
                 }
+                out.setLastModified(new Date().getTime());
+                FileInputStream s = new FileInputStream(out);
+                conv = IOUtils.toString(s);
+                s.close();
+                compressed = JavaScriptCompressor.compress(conv);
                 return compressed;
             } catch (Throwable t) {
                 t.printStackTrace();

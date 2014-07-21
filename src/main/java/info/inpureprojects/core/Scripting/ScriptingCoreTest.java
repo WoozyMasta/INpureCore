@@ -43,5 +43,7 @@ public class ScriptingCoreTest extends TestCase {
         System.out.println("---------------------------------------");
         core.runInternalScript("scripts/tests/toc_test/setup_toc_test.js");
         core.loadScripts();
+        // Reload test
+        core.doReload();
     }
 }

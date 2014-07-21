@@ -3,7 +3,6 @@ package info.inpureprojects.core.Minecraft;
 import com.google.common.eventbus.Subscribe;
 import info.inpureprojects.core.API.Events.EventExposeObjects;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
-import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.ArrayList;
 
@@ -16,11 +15,6 @@ public class MinecraftHandler {
 
     public MinecraftHandler() {
         objs.add(new ExposedObject("fml", new FMLWrapper()));
-    }
-
-    @Subscribe
-    public void onBlockBreak(BlockEvent.BreakEvent evt) {
-
     }
 
     @Subscribe

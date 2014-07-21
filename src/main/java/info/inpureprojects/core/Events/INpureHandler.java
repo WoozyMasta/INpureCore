@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -48,6 +49,7 @@ public class INpureHandler {
     @Subscribe
     public void setScriptFolder(EventSetScriptFolder evt) {
         scriptFolder.mkdirs();
+        //System.out.println("Setting script basedir to: " + scriptFolder.getAbsolutePath());
         evt.setFolder(scriptFolder);
     }
 
@@ -107,4 +109,5 @@ public class INpureHandler {
             }
         }
     }
+
 }

@@ -2,33 +2,37 @@ package info.inpureprojects.core.Scripting.Objects.Exposed;
 
 import info.inpureprojects.core.Utils.Downloader;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by den on 7/16/2014.
  */
 public class FileIO {
 
-    public String getHash(String fileName){
+    public String getHash(String fileName) {
         File f = new File(fileName);
-        try{
+        try {
             InputStream i = new FileInputStream(f);
             String hash = DigestUtils.sha1Hex(i);
             return hash;
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         return null;
     }
 
-    public void downloadFile(String url, String fileName){
+    public void refreshDate(String file){
+        File f = new File(file);
+        f.setLastModified(new Date().getTime());
+    }
+
+    public void downloadFile(String url, String fileName) {
         Downloader.instance.download(url, fileName);
     }
 

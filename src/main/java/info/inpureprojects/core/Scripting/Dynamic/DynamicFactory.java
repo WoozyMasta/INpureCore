@@ -70,23 +70,24 @@ public class DynamicFactory {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (core.getEngine(engine) instanceof Invocable) {
-                Invocable invoc = core.getInvocable(engine);
-                invoc.invokeMethod(this.scriptClass, method.getName(), args);
-            } else {
-                // The lua engine does not implement Invocable.
-                // I've made this extendable via an enum in case of supporting more languages later.
-                for (specialHandlers h : specialHandlers.values()) {
-                    if (h.getHandler().isObjectCompatible(this.scriptClass)) {
-                        try {
+            try {
+                if (core.getEngine(engine) instanceof Invocable) {
+                    if (core.getEngine(engine).get(method.getName()) != null){
+                        Invocable invoc = core.getInvocable(engine);
+                        invoc.invokeMethod(this.scriptClass, method.getName(), args);
+                    }
+                } else {
+                    // The lua engine does not implement Invocable.
+                    // I've made this extendable via an enum in case of supporting more languages later.
+                    for (specialHandlers h : specialHandlers.values()) {
+                        if (h.getHandler().isObjectCompatible(this.scriptClass)) {
                             h.getHandler().handle(this.scriptClass, method.getName(), args[0]);
-                        } catch (Throwable t) {
-                            // This should only throw in theory when the specified function is not found. This is ok just ignore it.
-                            //t.printStackTrace();
+                            break;
                         }
-                        break;
                     }
                 }
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
             return null;
         }

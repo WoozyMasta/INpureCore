@@ -6,9 +6,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import info.inpureprojects.core.Events.INpureHandler;
+import info.inpureprojects.core.Minecraft.ForgeHandler;
 import info.inpureprojects.core.Minecraft.MinecraftHandler;
 import info.inpureprojects.core.Proxy.Proxy;
 import info.inpureprojects.core.Scripting.ScriptingCore;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.File;
 
@@ -31,23 +33,25 @@ public class INpureCore {
         configFolder = new File(evt.getModConfigurationDirectory(), "INpureCore");
         proxy.downloadLibs();
         core = new ScriptingCore();
-        proxy.registerOnAllBuses(new INpureHandler(configFolder));
-        proxy.registerOnAllBuses(new MinecraftHandler());
+        core.bus.register(new INpureHandler(configFolder));
+        core.bus.register(new MinecraftHandler());
+        ForgeHandler h = new ForgeHandler();
+        MinecraftForge.EVENT_BUS.register(h);
         core.doSetup();
         proxy.extractCore();
         core.loadScripts();
         core.doLoad();
-        core.bus.post(evt);
+        core.forwardingBus.post(evt);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
-        core.bus.post(evt);
+        core.forwardingBus.post(evt);
     }
 
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent evt) {
-        core.bus.post(evt);
+        core.forwardingBus.post(evt);
         core.doSave();
     }
 

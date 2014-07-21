@@ -4,6 +4,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Scripting.Dynamic.DynamicFactory;
 import info.inpureprojects.core.Scripting.Dynamic.IFML;
+import info.inpureprojects.core.Scripting.Dynamic.IMinecraft;
 import info.inpureprojects.core.Scripting.ScriptingCore;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -19,12 +20,18 @@ import java.util.List;
  */
 public class FMLWrapper {
 
-    public void loadJar(String path){
+    public void loadJar(String path) {
         INpureCore.proxy.loadJar(new File(path));
     }
 
     public void registerModLoadEvents(ScriptingCore core, String engine, Object o) {
-        core.bus.register(DynamicFactory.instance.create(core, engine, o, IFML.class));
+        Object proxy = DynamicFactory.instance.create(core, engine, o, IFML.class);
+        core.forwardingBus.register(proxy);
+    }
+
+    public void registerMinecraftEvents(ScriptingCore core, String engine, Object o) {
+        Object proxy = DynamicFactory.instance.create(core, engine, o, IMinecraft.class);
+        core.forwardingBus.register(proxy);
     }
 
     public void registerLangFileInternal(String path) {

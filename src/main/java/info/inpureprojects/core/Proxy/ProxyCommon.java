@@ -6,7 +6,6 @@ import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Utils.Downloader;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.common.MinecraftForge;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -48,10 +47,10 @@ public class ProxyCommon extends Proxy {
 
     @Override
     public void loadJar(File file) {
-        try{
+        try {
             LaunchClassLoader classLoader = (LaunchClassLoader) this.getClass().getClassLoader();
             classLoader.addURL(file.toURI().toURL());
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }
@@ -63,17 +62,17 @@ public class ProxyCommon extends Proxy {
         File lib = new File(INpureCore.configFolder, "libs");
         lib.mkdirs();
         Downloader.instance.download(partial + "lib_list.txt", list.getAbsolutePath());
-        try{
+        try {
             InputStream in = new FileInputStream(list);
             List<String> a = IOUtils.readLines(in);
-            for (String s : a){
+            for (String s : a) {
                 File n = new File(lib, s);
                 Downloader.instance.download(partial + s, n.getAbsolutePath());
                 this.loadJar(n);
             }
             list.deleteOnExit();
             in.close();
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }

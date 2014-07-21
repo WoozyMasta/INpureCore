@@ -1,6 +1,6 @@
 /// <reference path="imports.d.ts"/>
 
-class interface_test implements IEvents{
+class interface_test implements IScriptEvents{
 
     onSave(evt : any){
         out.print("save!");
@@ -14,6 +14,9 @@ class interface_test implements IEvents{
         var saveData = evt.load("interfaceTest");
         var s = saveData.get("something");
         out.print(s);
+    }
+
+    onReload(evt : any){
     }
 
 }

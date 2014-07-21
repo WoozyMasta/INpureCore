@@ -3,14 +3,16 @@ package info.inpureprojects.core.Scripting;
 import com.google.common.eventbus.EventBus;
 import info.inpureprojects.core.API.Events.*;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
+import info.inpureprojects.core.Utils.Timer;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.AgeFileFilter;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by den on 7/16/2014.
@@ -18,6 +20,7 @@ import java.util.HashMap;
 public class ScriptingCore {
 
     public EventBus bus = new EventBus();
+    public EventBus forwardingBus = new EventBus();
     private HashMap<String, ScriptEngine> engines = new HashMap();
     private ArrayList<ExposedObject> exposedObjects = new ArrayList();
     private File scriptFolder;
@@ -25,6 +28,24 @@ public class ScriptingCore {
     private File saveFolder;
 
     public ScriptingCore() {
+    }
+
+    public void doReload() {
+        Timer t = new Timer();
+        t.start();
+        System.out.println("Starting script reload process...");
+        this.doSave();
+        forwardingBus.post(new EventReloadScripts());
+        this.clearForwardBus();
+        this.engines.clear();
+        this.doSetup();
+        this.loadScripts();
+        t.stop();
+        t.announce("Reloading scripts");
+    }
+
+    public void clearForwardBus() {
+        forwardingBus = new EventBus();
     }
 
     public ScriptEngine getEngine(String engine) {
@@ -44,7 +65,7 @@ public class ScriptingCore {
 
     public void doSave() {
         EventSave s = new EventSave();
-        bus.post(s);
+        forwardingBus.post(s);
         EventSaveComplete s2 = new EventSaveComplete(s.getMap());
         bus.post(s2);
     }
@@ -53,7 +74,7 @@ public class ScriptingCore {
         EventStartLoad s = new EventStartLoad();
         bus.post(s);
         EventLoad s2 = new EventLoad(s.getMap());
-        bus.post(s2);
+        forwardingBus.post(s2);
     }
 
     public Object getVariable_debug(String engine, String var) {
@@ -95,6 +116,12 @@ public class ScriptingCore {
         //----------------
         EventSetSaveFolder event2 = new EventSetSaveFolder();
         bus.post(event2);
+        this.saveFolder = event2.getFolder();
+        exposedObjects.add(new ExposedObject("saveFolder", this.saveFolder));
+        for (File f : FileUtils.listFiles(this.scriptCache, new AgeFileFilter(new Date(1361635382096L)), null)){
+            System.out.println(f.getName() + " has not been loaded from cache in 7 days. Marking for delete.");
+            f.deleteOnExit();
+        }
     }
 
     private void setupSupportedEngines() {
@@ -130,5 +157,4 @@ public class ScriptingCore {
             }
         }
     }
-
 }

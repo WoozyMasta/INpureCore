@@ -10,3 +10,7 @@ function registerFMLHandler(handler)
     fml:registerModLoadEvents(scriptingCore, lang, handler);
 end
 
+function registerMCHandler(handler)
+    fml:registerMinecraftEvents(scritpingCore, lang, handler);
+end
+
