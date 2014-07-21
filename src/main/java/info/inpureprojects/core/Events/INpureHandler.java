@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -25,6 +24,7 @@ import java.util.HashMap;
  */
 public class INpureHandler {
 
+    private HashMap<String, TocManager.TableofContents> tocs = new HashMap();
     private ArrayList<ExposedObject> objs = new ArrayList();
     private File scriptFolder;
     private File saveFolder;
@@ -39,6 +39,10 @@ public class INpureHandler {
         objs.add(new ExposedObject("saveFolder", this.saveFolder));
         objs.add(new ExposedObject("utils", new DataTypes()));
         objs.add(new ExposedObject("bus", new EventBus()));
+    }
+
+    public HashMap<String, TocManager.TableofContents> getTocs() {
+        return tocs;
     }
 
     @Subscribe
@@ -98,6 +102,7 @@ public class INpureHandler {
             if (!f.isDirectory()) {
                 if (f.getName().contains(".toc")) {
                     TocManager.TableofContents c = TocManager.instance.read(f);
+                    tocs.put(c.getTitle(), c);
                     System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
                     for (String s : c.getScripts()) {
                         System.out.println("Loading: " + s);

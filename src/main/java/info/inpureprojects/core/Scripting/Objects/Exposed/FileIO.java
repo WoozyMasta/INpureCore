@@ -8,12 +8,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Date;
 
 /**
  * Created by den on 7/16/2014.
  */
 public class FileIO {
+
+    public void forceDirOnClasspath(String dir) {
+        try {
+            File f = new File(dir);
+            URL u = f.toURL();
+            URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Class urlClass = URLClassLoader.class;
+            Method method = urlClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+            method.setAccessible(true);
+            method.invoke(urlClassLoader, new Object[]{u});
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
 
     public String getHash(String fileName) {
         File f = new File(fileName);
@@ -27,7 +44,7 @@ public class FileIO {
         return null;
     }
 
-    public void refreshDate(String file){
+    public void refreshDate(String file) {
         File f = new File(file);
         f.setLastModified(new Date().getTime());
     }

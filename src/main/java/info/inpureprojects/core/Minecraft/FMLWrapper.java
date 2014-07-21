@@ -2,10 +2,13 @@ package info.inpureprojects.core.Minecraft;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import info.inpureprojects.core.INpureCore;
+import info.inpureprojects.core.Item.ItemScriptable;
 import info.inpureprojects.core.Scripting.Dynamic.DynamicFactory;
 import info.inpureprojects.core.Scripting.Dynamic.IFML;
 import info.inpureprojects.core.Scripting.Dynamic.IMinecraft;
+import info.inpureprojects.core.Scripting.Dynamic.IScriptableItem;
 import info.inpureprojects.core.Scripting.ScriptingCore;
+import net.minecraft.item.Item;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -19,6 +22,13 @@ import java.util.List;
  * Created by den on 7/19/2014.
  */
 public class FMLWrapper {
+
+    public Item registerItem(ScriptingCore core, String engine, Object o) {
+        IScriptableItem proxy = (IScriptableItem) DynamicFactory.instance.create(core, engine, o, IScriptableItem.class);
+        ItemScriptable i = new ItemScriptable(proxy);
+        Item.itemRegistry.addObject(5000, proxy.getUnlocalizedName(), i);
+        return i;
+    }
 
     public void loadJar(String path) {
         INpureCore.proxy.loadJar(new File(path));

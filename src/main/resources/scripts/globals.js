@@ -9,3 +9,7 @@ function registerFMLHandler(handler){
 function registerMCHandler(handler){
     fml.registerMinecraftEvents(scriptingCore, lang, handler);
 }
+
+function registerItem(handler){
+    fml.registerItem(scriptingCore, lang, handler);
+}

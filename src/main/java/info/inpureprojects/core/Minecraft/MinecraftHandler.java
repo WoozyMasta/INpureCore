@@ -15,6 +15,7 @@ public class MinecraftHandler {
 
     public MinecraftHandler() {
         objs.add(new ExposedObject("fml", new FMLWrapper()));
+        objs.add(new ExposedObject("worlds", new DimManager()));
     }
 
     @Subscribe

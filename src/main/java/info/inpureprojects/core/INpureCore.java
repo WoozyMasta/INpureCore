@@ -1,10 +1,10 @@
 package info.inpureprojects.core;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.*;
+import info.inpureprojects.core.API.Events.EventRegisterTexture;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Minecraft.ForgeHandler;
 import info.inpureprojects.core.Minecraft.MinecraftHandler;
@@ -26,22 +26,26 @@ public class INpureCore {
     public static Proxy proxy;
     public static ScriptingCore core;
     public static File configFolder;
+    public static INpureHandler scriptHandler;
 
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
         configFolder = new File(evt.getModConfigurationDirectory(), "INpureCore");
+        scriptHandler = new INpureHandler(configFolder);
         proxy.downloadLibs();
         core = new ScriptingCore();
-        core.bus.register(new INpureHandler(configFolder));
+        core.bus.register(scriptHandler);
         core.bus.register(new MinecraftHandler());
-        ForgeHandler h = new ForgeHandler();
-        MinecraftForge.EVENT_BUS.register(h);
+        MinecraftForge.EVENT_BUS.register(new ForgeHandler());
         core.doSetup();
         proxy.extractCore();
         core.loadScripts();
         core.doLoad();
         core.forwardingBus.post(evt);
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            EventRegisterTexture.setupManager();
+        }
     }
 
     @Mod.EventHandler
@@ -52,6 +56,15 @@ public class INpureCore {
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent evt) {
         core.forwardingBus.post(evt);
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent evt) {
+
+    }
+
+    @Mod.EventHandler
+    public void serverStopping(FMLServerStoppingEvent evt) {
         core.doSave();
     }
 

@@ -1,31 +1,48 @@
 /// <reference path="imports.d.ts"/>
-var inpurecore_workspace;
+var inpurecore_scripts_workspace;
 var inpurecore_map;
 var INpureCore;
+//------------
+var inpurecore_icons;
+var inpurecore_test;
 
 class inpurecore_mcHandler{
      onBlockBreak(evt : any){
      }
 }
 
+class inpurecore_testItem implements IScriptableItem{
+
+    getUnlocalizedName(){
+        return "inpurecore.testItem";
+    }
+
+    getIcon(item : any){
+        return inpurecore_icons.get("edward");
+    }
+
+}
 // Remember: None of these events are called on reload. Don't depend on them for anything but interacting with Minecraft during startup.
 class inpurecore_FMLHandler implements IFML{
 
     onPreInit(evt : any){
+        inpurecore_icons = utils.newMap();
     }
 
     onInit(evt : any){
-        inpurecore_map.put("commons-codec-1.9.jar", io.getHash(scriptFolder.getParent() + "/libs/commons-codec-1.9.jar"));
-        inpurecore_map.put("js.jar", io.getHash(scriptFolder.getParent() + "/libs/js.jar"));
-        inpurecore_map.put("junit.jar", io.getHash(scriptFolder.getParent() + "/libs/junit.jar"));
-        inpurecore_map.put("luaj-jse-3.0.jar", io.getHash(scriptFolder.getParent() + "/libs/luaj-jse-3.0.jar"));
-        inpurecore_map.put("slf4j-api-1.7.7.jar", io.getHash(scriptFolder.getParent() + "/libs/slf4j-api-1.7.7.jar"));
-        inpurecore_map.put("slf4j-simple-1.7.7.jar", io.getHash(scriptFolder.getParent() + "/libs/slf4j-simple-1.7.7.jar"));
-        inpurecore_map.put("typescript4j-0.5.0-SNAPSHOT.jar", io.getHash(scriptFolder.getParent() + "/libs/typescript4j-0.5.0-SNAPSHOT.jar"));
+        fml.registerLangFile(inpurecore_scripts_workspace, "/resources/en_US.lang");
+        //inpurecore_test = registerItem(new inpurecore_testItem());
     }
 
     onPostInit(evt : any){
 
+    }
+
+    onItemTextures(evt : any){
+        //inpurecore_icons.put("edward", evt.register("inpurecore:radical_edward"));
+    }
+
+    onBlockTextures(evt : any){
     }
 }
 

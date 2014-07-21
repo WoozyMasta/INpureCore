@@ -12,7 +12,9 @@ import javax.script.ScriptEngine;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by den on 7/16/2014.
@@ -28,6 +30,10 @@ public class ScriptingCore {
     private File saveFolder;
 
     public ScriptingCore() {
+    }
+
+    public File getScriptFolder() {
+        return scriptFolder;
     }
 
     public void doReload() {
@@ -118,7 +124,7 @@ public class ScriptingCore {
         bus.post(event2);
         this.saveFolder = event2.getFolder();
         exposedObjects.add(new ExposedObject("saveFolder", this.saveFolder));
-        for (File f : FileUtils.listFiles(this.scriptCache, new AgeFileFilter(new Date(1361635382096L)), null)){
+        for (File f : FileUtils.listFiles(this.scriptCache, new AgeFileFilter(new Date(1361635382096L)), null)) {
             System.out.println(f.getName() + " has not been loaded from cache in 7 days. Marking for delete.");
             f.deleteOnExit();
         }

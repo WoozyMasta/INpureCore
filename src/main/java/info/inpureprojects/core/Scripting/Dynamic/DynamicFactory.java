@@ -72,10 +72,8 @@ public class DynamicFactory {
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             try {
                 if (core.getEngine(engine) instanceof Invocable) {
-                    if (core.getEngine(engine).get(method.getName()) != null){
-                        Invocable invoc = core.getInvocable(engine);
-                        invoc.invokeMethod(this.scriptClass, method.getName(), args);
-                    }
+                    Invocable invoc = core.getInvocable(engine);
+                    return invoc.invokeMethod(this.scriptClass, method.getName(), args);
                 } else {
                     // The lua engine does not implement Invocable.
                     // I've made this extendable via an enum in case of supporting more languages later.
@@ -87,7 +85,7 @@ public class DynamicFactory {
                     }
                 }
             } catch (Throwable t) {
-                t.printStackTrace();
+
             }
             return null;
         }

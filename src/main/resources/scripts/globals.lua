@@ -14,3 +14,7 @@ function registerMCHandler(handler)
     fml:registerMinecraftEvents(scritpingCore, lang, handler);
 end
 
+function registerItem(handler)
+    fml:registerItem(scriptingCore, lang, handler);
+end
+

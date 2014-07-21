@@ -50,5 +50,4 @@ public interface IMinecraft {
 
     @Subscribe
     public void onPotionBrewed(PotionBrewedEvent evt);
-
 }

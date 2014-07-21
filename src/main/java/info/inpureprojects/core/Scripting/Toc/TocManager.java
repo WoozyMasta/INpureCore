@@ -50,6 +50,8 @@ public class TocManager {
                 c.setAuthor(clean(s));
             } else if (s.contains("## Version:")) {
                 c.setVersion(clean(s));
+            } else if (s.contains("## Resources:")) {
+                c.setResources(clean(s));
             } else if (!s.contains("##")) {
                 f.add(s.trim());
             }
@@ -63,7 +65,16 @@ public class TocManager {
         private String title;
         private String author;
         private String version;
+        private String resources = "/resources";
         private List<String> scripts;
+
+        public String getResources() {
+            return resources;
+        }
+
+        public void setResources(String resources) {
+            this.resources = resources;
+        }
 
         public List<String> getScripts() {
             return scripts;
