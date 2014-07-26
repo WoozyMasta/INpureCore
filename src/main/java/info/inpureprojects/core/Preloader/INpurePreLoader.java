@@ -6,20 +6,25 @@ import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
 import info.inpureprojects.core.Utils.Downloader;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Map;
+import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 
 /**
  * Created by den on 7/25/2014.
  */
+@IFMLLoadingPlugin.MCVersion(value = "1.7.10")
 public class INpurePreLoader implements IFMLLoadingPlugin {
 
     public static boolean isDev;
     public static File mc;
+    public static File source;
     private INpureDepHandler dep = new INpureDepHandler();
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        return new String[]{};
     }
 
     @Override
@@ -47,6 +52,7 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         for (String s : dep.readStream(this.getClass().getClassLoader().getResourceAsStream("resources.inpure"))) {
             Downloader.instance.download(s, ver.getAbsolutePath());
         }
+        source = (File) data.get("coremodLocation");
     }
 
     @Override
