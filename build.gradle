@@ -62,8 +62,11 @@ processResources
     }
 }
 
-manifest{
-	attribute 'FMLCorePlugin': 'info.inpureprojects.core.Preloader.INpurePreLoader'
-	attribute 'FMLCorePluginContainsFMLMod': 'true'
-    attribute 'FMLAT': 'inpure_at.cfg'
+jar {
+	manifest {
+		attributes 'FMLCorePlugin': 'info.inpureprojects.core.Preloader.INpurePreLoader'
+		attributes 'FMLCorePluginContainsFMLMod': 'true'
+		attributes 'FMLAT': 'inpure_at.cfg'
+    }
 }
+
