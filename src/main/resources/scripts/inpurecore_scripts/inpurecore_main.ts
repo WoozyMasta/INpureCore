@@ -6,11 +6,6 @@ var INpureCore;
 var inpurecore_icons;
 var inpurecore_test;
 
-class inpurecore_mcHandler{
-     onBlockBreak(evt : any){
-     }
-}
-
 class inpurecore_testItem implements IScriptableItem{
 
     getUnlocalizedName(){
@@ -22,6 +17,7 @@ class inpurecore_testItem implements IScriptableItem{
     }
 
 }
+
 // Remember: None of these events are called on reload. Don't depend on them for anything but interacting with Minecraft during startup.
 class inpurecore_FMLHandler implements IFML{
 
@@ -66,7 +62,6 @@ class inpurecore_functions{
     setup(){
         registerFMLHandler(new inpurecore_FMLHandler());
         registerEventHandler(new inpurecore_dataHandler());
-        registerMCHandler(new inpurecore_mcHandler());
         this.print("ready to go!");
     }
 }

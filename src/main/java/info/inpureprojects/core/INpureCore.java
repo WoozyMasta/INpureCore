@@ -10,6 +10,7 @@ import info.inpureprojects.core.Config.PropertiesHolder;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Minecraft.ForgeHandler;
 import info.inpureprojects.core.Minecraft.MinecraftHandler;
+import info.inpureprojects.core.Preloader.INpurePreLoader;
 import info.inpureprojects.core.Proxy.Proxy;
 import info.inpureprojects.core.Scripting.ScriptingCore;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,6 +49,9 @@ public class INpureCore {
         core.bus.register(new MinecraftHandler());
         MinecraftForge.EVENT_BUS.register(new ForgeHandler());
         core.doSetup();
+        if (INpurePreLoader.isDev) {
+            proxy.devStuff();
+        }
         proxy.extractCore();
         core.loadScripts();
         core.doLoad();

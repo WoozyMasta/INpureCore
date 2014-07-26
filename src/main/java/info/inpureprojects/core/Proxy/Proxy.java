@@ -23,4 +23,6 @@ public abstract class Proxy {
 
     public abstract void collectData();
 
+    public abstract void devStuff();
+
 }

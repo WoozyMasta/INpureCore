@@ -33,6 +33,10 @@ public class ScriptingCore {
     public ScriptingCore() {
     }
 
+    public File getSaveFolder() {
+        return saveFolder;
+    }
+
     public File getScriptFolder() {
         return scriptFolder;
     }
@@ -141,6 +145,10 @@ public class ScriptingCore {
                 engines.get(s.getEngine()).put("lang", s.getEngine());
             }
         }
+    }
+
+    public void importPath(String path) {
+        this.importFile(new File(this.getScriptFolder(), "path"));
     }
 
     public void importFile(File file) {

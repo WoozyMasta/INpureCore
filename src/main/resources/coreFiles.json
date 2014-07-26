@@ -1,0 +1,16 @@
+{
+  "files": [
+    "scripts/inpurecore_scripts/INpureCore.toc",
+    "scripts/inpurecore_scripts/inpurecore_main.ts",
+    "scripts/inpurecore_scripts/resources/lang/en_US.lang",
+    "scripts/inpurecore_scripts/resources/textures/items/radical_edward.png"
+  ],
+  "folders": [
+    "inpurecore_scripts",
+    "inpurecore_scripts/resources",
+    "inpurecore_scripts/resources/textures",
+    "inpurecore_scripts/resources/textures/items",
+    "inpurecore_scripts/resources/textures/blocks",
+    "inpurecore_scripts/resources/lang"
+  ]
+}

@@ -11,6 +11,33 @@ public class Streams {
 
     public static final Streams instance = new Streams();
 
+    public Reader getFileReader(File f) {
+        try {
+            return new FileReader(f);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return null;
+    }
+
+    public Reader getReader(InputStream in) {
+        try {
+            return new InputStreamReader(in);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return null;
+    }
+
+    public Writer getWriter(File f) {
+        try {
+            return new FileWriter(f);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return null;
+    }
+
     public InputStream getStream(File f) {
         try {
             return new FileInputStream(f);

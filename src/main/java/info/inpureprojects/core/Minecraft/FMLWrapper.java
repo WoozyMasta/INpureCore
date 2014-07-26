@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Minecraft;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Item.ItemScriptable;
@@ -9,6 +10,7 @@ import info.inpureprojects.core.Scripting.Dynamic.IMinecraft;
 import info.inpureprojects.core.Scripting.Dynamic.IScriptableItem;
 import info.inpureprojects.core.Scripting.ScriptingCore;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -23,10 +25,18 @@ import java.util.List;
  */
 public class FMLWrapper {
 
+    public Configuration getConfig(String fileName) {
+        if (fileName.contains(".cfg")) {
+            fileName = fileName.concat(".cfg");
+        }
+        Configuration c = new Configuration(new File(INpureCore.core.getSaveFolder(), fileName));
+        return c;
+    }
+
     public Item registerItem(ScriptingCore core, String engine, Object o) {
         IScriptableItem proxy = (IScriptableItem) DynamicFactory.instance.create(core, engine, o, IScriptableItem.class);
         ItemScriptable i = new ItemScriptable(proxy);
-        Item.itemRegistry.addObject(5000, proxy.getUnlocalizedName(), i);
+        GameRegistry.registerItem(i, i.getUnlocalizedName());
         return i;
     }
 
