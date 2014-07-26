@@ -13,7 +13,3 @@ function registerMCHandler(handler){
 function registerItem(handler){
     fml.registerItem(scriptingCore, lang, handler);
 }
-
-function include(path){
-    scriptingCore.importPath(path);
-}
