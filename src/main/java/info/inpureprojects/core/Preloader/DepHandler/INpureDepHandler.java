@@ -20,7 +20,7 @@ public class INpureDepHandler {
                 if (read.contains("##url=")) {
                     url = read.split("=")[1].trim().replaceAll("\\s", "");
                 } else {
-                    deps.add(url + in);
+                    deps.add(url + read);
                 }
             }
             s.close();

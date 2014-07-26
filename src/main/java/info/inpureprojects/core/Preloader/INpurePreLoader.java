@@ -4,6 +4,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
 import info.inpureprojects.core.Utils.Downloader;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -46,8 +47,9 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         if (!ver.exists()) {
             ver.mkdirs();
         }
+        print("Starting library configuration...");
         for (String s : dep.readStream(this.getClass().getClassLoader().getResourceAsStream("resources.inpure"))) {
-            Downloader.instance.download(s, ver.getAbsolutePath());
+            Downloader.instance.download(s, new File(ver, FilenameUtils.getName(s)).getAbsolutePath());
         }
         source = (File) data.get("coremodLocation");
     }

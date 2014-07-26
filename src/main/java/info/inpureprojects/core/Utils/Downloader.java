@@ -19,6 +19,8 @@ public class Downloader {
             if (!f.exists()) {
                 System.out.println("Downloading: " + url);
                 FileUtils.copyURLToFile(download, f);
+            }else{
+                System.out.println("Skipping: " + url);
             }
         } catch (Throwable t) {
             t.printStackTrace();
