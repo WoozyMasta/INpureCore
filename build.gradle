@@ -61,3 +61,9 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+manifest{
+	attribute 'FMLCorePlugin': 'info.inpureprojects.core.Preloader.INpurePreLoader'
+	attribute 'FMLCorePluginContainsFMLMod': 'true'
+    attribute 'FMLAT': 'inpure_at.cfg'
+}

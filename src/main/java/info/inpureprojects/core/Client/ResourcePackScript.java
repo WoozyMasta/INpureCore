@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Client;
 
+import cpw.mods.fml.common.ModContainer;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Scripting.Toc.TocManager;
 import net.minecraft.client.resources.IResourcePack;
@@ -22,6 +23,10 @@ public class ResourcePackScript implements IResourcePack {
 
     private Set<String> set = new HashSet<String>();
 
+    public ResourcePackScript(ModContainer container) {
+        set.add(container.getModId());
+    }
+
     @Override
     public InputStream getInputStream(ResourceLocation loc) throws IOException {
         try {
@@ -36,8 +41,9 @@ public class ResourcePackScript implements IResourcePack {
     private File getFileFromLoc(ResourceLocation loc) {
         File firstDir = new File(INpureCore.core.getScriptFolder(), loc.getResourceDomain());
         TocManager.TableofContents toc = INpureCore.scriptHandler.getTocs().get(loc.getResourceDomain());
-        File resourceDir = new File(firstDir, toc.getResources() + "/textures");
-        File actualFile = new File(resourceDir, loc.getResourcePath() + ".png");
+        File resourceDir = new File(firstDir, toc.getResources());
+        File actualFile = new File(resourceDir, "/" + loc.getResourcePath());
+        //INpureCore.proxy.print(actualFile.getAbsolutePath());
         return actualFile;
     }
 
@@ -48,7 +54,7 @@ public class ResourcePackScript implements IResourcePack {
 
     @Override
     public Set getResourceDomains() {
-        return null;
+        return set;
     }
 
     @Override
@@ -63,6 +69,6 @@ public class ResourcePackScript implements IResourcePack {
 
     @Override
     public String getPackName() {
-        return null;
+        return "INpure_ScriptLoader:" + set.toArray()[0];
     }
 }

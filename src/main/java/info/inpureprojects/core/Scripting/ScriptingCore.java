@@ -3,6 +3,7 @@ package info.inpureprojects.core.Scripting;
 import com.google.common.eventbus.EventBus;
 import info.inpureprojects.core.API.Events.*;
 import info.inpureprojects.core.Scripting.Objects.ExposedObject;
+import info.inpureprojects.core.Utils.Streams;
 import info.inpureprojects.core.Utils.Timer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AgeFileFilter;
@@ -10,7 +11,6 @@ import org.apache.commons.io.filefilter.AgeFileFilter;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +28,7 @@ public class ScriptingCore {
     private File scriptFolder;
     private File scriptCache;
     private File saveFolder;
+    private boolean skipLibs = false;
 
     public ScriptingCore() {
     }
@@ -143,12 +144,7 @@ public class ScriptingCore {
     }
 
     public void importFile(File file) {
-        try {
-            FileInputStream f = new FileInputStream(file);
-            this.importStream(f, file.getName());
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+        this.importStream(Streams.instance.getStream(file), file.getName());
     }
 
     public void importStream(InputStream stream, String fileName) {

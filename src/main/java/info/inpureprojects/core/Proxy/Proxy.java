@@ -19,6 +19,8 @@ public abstract class Proxy {
 
     public abstract void loadJar(File file);
 
-    public abstract void downloadLibs();
+    public abstract void client();
+
+    public abstract void collectData();
 
 }

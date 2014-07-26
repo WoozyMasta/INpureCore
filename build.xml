@@ -34,7 +34,7 @@
 			<url url="${forge.url}"/>
 		</get>
 		<echo message="Unzipping ForgeGradle..."/>
-		<unzip src="${download.dir}/forge.zip" dest="${build.dir}"/>
+		<unzip src="${download.dir}/forge.zip" dest="${build.dir}" overwrite="false"/>
 		<echo message="Cleaning up ForgeGradle files..."/>
 		<delete>
 			<fileset dir="${build.dir}">

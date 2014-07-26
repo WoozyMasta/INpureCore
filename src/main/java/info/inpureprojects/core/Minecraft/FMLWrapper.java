@@ -44,11 +44,8 @@ public class FMLWrapper {
         core.forwardingBus.register(proxy);
     }
 
-    public void registerLangFileInternal(String path) {
-        File f = new File(path);
-        String key = FilenameUtils.removeExtension(f.getName());
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(path);
-        this.Import(key, in);
+    public String translate(String key) {
+        return LanguageRegistry.instance().getStringLocalization(key);
     }
 
     public void registerLangFile(File workspace, String path) {

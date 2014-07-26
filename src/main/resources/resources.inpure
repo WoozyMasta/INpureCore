@@ -1,0 +1,8 @@
+##url= https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/
+commons-codec-1.9.jar
+js.jar
+junit.jar
+luaj-jse-3.0.jar
+slf4j-api-1.7.7.jar
+slf4j-simple-1.7.7.jar
+typescript4j-0.5.0-SNAPSHOT.jar

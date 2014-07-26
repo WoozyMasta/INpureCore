@@ -30,16 +30,14 @@ class inpurecore_FMLHandler implements IFML{
     }
 
     onInit(evt : any){
-        fml.registerLangFile(inpurecore_scripts_workspace, "/resources/en_US.lang");
-        //inpurecore_test = registerItem(new inpurecore_testItem());
+        inpurecore_test = registerItem(new inpurecore_testItem());
     }
 
     onPostInit(evt : any){
-
     }
 
     onItemTextures(evt : any){
-        //inpurecore_icons.put("edward", evt.register("inpurecore:radical_edward"));
+        inpurecore_icons.put("edward", evt.register("inpurecore_scripts:radical_edward"));
     }
 
     onBlockTextures(evt : any){

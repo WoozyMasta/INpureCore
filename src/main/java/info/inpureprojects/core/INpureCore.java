@@ -1,16 +1,19 @@
 package info.inpureprojects.core;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import info.inpureprojects.core.API.Events.EventRegisterTexture;
+import info.inpureprojects.core.Config.PropertiesHolder;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Minecraft.ForgeHandler;
 import info.inpureprojects.core.Minecraft.MinecraftHandler;
 import info.inpureprojects.core.Proxy.Proxy;
 import info.inpureprojects.core.Scripting.ScriptingCore;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 
@@ -27,13 +30,19 @@ public class INpureCore {
     public static ScriptingCore core;
     public static File configFolder;
     public static INpureHandler scriptHandler;
+    public static File libsFolder;
+    public static Configuration config;
+    public static PropertiesHolder properties;
 
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
+        libsFolder = new File(evt.getSourceFile().getParent(), Loader.MC_VERSION);
+        libsFolder.mkdirs();
         configFolder = new File(evt.getModConfigurationDirectory(), "INpureCore");
+        config = new Configuration(new File(configFolder, "INpureCore.cfg"));
+        properties = new PropertiesHolder(config);
         scriptHandler = new INpureHandler(configFolder);
-        proxy.downloadLibs();
         core = new ScriptingCore();
         core.bus.register(scriptHandler);
         core.bus.register(new MinecraftHandler());
@@ -42,6 +51,7 @@ public class INpureCore {
         proxy.extractCore();
         core.loadScripts();
         core.doLoad();
+        proxy.client();
         core.forwardingBus.post(evt);
         if (FMLCommonHandler.instance().getSide().isClient()) {
             EventRegisterTexture.setupManager();
@@ -50,6 +60,7 @@ public class INpureCore {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
+        proxy.collectData();
         core.forwardingBus.post(evt);
     }
 
