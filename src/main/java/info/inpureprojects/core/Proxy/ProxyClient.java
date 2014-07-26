@@ -3,6 +3,7 @@ package info.inpureprojects.core.Proxy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
+import info.inpureprojects.core.API.Events.EventRegisterTexture;
 import info.inpureprojects.core.Client.FakeLogger;
 import info.inpureprojects.core.Client.ScriptModContainer;
 import info.inpureprojects.core.INpureCore;
@@ -23,6 +24,7 @@ public class ProxyClient extends ProxyCommon {
 
     @Override
     public void client() {
+        EventRegisterTexture.setupManager();
         this.print("Beating Minecraft's resource loading system with a shovel. Please stand by...");
         // This causes all those missing texture errors to vanish from the console. Woo!
         if (INpureCore.properties.textureLoggerOverride) {

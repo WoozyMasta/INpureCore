@@ -1,11 +1,9 @@
 package info.inpureprojects.core;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
-import info.inpureprojects.core.API.Events.EventRegisterTexture;
 import info.inpureprojects.core.Config.PropertiesHolder;
 import info.inpureprojects.core.Events.INpureHandler;
 import info.inpureprojects.core.Minecraft.ForgeHandler;
@@ -57,9 +55,6 @@ public class INpureCore {
         core.doLoad();
         proxy.client();
         core.forwardingBus.post(evt);
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            EventRegisterTexture.setupManager();
-        }
     }
 
     @Mod.EventHandler
