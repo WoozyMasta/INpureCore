@@ -47,24 +47,26 @@ public class ProxyCommon extends Proxy {
 
     @Override
     public void extractCore() {
-        FileIO io = new FileIO();
-        Gson json = new GsonBuilder().setPrettyPrinting().create();
-        Reader r = null;
-        if (INpurePreLoader.isDev) {
-            File in = new File(INpurePreLoader.mc, "coreFiles.json");
-            r = Streams.instance.getFileReader(in);
-        } else {
-            r = Streams.instance.getReader(this.getClass().getClassLoader().getResourceAsStream("coreFiles.json"));
-        }
-        HashMap<String, List<String>> map = json.fromJson(r, HashMap.class);
-        for (String s : map.get("folders")) {
-            File d = new File(INpureCore.core.getScriptFolder(), s);
-            d.mkdirs();
-        }
-        for (String s : map.get("files")) {
-            String path = s.substring(8);
-            File f = new File(INpureCore.core.getScriptFolder(), path);
-            io.extractFileFromJar(s, f.getAbsolutePath());
+        if (INpureCore.properties.extractExamples){
+            FileIO io = new FileIO();
+            Gson json = new GsonBuilder().setPrettyPrinting().create();
+            Reader r = null;
+            if (INpurePreLoader.isDev) {
+                File in = new File(INpurePreLoader.mc, "coreFiles.json");
+                r = Streams.instance.getFileReader(in);
+            } else {
+                r = Streams.instance.getReader(this.getClass().getClassLoader().getResourceAsStream("coreFiles.json"));
+            }
+            HashMap<String, List<String>> map = json.fromJson(r, HashMap.class);
+            for (String s : map.get("folders")) {
+                File d = new File(INpureCore.core.getScriptFolder(), s);
+                d.mkdirs();
+            }
+            for (String s : map.get("files")) {
+                String path = s.substring(8);
+                File f = new File(INpureCore.core.getScriptFolder(), path);
+                io.extractFileFromJar(s, f.getAbsolutePath());
+            }
         }
     }
 

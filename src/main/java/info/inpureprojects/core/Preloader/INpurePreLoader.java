@@ -6,10 +6,7 @@ import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
 import info.inpureprojects.core.Utils.Downloader;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Map;
-import java.util.jar.JarInputStream;
-import java.util.jar.Manifest;
 
 /**
  * Created by den on 7/25/2014.
