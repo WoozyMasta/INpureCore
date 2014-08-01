@@ -1,6 +1,6 @@
 package info.inpureprojects.core.API.Scripting;
 
-import info.inpureprojects.core.API.Toc.TocManager;
+import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 
 import javax.script.ScriptEngine;
 import java.io.File;

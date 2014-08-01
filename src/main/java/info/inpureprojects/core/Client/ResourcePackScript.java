@@ -1,7 +1,7 @@
 package info.inpureprojects.core.Client;
 
 import cpw.mods.fml.common.ModContainer;
-import info.inpureprojects.core.API.Toc.TocManager;
+import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.IMetadataSerializer;

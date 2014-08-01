@@ -1,11 +1,9 @@
 package info.inpureprojects.core.Scripting.Dynamic;
 
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
-import info.inpureprojects.core.INpureCore;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import javax.script.Invocable;
@@ -39,12 +37,12 @@ public class DynamicFactory {
                 LuaTable table = (LuaTable) o;
                 LuaValue a = table.get(target);
                 LuaFunction f = (LuaFunction) a;
-                if (arg == null){
+                if (arg == null) {
                     f.invoke(table);
-                }else{
+                } else {
                     ArrayList<LuaValue> list = new ArrayList();
                     list.add(table);
-                    for (Object o1 : arg){
+                    for (Object o1 : arg) {
                         list.add(CoerceJavaToLua.coerce(o1));
                     }
                     f.invoke(list.toArray(new LuaValue[list.size()]));

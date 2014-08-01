@@ -1,4 +1,4 @@
-package info.inpureprojects.core.API.Toc;
+package info.inpureprojects.core.API.Scripting.Toc;
 
 import org.apache.commons.io.IOUtils;
 

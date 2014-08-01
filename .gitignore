@@ -19,3 +19,4 @@ out/
 gradlew
 gradlew.bat
 Tests/middleclass.lua
+deps/

@@ -5,9 +5,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import info.inpureprojects.core.API.Scripting.CanBeNull;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
-import info.inpureprojects.core.API.Toc.TocManager;
+import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 import info.inpureprojects.core.Client.ScriptModContainer;
-import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Scripting.Objects.Exposed.Console;
 import info.inpureprojects.core.Utils.Downloader;
 import info.inpureprojects.core.Utils.Streams;
@@ -41,10 +40,10 @@ public class ScriptingCore implements IScriptingCore {
         }
         File m = new File(workingDir, "middleclass.lua");
         Downloader.instance.download("https://raw.githubusercontent.com/kikito/middleclass/master/middleclass.lua", m);
-        try{
+        try {
             this.loadFile(m);
             this.loadPackagesInternal(Arrays.asList(globals));
-        }catch(Throwable t){
+        } catch (Throwable t) {
             System.out.println("MAJOR ERROR: Internal libraries failed to load!");
         }
     }
@@ -64,11 +63,11 @@ public class ScriptingCore implements IScriptingCore {
         }
     }
 
-    private void loadFile(File file) throws Exception{
+    private void loadFile(File file) throws Exception {
         this.loadStream(Streams.instance.getStream(file), file.getName());
     }
 
-    private void loadStream(InputStream stream, String fileName) throws Exception{
+    private void loadStream(InputStream stream, String fileName) throws Exception {
         for (EnumScripting s : EnumScripting.values()) {
             if (s.isCompatible(fileName)) {
                 String script = s.getHandler().Import(stream);
@@ -80,7 +79,7 @@ public class ScriptingCore implements IScriptingCore {
 
     @Override
     @CanBeNull
-    public void loadPackagesInternal(List<String> list) throws Exception{
+    public void loadPackagesInternal(List<String> list) throws Exception {
         if (list != null) {
             for (String str : list) {
                 this.loadStream(this.getClass().getClassLoader().getResourceAsStream(str), str);
@@ -89,7 +88,7 @@ public class ScriptingCore implements IScriptingCore {
     }
 
     @Override
-    public void loadPackagesFromDir(File dir) throws Exception{
+    public void loadPackagesFromDir(File dir) throws Exception {
         for (File f : FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
             if (!f.isDirectory()) {
                 if (f.getName().contains(".toc")) {
@@ -100,10 +99,10 @@ public class ScriptingCore implements IScriptingCore {
                         File file = new File(f.getParent() + "/" + s);
                         this.loadFile(file);
                         loaded.add(c);
-                        try{
+                        try {
                             FMLCommonHandler.instance().addModToResourcePack(new ScriptModContainer(c, dir, this));
                             System.out.println("Resource loading configured for script pack: " + c.getTitle());
-                        }catch(Throwable t){
+                        } catch (Throwable t) {
                             // This is for test cases.
                         }
                     }

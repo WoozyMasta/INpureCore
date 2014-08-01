@@ -4,7 +4,7 @@ import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ModMetadata;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
-import info.inpureprojects.core.API.Toc.TocManager;
+import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.modInfo;
 
