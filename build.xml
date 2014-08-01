@@ -1,5 +1,5 @@
 <!-- MAKE SURE TO RENAME THE PROJECT -->
-<project name="DungeonsAndEnderdragons" default="main">
+<project name="INpureCore" default="main">
 	<property environment="env"/>
 	<property name="src.dir" value="src/main/java"/>
 	<property name="api.dir" value="src/api/java"/>
