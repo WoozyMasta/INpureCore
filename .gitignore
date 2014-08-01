@@ -18,3 +18,4 @@ out/
 *.lck
 gradlew
 gradlew.bat
+Tests/middleclass.lua

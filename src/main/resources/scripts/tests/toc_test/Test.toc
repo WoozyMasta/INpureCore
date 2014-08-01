@@ -1,6 +1,0 @@
-## Title: Toc_Test
-## Author: denoflions
-## Version: 0.1
-scripts/tests/toc_test.js
-scripts/tests/toc_test.ts
-scripts/tests/toc_test.lua

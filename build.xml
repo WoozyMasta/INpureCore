@@ -100,5 +100,14 @@
 			<fileset dir="." includes="**/*.iws"/>
 		</delete>
 	</target>
+	
+	<target name="tests">
+		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c gradlew.bat test"/>
+		</exec>
+		<exec dir="${build.dir}" executable="sh" osfamily="unix">
+			<arg line="gradlew test"/>
+		</exec>
+	</target>
 
 </project>

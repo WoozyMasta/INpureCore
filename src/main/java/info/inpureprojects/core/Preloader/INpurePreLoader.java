@@ -49,7 +49,7 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         }
         print("Starting library configuration...");
         for (String s : dep.readStream(this.getClass().getClassLoader().getResourceAsStream("resources.inpure"))) {
-            Downloader.instance.download(s, new File(ver, FilenameUtils.getName(s)).getAbsolutePath());
+            Downloader.instance.download(s, new File(ver, FilenameUtils.getName(s)));
         }
         source = (File) data.get("coremodLocation");
     }

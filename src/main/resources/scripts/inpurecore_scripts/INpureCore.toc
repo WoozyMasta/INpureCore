@@ -1,4 +1,0 @@
-## Title: INpureCore_Scripts
-## Author: denoflions
-## Version: 1.0
-inpurecore_main.ts

@@ -1,8 +1,7 @@
 package info.inpureprojects.core.Client;
 
 import cpw.mods.fml.common.ModContainer;
-import info.inpureprojects.core.INpureCore;
-import info.inpureprojects.core.Scripting.Toc.TocManager;
+import info.inpureprojects.core.API.Toc.TocManager;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.IMetadataSerializer;
@@ -22,16 +21,17 @@ import java.util.Set;
 public class ResourcePackScript implements IResourcePack {
 
     private Set<String> set = new HashSet<String>();
+    private ScriptModContainer script;
 
     public ResourcePackScript(ModContainer container) {
         set.add(container.getModId());
+        script = (ScriptModContainer) container;
     }
 
     @Override
     public InputStream getInputStream(ResourceLocation loc) throws IOException {
         try {
-            File actualFile = this.getFileFromLoc(loc);
-            return new FileInputStream(actualFile);
+            return new FileInputStream(this.getFileFromLoc(loc));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -39,11 +39,16 @@ public class ResourcePackScript implements IResourcePack {
     }
 
     private File getFileFromLoc(ResourceLocation loc) {
-        File firstDir = new File(INpureCore.core.getScriptFolder(), loc.getResourceDomain());
-        TocManager.TableofContents toc = INpureCore.scriptHandler.getTocs().get(loc.getResourceDomain());
-        File resourceDir = new File(firstDir, toc.getResources());
+        File firstDir = new File(script.getSource(), loc.getResourceDomain());
+        TocManager.TableofContents toc = null;
+        for (TocManager.TableofContents c : script.getCore().getLoadedModules()) {
+            if (c.getTitle().equals(loc.getResourceDomain())) {
+                toc = c;
+                break;
+            }
+        }
+        File resourceDir = new File(firstDir, "/resources");
         File actualFile = new File(resourceDir, "/" + loc.getResourcePath());
-        //INpureCore.proxy.print(actualFile.getAbsolutePath());
         return actualFile;
     }
 
