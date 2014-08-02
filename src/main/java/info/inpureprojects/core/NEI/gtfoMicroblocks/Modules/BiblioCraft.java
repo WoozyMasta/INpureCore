@@ -19,7 +19,6 @@ public class BiblioCraft extends GtfoFMPModule{
     public BiblioCraft(String id) {
         super(id);
     }
-    private Random r = new Random();
 
     @Override
     public void run() {
@@ -29,14 +28,14 @@ public class BiblioCraft extends GtfoFMPModule{
                 if (f.getType().equals(Block.class)){
                     Block b = (Block) f.get(null);
                     ItemStack stack = new ItemStack(b, 1, 0);
-                    API.setItemListEntries(stack.getItem(), NEIINpureConfig.buildStackList(stack, new int[]{r.nextInt(5)}));
+                    API.setItemListEntries(stack.getItem(), NEIINpureConfig.buildStackList(stack, new int[]{0}));
                 }
             }
             for (Field f : Class.forName("jds.bibliocraft.items.ItemLoader").getDeclaredFields()){
                 if (f.getType().equals(Item.class)){
                     Item i = (Item) f.get(null);
                     ItemStack stack = new ItemStack(i, 1, 0);
-                    API.setItemListEntries(stack.getItem(), NEIINpureConfig.buildStackList(stack, new int[]{r.nextInt(5)}));
+                    API.setItemListEntries(stack.getItem(), NEIINpureConfig.buildStackList(stack, new int[]{0}));
                 }
             }
         }catch(Throwable t){
