@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * Created by den on 8/1/2014.
  */
-public class BuildCraftTransport extends GtfoBaseModule {
+public class BuildCraftTransport extends GtfoFMPModule {
 
     public BuildCraftTransport(String id) {
         super(id);

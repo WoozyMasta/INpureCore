@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * Created by den on 8/1/2014.
  */
-public class appliedenergistics2 extends GtfoBaseModule {
+public class appliedenergistics2 extends GtfoFMPModule {
 
     public appliedenergistics2(String id) {
         super(id);

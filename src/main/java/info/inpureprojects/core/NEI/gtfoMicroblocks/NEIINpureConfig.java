@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public class NEIINpureConfig implements IConfigureNEI {
 
-    public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2"};
+    public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft"};
 
     public static ArrayList<ItemStack> buildStackList(ItemStack stack, int[] metas) {
         ArrayList<ItemStack> stacks = new ArrayList();
@@ -56,7 +56,11 @@ public class NEIINpureConfig implements IConfigureNEI {
     }
 
     private String getRandomMaterial() {
-        return MicroMaterialRegistry.materialName(new Random().nextInt(20));
+        try{
+            return MicroMaterialRegistry.materialName(new Random().nextInt(20));
+        }catch(Throwable t){
+            return "";
+        }
     }
 
     @Override

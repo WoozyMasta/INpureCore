@@ -5,11 +5,11 @@ import info.inpureprojects.core.NEI.gtfoMicroblocks.IGtfoModule;
 /**
  * Created by den on 8/1/2014.
  */
-public abstract class GtfoBaseModule implements IGtfoModule {
+public abstract class GtfoFMPModule implements IGtfoModule {
 
     public String id;
 
-    protected GtfoBaseModule(String id) {
+    protected GtfoFMPModule(String id) {
         this.id = id;
     }
 

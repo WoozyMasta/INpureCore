@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by den on 8/1/2014.
  */
-public class ForgeMicroblock extends GtfoBaseModule {
+public class ForgeMicroblock extends GtfoFMPModule {
 
     public ForgeMicroblock(String id) {
         super(id);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by den on 8/1/2014.
  */
-public class ExtraUtilities extends GtfoBaseModule {
+public class ExtraUtilities extends GtfoFMPModule {
 
     public ExtraUtilities(String id) {
         super(id);
