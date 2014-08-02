@@ -3,8 +3,8 @@ package info.inpureprojects.core.NEI.gtfoMicroblocks.Modules;
 import codechicken.nei.api.API;
 import info.inpureprojects.core.INpureCore;
 import net.minecraft.item.ItemStack;
-import scala.actors.threadpool.Arrays;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -25,6 +25,7 @@ public class BuildCraftTransport extends GtfoFMPModule {
             API.setItemListEntries(facades.get(0).getItem(), Arrays.asList(new ItemStack[]{facades.get(new Random().nextInt(facades.size()))}));
         } catch (Throwable t) {
             INpureCore.proxy.warning("Failed to hook bc!");
+            t.printStackTrace();
         }
     }
 }

@@ -4,9 +4,9 @@ import appeng.api.AEApi;
 import codechicken.nei.api.API;
 import info.inpureprojects.core.INpureCore;
 import net.minecraft.item.ItemStack;
-import scala.actors.threadpool.Arrays;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
