@@ -1,4 +1,4 @@
-package info.inpureprojects.core.Utils;
+package info.inpureprojects.core.API.Utils;
 
 import org.apache.commons.io.FileUtils;
 

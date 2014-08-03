@@ -56,9 +56,9 @@ public class NEIINpureConfig implements IConfigureNEI {
     }
 
     private String getRandomMaterial() {
-        try{
+        try {
             return MicroMaterialRegistry.materialName(new Random().nextInt(20));
-        }catch(Throwable t){
+        } catch (Throwable t) {
             return "";
         }
     }

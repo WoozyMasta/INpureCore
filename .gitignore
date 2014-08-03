@@ -2,7 +2,6 @@ forge/
 build/
 bin/
 reobf/
-*.class
 downloads/
 eclipse/
 gradle/

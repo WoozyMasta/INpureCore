@@ -2,8 +2,10 @@ package info.inpureprojects.core.Preloader;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import info.inpureprojects.core.API.Events.EventPreloaderRegister;
+import info.inpureprojects.core.API.PreloaderAPI;
+import info.inpureprojects.core.API.Utils.Downloader;
 import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
-import info.inpureprojects.core.Utils.Downloader;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -13,12 +15,17 @@ import java.util.Map;
  * Created by den on 7/25/2014.
  */
 @IFMLLoadingPlugin.MCVersion(value = "1.7.10")
+@IFMLLoadingPlugin.Name(value = "INpurePreLoader")
 public class INpurePreLoader implements IFMLLoadingPlugin {
 
     public static boolean isDev;
     public static File mc;
     public static File source;
     private INpureDepHandler dep = new INpureDepHandler();
+
+    public static void print(String msg) {
+        System.out.println("[INpureCore|Preloader]: " + msg);
+    }
 
     @Override
     public String[] getASMTransformerClass() {
@@ -52,14 +59,11 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
             Downloader.instance.download(s, new File(ver, FilenameUtils.getName(s)));
         }
         source = (File) data.get("coremodLocation");
+        PreloaderAPI.modules = new ModuleManager();
     }
 
     @Override
     public String getAccessTransformerClass() {
         return null;
-    }
-
-    public void print(String msg) {
-        System.out.println("[INpureCore|Preloader]: " + msg);
     }
 }

@@ -1,4 +1,4 @@
-package info.inpureprojects.core.Utils;
+package info.inpureprojects.core.API.Utils;
 
 import org.apache.commons.compress.utils.IOUtils;
 
@@ -81,6 +81,19 @@ public class Streams {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    public byte[] getBytes(InputStream in) {
+        try {
+            return IOUtils.toByteArray(in);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return null;
+    }
+
+    public byte[] getBytesFromFile(File f) {
+        return getBytes(this.getStream(f));
     }
 
 }

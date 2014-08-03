@@ -6,10 +6,10 @@ import info.inpureprojects.core.API.Scripting.CanBeNull;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.Toc.TocManager;
+import info.inpureprojects.core.API.Utils.Downloader;
+import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.Client.ScriptModContainer;
 import info.inpureprojects.core.Scripting.Objects.Exposed.Console;
-import info.inpureprojects.core.Utils.Downloader;
-import info.inpureprojects.core.Utils.Streams;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
