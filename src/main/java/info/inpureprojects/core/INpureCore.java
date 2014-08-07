@@ -32,7 +32,7 @@ public class INpureCore {
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
-        properties = new PropertiesHolder(new Configuration(new File(new File(evt.getModConfigurationDirectory(), "INpureCore"), "INpureCore.cfg")));
+        properties = new PropertiesHolder(new Configuration(new File(new File(evt.getModConfigurationDirectory(), "INpureProjects/INpureCore"), "INpureCore.cfg")));
         proxy.client();
         proxy.setupAPI();
         PreloaderAPI.modules.registerAll(subModules.Classes);
@@ -49,7 +49,7 @@ public class INpureCore {
         }
         for (IINpureSubmodule s : modules) {
             proxy.print("Processing preinit event for submodule " + s.getClass().getName());
-            s.pre();
+            s.pre(new File(evt.getModConfigurationDirectory(), "INpureProjects"));
         }
     }
 
