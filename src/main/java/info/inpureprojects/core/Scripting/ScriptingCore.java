@@ -27,7 +27,7 @@ public class ScriptingCore implements IScriptingCore {
 
     private static final String[] globals = new String[]{"scripts/env.lua"};
     private static final ExposedObject[] bundled = new ExposedObject[]{new ExposedObject("out", new Console())};
-    private ScriptEngine[] engines = new ScriptEngine[2];
+    private ScriptEngine[] engines = new ScriptEngine[3];
     private ArrayList<TocManager.TableofContents> loaded = new ArrayList();
     private EventBus bus = new EventBus();
 

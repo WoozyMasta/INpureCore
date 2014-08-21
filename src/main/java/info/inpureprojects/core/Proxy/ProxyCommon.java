@@ -40,6 +40,7 @@ public class ProxyCommon extends Proxy {
                 return DynamicFactory.instance.create(core, engine, obj, Interface);
             }
         };
+
     }
 
     @Override

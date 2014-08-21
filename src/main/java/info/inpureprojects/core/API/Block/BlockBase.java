@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.lang.Object;import java.lang.Override;import java.lang.String;import java.util.List;
+import java.util.List;
 
 /**
  * Created by den on 8/7/2014.

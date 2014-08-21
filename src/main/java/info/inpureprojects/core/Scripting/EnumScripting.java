@@ -13,7 +13,8 @@ import java.io.InputStream;
 public enum EnumScripting {
 
     JAVASCRIPT(".js", "JavaScript", new jsHandler()),
-    LUA(".lua", "lua", new luaHandler());
+    LUA(".lua", "lua", new luaHandler()),
+    RUBY(".rb", "jruby", new luaHandler());
     public static ScriptEngineManager m;
     private String extension;
     private String engine;

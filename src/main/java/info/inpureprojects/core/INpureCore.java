@@ -5,8 +5,10 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import info.inpureprojects.core.API.Events.EventPreloaderRegister;
 import info.inpureprojects.core.API.IINpureSubmodule;
+import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.Config.PropertiesHolder;
 import info.inpureprojects.core.Preloader.ModuleManager;
@@ -66,6 +68,16 @@ public class INpureCore {
         for (IINpureSubmodule s : modules) {
             proxy.print("Processing postinit event for submodule " + s.getClass().getName());
             s.post();
+        }
+    }
+
+    @Mod.EventHandler
+    public void onServer(FMLServerAboutToStartEvent evt) {
+        for (IINpureSubmodule s : modules) {
+            if (s instanceof IINpureSubmoduleExpanded) {
+                proxy.print("Processing ServerAboutToStart event for submodule " + s.getClass().getName());
+                ((IINpureSubmoduleExpanded) s).onServerAboutToStart();
+            }
         }
     }
 

@@ -20,15 +20,7 @@ public class ScriptingCoreTest extends TestCase {
     }
 
     public void testLoadPackagesInternal() throws Exception {
-        core.loadPackagesInternal(Arrays.asList(new String[]{"scripts/Test.lua"}));
-        ITestInterface t = (ITestInterface) DynamicFactory.instance.create(core, 1, core.getEngine(1).get("testInstance"), ITestInterface.class);
-        t.doStuff();
-        t.doStuffWithArgs("one", "two");
-    }
-
-    public void testloadPackagesFromDir() throws Exception {
-        System.out.println("Testing external load...");
-        core.loadPackagesFromDir(new File(testDir, "packages"));
+        core.loadPackagesInternal(Arrays.asList(new String[]{"scripts/Test.rb"}));
     }
 
 }

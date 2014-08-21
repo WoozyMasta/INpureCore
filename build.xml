@@ -12,7 +12,7 @@
 	<property name="reobf.dir" value="${build.dir}/reobf"/>
 	<property name="bin.dir" value="${build.dir}/bin"/>
 	<property name="lib.dir" value="${build.dir}/libs"/>
-	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.0.1187/forge-1.7.10-10.13.0.1187-src.zip"/>
+	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.0.1199/forge-1.7.10-10.13.0.1199-src.zip"/>
 	
 	<target name="properties">
 		<available property="has.folders" type="dir" file="${download.dir}"/>
@@ -84,7 +84,6 @@
 			<arg line="gradlew cleanCache"/>
 		</exec>
 		<delete dir="${deps.dir}"/>
-		<delete dir="${api.dir}"/>
 		<delete dir="${download.dir}"/>
 		<delete dir="${build.dir}/.gradle"/>
 		<delete dir="${build.dir}/build"/>

@@ -2,7 +2,6 @@ package info.inpureprojects.core.Preloader;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import info.inpureprojects.core.API.Events.EventPreloaderRegister;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Utils.Downloader;
 import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;

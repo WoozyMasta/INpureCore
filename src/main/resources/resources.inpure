@@ -1,3 +1,4 @@
 ##url= https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/
 commons-codec-1.9.jar
 luaj-jse-3.0.jar
+jruby.jar

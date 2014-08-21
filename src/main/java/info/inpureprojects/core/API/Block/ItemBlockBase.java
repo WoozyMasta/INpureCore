@@ -3,7 +3,7 @@ package info.inpureprojects.core.API.Block;
 import info.inpureprojects.core.API.MovedFrom;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;import java.lang.Override;import java.lang.String;
+import net.minecraft.item.ItemStack;
 
 /**
  * Created by den on 8/11/2014.

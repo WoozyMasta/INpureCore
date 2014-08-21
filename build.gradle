@@ -22,7 +22,7 @@ group= "info.inpureprojects.core" // http://maven.apache.org/guides/mini/guide-n
 archivesBaseName = "INpureCore"
 
 minecraft {
-    version = "1.7.10-10.13.0.1187"
+    version = "1.7.10-10.13.0.1199"
     assetDir = "eclipse/assets"
 }
 
