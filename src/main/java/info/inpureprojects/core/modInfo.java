@@ -7,7 +7,7 @@ public class modInfo {
 
     public static final String modid = "inpure|core";
     public static final String name = "INpureCore";
-    public static final String version = "1.0.0R1.0.0B1";
+    public static final String version = "1.7.10R1.0.0B1";
     public static final String deps = "after:ExtraUtilities";
 
     private static final String proxy_path = "info.inpureprojects.core.Proxy.";
