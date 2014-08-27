@@ -1,6 +1,7 @@
 package info.inpureprojects.core.Preloader;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModClassLoader;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Utils.Downloader;
@@ -8,6 +9,8 @@ import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -20,6 +23,9 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
     public static boolean isDev;
     public static File mc;
     public static File source;
+    public static File versionFolder;
+    public static File INpure;
+    public static ArrayList<File> toInject = new ArrayList();
     private INpureDepHandler dep = new INpureDepHandler();
 
     public static void print(String msg) {
@@ -49,13 +55,16 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         }
         mc = (File) data.get("mcLocation");
         File mods = new File(mc, "mods");
-        File ver = new File(mods, Loader.MC_VERSION);
-        if (!ver.exists()) {
-            ver.mkdirs();
+        versionFolder = new File(mods, Loader.MC_VERSION);
+        INpure = new File(versionFolder, "INpureProjects/deps");
+        if (!INpure.exists()) {
+            INpure.mkdirs();
         }
         print("Starting library configuration...");
         for (String s : dep.readStream(this.getClass().getClassLoader().getResourceAsStream("resources.inpure"))) {
-            Downloader.instance.download(s, new File(ver, FilenameUtils.getName(s)));
+            File inject = new File(INpure, FilenameUtils.getName(s));
+            Downloader.instance.download(s, inject);
+            toInject.add(inject);
         }
         source = (File) data.get("coremodLocation");
         PreloaderAPI.modules = new ModuleManager();
@@ -64,5 +73,16 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
     @Override
     public String getAccessTransformerClass() {
         return null;
+    }
+
+    public static void forceLoad(File file){
+        try{
+            Field mLoader = Class.forName("cpw.mods.fml.common.Loader").getDeclaredField("modClassLoader");
+            mLoader.setAccessible(true);
+            ModClassLoader loader = (ModClassLoader) mLoader.get(Loader.instance());
+            loader.addFile(file);
+        }catch(Throwable t){
+            t.printStackTrace();
+        }
     }
 }

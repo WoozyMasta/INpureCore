@@ -31,13 +31,13 @@ public class ProxyCommon extends Proxy {
     public void setupAPI() {
         INpureAPI.manager = new IScriptingManager() {
             @Override
-            public IScriptingCore create() {
-                return new ScriptingCore();
+            public IScriptingCore create(SupportedLanguages lang) {
+                return new ScriptingCore(lang);
             }
 
             @Override
-            public Object WrapScript(IScriptingCore core, int engine, Object obj, Class Interface) {
-                return DynamicFactory.instance.create(core, engine, obj, Interface);
+            public Object WrapScript(IScriptingCore core, Object obj, Class Interface) {
+                return DynamicFactory.instance.create(core, obj, Interface);
             }
         };
 

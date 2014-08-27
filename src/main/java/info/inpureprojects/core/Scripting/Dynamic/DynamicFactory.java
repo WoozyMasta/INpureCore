@@ -19,9 +19,9 @@ public class DynamicFactory {
 
     public static final DynamicFactory instance = new DynamicFactory();
 
-    public Object create(IScriptingCore core, int engine, Object obj, Class Interface) {
+    public Object create(IScriptingCore core, Object obj, Class Interface) {
         try {
-            DynamicHandler h = new DynamicHandler(core, engine, obj);
+            DynamicHandler h = new DynamicHandler(core, obj);
             return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{Interface}, h);
         } catch (Throwable t) {
             t.printStackTrace();
@@ -69,20 +69,18 @@ public class DynamicFactory {
     public static class DynamicHandler implements InvocationHandler {
 
         private IScriptingCore core;
-        private int engine;
         private Object scriptClass;
 
-        public DynamicHandler(IScriptingCore core, int engine, Object scriptClass) {
+        public DynamicHandler(IScriptingCore core, Object scriptClass) {
             this.core = core;
-            this.engine = engine;
             this.scriptClass = scriptClass;
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             try {
-                if (core.getEngine(engine) instanceof Invocable) {
-                    Invocable invoc = (Invocable) core.getEngine(engine);
+                if (core.getEngine() instanceof Invocable) {
+                    Invocable invoc = (Invocable) core.getEngine();
                     return invoc.invokeMethod(this.scriptClass, method.getName(), args);
                 } else {
                     // The lua engine does not implement Invocable.

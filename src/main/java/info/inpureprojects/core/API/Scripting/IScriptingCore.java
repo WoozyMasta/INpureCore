@@ -22,8 +22,8 @@ public interface IScriptingCore {
 
     public void loadPackagesFromDir(File dir) throws Exception;
 
-    public ScriptEngine getEngine(int ordinal);
-
     public List<TocManager.TableofContents> getLoadedModules();
+
+    public ScriptEngine getEngine();
 
 }

@@ -11,6 +11,7 @@ import info.inpureprojects.core.API.IINpureSubmodule;
 import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.Config.PropertiesHolder;
+import info.inpureprojects.core.Preloader.INpurePreLoader;
 import info.inpureprojects.core.Preloader.ModuleManager;
 import info.inpureprojects.core.Proxy.Proxy;
 import net.minecraftforge.common.config.Configuration;
@@ -34,6 +35,10 @@ public class INpureCore {
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         instance = this;
+        for (File f : INpurePreLoader.toInject){
+            INpurePreLoader.forceLoad(f);
+        }
+        INpurePreLoader.toInject = null;
         properties = new PropertiesHolder(new Configuration(new File(new File(evt.getModConfigurationDirectory(), "INpureProjects/INpureCore"), "INpureCore.cfg")));
         proxy.client();
         proxy.setupAPI();

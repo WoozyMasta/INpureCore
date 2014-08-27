@@ -1,4 +1,0 @@
-## Title: testPackage
-## Author: denoflions
-## Version: 1.0
-testMe.lua

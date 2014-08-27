@@ -5,7 +5,7 @@ package info.inpureprojects.core.API.Scripting;
  */
 public interface IScriptingManager {
 
-    public IScriptingCore create();
+    public IScriptingCore create(SupportedLanguages lang);
 
     /**
      * This method takes the parameters and returns an object of the interface type.
@@ -16,6 +16,14 @@ public interface IScriptingManager {
      * @Param obj Script generated object. Should be a class/singleton. Lua classes are tables.
      * @Return Wrapped script object. You'll need to cast it to your interface.
      */
-    public Object WrapScript(IScriptingCore core, int engine, Object obj, Class Interface);
+    public Object WrapScript(IScriptingCore core, Object obj, Class Interface);
+
+    public static enum SupportedLanguages{
+
+        JAVASCRIPT,
+        LUA,
+        RUBY;
+
+    }
 
 }
