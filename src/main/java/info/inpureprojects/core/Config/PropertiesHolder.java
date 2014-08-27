@@ -10,6 +10,7 @@ public class PropertiesHolder {
     public boolean textureLoggerOverride;
     public boolean hideCrapFromNEI;
     public boolean hideVanillaCrapFromNEI;
+    public boolean updateCheck;
 
     public PropertiesHolder(Configuration config) {
         config.load();
@@ -18,6 +19,7 @@ public class PropertiesHolder {
         config.get("tweaks", "Hide_Microblocks_From_NEI", true).comment = "This includes ForgeMicroblocks, ExtraUtils microblocks, BC Facades, and AE Facades.";
         hideVanillaCrapFromNEI = config.get("tweaks", "Hide_VanillaCrap_From_NEI", true).getBoolean();
         config.get("tweaks", "Hide_VanillaCrap_From_NEI", true).comment = "Mob spawners, portals, fire, and still liquid source blocks.";
+        updateCheck = config.get("updater", "check", true).getBoolean();
         config.save();
     }
 
