@@ -1,0 +1,18 @@
+[
+{
+  "modid": "inpure|core",
+  "name": "INpureCore",
+  "description": "Core mod for INpure Projects",
+  "version": "1.7.10R1.0.0B2",
+  "credits": "",
+  "logoFile": "",
+  "mcversion": "1.7.10",
+  "url": "https://github.com/INpureProjects",
+  "updateUrl": "https://github.com/INpureProjects/INpureCore",
+  "authors": [ "denoflionsx" ],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": [
+	 "Forge"
+]
+}
