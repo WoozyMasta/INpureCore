@@ -13,11 +13,13 @@ import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import info.inpureprojects.core.API.Events.EventPreloaderRegister;
 import info.inpureprojects.core.API.IINpureSubmodule;
 import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
+import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.Config.PropertiesHolder;
 import info.inpureprojects.core.Preloader.INpurePreLoader;
 import info.inpureprojects.core.Preloader.ModuleManager;
 import info.inpureprojects.core.Proxy.Proxy;
+import info.inpureprojects.core.Updater.UpdateManager;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +30,7 @@ import java.util.ArrayList;
  * Created by den on 7/16/2014.
  */
 @Mod(modid = modInfo.modid, name = modInfo.name, version = modInfo.version, dependencies = modInfo.deps)
-@Optional.Interface(iface = "cofh.mod.updater.IUpdatableMod", modid = "CoFHCore")
-public class INpureCore implements IUpdatableMod{
+public class INpureCore{
 
     @Mod.Instance
     public static INpureCore instance;
@@ -38,29 +39,10 @@ public class INpureCore implements IUpdatableMod{
     public static PropertiesHolder properties;
     public static ArrayList<IINpureSubmodule> modules = new ArrayList();
     public static Logger log;
+    public static ArrayList<UpdateManager> managers = new ArrayList();
 
-    @Optional.Method(modid = "CoFHCore")
-    @Override
-    public String getModId() {
-        return modInfo.modid;
-    }
-
-    @Optional.Method(modid = "CoFHCore")
-    @Override
-    public String getModName() {
-        return modInfo.name;
-    }
-
-    @Optional.Method(modid = "CoFHCore")
-    @Override
-    public String getModVersion() {
-        return modInfo.version;
-    }
-
-    @Optional.Method(modid = "CoFHCore")
-    @Override
-    public Logger getLogger() {
-        return log;
+    public static void registerManager(IUpdateCheck check){
+        managers.add(new UpdateManager(check));
     }
 
     @Mod.EventHandler
@@ -94,8 +76,8 @@ public class INpureCore implements IUpdatableMod{
 
     @Subscribe
     public void registerModules(EventPreloaderRegister evt){
-        if (Loader.isModLoaded("CoFHCore") && properties.updateCheck){
-            PreloaderAPI.modules.register("info.inpureprojects.core.CoFH.ModuleUpdater");
+        if (Loader.isModLoaded(modInfo.modid) && properties.updateCheck){
+            PreloaderAPI.modules.register("info.inpureprojects.core.Updater.UpdateModule");
         }
     }
 
@@ -112,6 +94,9 @@ public class INpureCore implements IUpdatableMod{
         for (IINpureSubmodule s : modules) {
             proxy.print("Processing postinit event for submodule " + s.getClass().getName());
             s.post();
+        }
+        for (UpdateManager m : managers){
+            m.runCheck();
         }
     }
 
