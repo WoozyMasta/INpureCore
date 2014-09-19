@@ -1,12 +1,14 @@
 package info.inpureprojects.core.Updater;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.INpureCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import org.apache.commons.io.IOUtils;
 
@@ -42,10 +44,13 @@ public class UpdateManager {
             --lastPoll;
             return;
         }
-        if (!alreadyDisplayed && thread.isCheckComplete()){
-            if (thread.isUpdateAvailable()){
+        lastPoll = 400;
+        if (!alreadyDisplayed && thread.checkComplete){
+            if (thread.updateAvailable){
                 EntityPlayer player = evt.player;
-                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.getUpdate().getModName() + "]").appendText(EnumChatFormatting.WHITE + " A new version is available:"));
+                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.update.getModName() + "]").appendText(EnumChatFormatting.WHITE + " A new version is available: " + EnumChatFormatting.AQUA + thread.update.getVersion().replace(Loader.MC_VERSION, "") + EnumChatFormatting.WHITE));
+                this.alreadyDisplayed = true;
+                FMLCommonHandler.instance().bus().unregister(this);
             }
         }
     }
@@ -55,6 +60,7 @@ public class UpdateManager {
         private final IUpdateCheck update;
         private boolean updateAvailable = false;
         private boolean checkComplete = false;
+        private String latestVersion;
 
         public UThread(IUpdateCheck update) {
             super(update.getModId() + "UpdateCheck");
@@ -68,29 +74,18 @@ public class UpdateManager {
                 URL u = new URL(this.update.getUpdateUrl());
                 BufferedReader in = new BufferedReader(new InputStreamReader(u.openStream()));
                 List<String> lines = IOUtils.readLines(in);
-                if (!lines.get(0).split("\\s+")[0].equals(this.update.getVersion())){
+                this.latestVersion = lines.get(0).split("\\s+")[0];
+                if (!latestVersion.equals(this.update.getVersion())){
                     this.updateAvailable = true;
-                    INpureCore.proxy.print("Update found for " + this.getUpdate().getModName());
+                    INpureCore.proxy.print("Update found for " + this.update.getModName());
                 }else{
-                    INpureCore.proxy.print("No update found for " + this.getUpdate().getModName());
+                    INpureCore.proxy.print("No update found for " + this.update.getModName());
                 }
             }catch(Throwable t){
                 t.printStackTrace();
                 checkComplete = false;
             }
             checkComplete = true;
-        }
-
-        public boolean isUpdateAvailable() {
-            return updateAvailable;
-        }
-
-        public boolean isCheckComplete() {
-            return checkComplete;
-        }
-
-        public IUpdateCheck getUpdate() {
-            return update;
         }
     }
 
