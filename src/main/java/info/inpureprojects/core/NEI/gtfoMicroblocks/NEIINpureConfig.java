@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public class NEIINpureConfig implements IConfigureNEI {
 
-    public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft"};
+    public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
 
     public static ArrayList<ItemStack> buildStackList(ItemStack stack, int[] metas) {
         ArrayList<ItemStack> stacks = new ArrayList();
