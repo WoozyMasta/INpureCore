@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 /**
  * Created by den on 8/1/2014.
  */
+@Deprecated
 public class Vanilla implements IGtfoModule {
 
     @Override

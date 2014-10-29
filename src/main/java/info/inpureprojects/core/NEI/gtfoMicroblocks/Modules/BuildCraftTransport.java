@@ -11,6 +11,7 @@ import java.util.Random;
 /**
  * Created by den on 8/1/2014.
  */
+@Deprecated
 public class BuildCraftTransport extends GtfoFMPModule {
 
     public BuildCraftTransport(String id) {

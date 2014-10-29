@@ -75,6 +75,7 @@ public class UpdateManager {
                 BufferedReader in = new BufferedReader(new InputStreamReader(u.openStream()));
                 List<String> lines = IOUtils.readLines(in);
                 this.latestVersion = lines.get(0).split("\\s+")[0];
+                INpureCore.proxy.print("Local: " + this.update.getVersion() + ", Remote: " + this.latestVersion);
                 if (!latestVersion.equals(this.update.getVersion())){
                     this.updateAvailable = true;
                     INpureCore.proxy.print("Update found for " + this.update.getModName());

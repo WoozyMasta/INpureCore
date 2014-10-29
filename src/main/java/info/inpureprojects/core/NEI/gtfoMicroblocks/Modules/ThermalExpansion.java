@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by den on 9/19/2014.
  */
+@Deprecated
 public class ThermalExpansion extends GtfoFMPModule{
 
     public ThermalExpansion(String id) {

@@ -40,6 +40,7 @@ public class INpureCore{
     public static ArrayList<IINpureSubmodule> modules = new ArrayList();
     public static Logger log;
     public static ArrayList<UpdateManager> managers = new ArrayList();
+    public static File dir;
 
     public static void registerManager(IUpdateCheck check){
         managers.add(new UpdateManager(check));
@@ -68,9 +69,10 @@ public class INpureCore{
                 t.printStackTrace();
             }
         }
+        dir = new File(evt.getModConfigurationDirectory(), "INpureProjects");
         for (IINpureSubmodule s : modules) {
             proxy.print("Processing preinit event for submodule " + s.getClass().getName());
-            s.pre(new File(evt.getModConfigurationDirectory(), "INpureProjects"));
+            s.pre(dir);
         }
     }
 

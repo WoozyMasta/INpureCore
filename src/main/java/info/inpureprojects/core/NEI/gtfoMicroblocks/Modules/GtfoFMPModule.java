@@ -5,6 +5,7 @@ import info.inpureprojects.core.NEI.gtfoMicroblocks.IGtfoModule;
 /**
  * Created by den on 8/1/2014.
  */
+@Deprecated
 public abstract class GtfoFMPModule implements IGtfoModule {
 
     public String id;

@@ -121,17 +121,17 @@ public class ScriptingCore implements IScriptingCore {
                 if (f.getName().contains(".toc")) {
                     TocManager.TableofContents c = TocManager.instance.read(f);
                     System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
+                    try {
+                        FMLCommonHandler.instance().addModToResourcePack(new ScriptModContainer(c, dir, this));
+                        System.out.println("Resource loading configured for script pack: " + c.getTitle());
+                    } catch (Throwable t) {
+                        // This is for test cases.
+                    }
                     for (String s : c.getScripts()) {
                         System.out.println("Loading: " + s);
                         File file = new File(f.getParent() + "/" + s);
                         this.loadFile(file);
                         loaded.add(c);
-                        try {
-                            FMLCommonHandler.instance().addModToResourcePack(new ScriptModContainer(c, dir, this));
-                            System.out.println("Resource loading configured for script pack: " + c.getTitle());
-                        } catch (Throwable t) {
-                            // This is for test cases.
-                        }
                     }
                 }
             }

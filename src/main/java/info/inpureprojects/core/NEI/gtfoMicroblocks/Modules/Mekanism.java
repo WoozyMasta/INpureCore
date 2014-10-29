@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by den on 9/19/2014.
  */
+@Deprecated
 public class Mekanism extends GtfoFMPModule{
 
     public Mekanism(String id) {
