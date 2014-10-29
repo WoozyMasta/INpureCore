@@ -3,6 +3,7 @@ package info.inpureprojects.core.NEI.gtfoMicroblocks.Modules;
 import appeng.api.AEApi;
 import codechicken.nei.api.API;
 import info.inpureprojects.core.INpureCore;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.lang.reflect.Field;
@@ -13,6 +14,7 @@ import java.util.Random;
 /**
  * Created by den on 8/1/2014.
  */
+@Deprecated
 public class appliedenergistics2 extends GtfoFMPModule {
 
     public appliedenergistics2(String id) {

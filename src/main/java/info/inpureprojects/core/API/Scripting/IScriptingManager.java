@@ -18,7 +18,7 @@ public interface IScriptingManager {
      */
     public Object WrapScript(IScriptingCore core, Object obj, Class Interface);
 
-    public static enum SupportedLanguages{
+    public static enum SupportedLanguages {
 
         JAVASCRIPT,
         LUA,

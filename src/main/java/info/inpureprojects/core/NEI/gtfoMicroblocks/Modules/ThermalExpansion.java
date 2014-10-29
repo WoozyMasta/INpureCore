@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
  * Created by den on 9/19/2014.
  */
 @Deprecated
-public class ThermalExpansion extends GtfoFMPModule{
+public class ThermalExpansion extends GtfoFMPModule {
 
     public ThermalExpansion(String id) {
         super(id);
@@ -18,10 +18,10 @@ public class ThermalExpansion extends GtfoFMPModule{
     @Override
     public void run() {
         INpureCore.proxy.print("Oh look, Florbs.");
-        try{
+        try {
             ItemStack florb = (ItemStack) Class.forName("thermalexpansion.item.TEFlorbs").getDeclaredField("florb").get(null);
             API.setItemListEntries(florb.getItem(), NEIINpureConfig.buildStackList(florb, new int[]{0, 1}));
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }

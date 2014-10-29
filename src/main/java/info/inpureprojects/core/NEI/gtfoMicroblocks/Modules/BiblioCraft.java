@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 /**
  * Created by den on 8/2/2014.
  */
+@Deprecated
 public class BiblioCraft extends GtfoFMPModule {
 
     public BiblioCraft(String id) {

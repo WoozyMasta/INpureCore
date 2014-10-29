@@ -5,10 +5,10 @@ package info.inpureprojects.core.API;
  */
 public class Updater {
 
-    public static void register(IUpdateCheck update){
-        try{
+    public static void register(IUpdateCheck update) {
+        try {
             Class.forName("info.inpureprojects.core.INpureCore").getDeclaredMethod("registerManager", new Class[]{IUpdateCheck.class}).invoke(null, new Object[]{update});
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }

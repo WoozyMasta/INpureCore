@@ -1,4 +1,4 @@
-package info.inpureprojects.core.NEI.gtfoMicroblocks;
+package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 
 import cpw.mods.fml.common.Loader;
 
@@ -7,7 +7,7 @@ import cpw.mods.fml.common.Loader;
  */
 public class FMLObject {
 
-    public boolean isModLoaded(String modid){
+    public boolean isModLoaded(String modid) {
         return Loader.isModLoaded(modid);
     }
 

@@ -1,8 +1,8 @@
-package info.inpureprojects.core.NEI.gtfoMicroblocks;
+package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 
 import codechicken.nei.api.API;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
+import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class ExtraUtilitiesObject {
 
-    public void obliterate_microblocks(int[] metas, String id){
+    public void obliterate_microblocks(int[] metas, String id) {
         Item i = GameRegistry.findItem("ExtraUtilities", "microblocks");
         ItemStack pipeJacket = new ItemStack(i, 1, 0);
         ArrayList<ItemStack> stacks = new ArrayList();

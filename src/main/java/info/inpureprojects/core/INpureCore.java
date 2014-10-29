@@ -1,10 +1,8 @@
 package info.inpureprojects.core;
 
-import cofh.mod.updater.IUpdatableMod;
 import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
  * Created by den on 7/16/2014.
  */
 @Mod(modid = modInfo.modid, name = modInfo.name, version = modInfo.version, dependencies = modInfo.deps)
-public class INpureCore{
+public class INpureCore {
 
     @Mod.Instance
     public static INpureCore instance;
@@ -42,7 +40,7 @@ public class INpureCore{
     public static ArrayList<UpdateManager> managers = new ArrayList();
     public static File dir;
 
-    public static void registerManager(IUpdateCheck check){
+    public static void registerManager(IUpdateCheck check) {
         managers.add(new UpdateManager(check));
     }
 
@@ -51,7 +49,7 @@ public class INpureCore{
         instance = this;
         PreloaderAPI.preLoaderEvents.register(this);
         log = evt.getModLog();
-        for (File f : INpurePreLoader.toInject){
+        for (File f : INpurePreLoader.toInject) {
             INpurePreLoader.forceLoad(f);
         }
         INpurePreLoader.toInject = null;
@@ -77,8 +75,8 @@ public class INpureCore{
     }
 
     @Subscribe
-    public void registerModules(EventPreloaderRegister evt){
-        if (Loader.isModLoaded(modInfo.modid) && properties.updateCheck){
+    public void registerModules(EventPreloaderRegister evt) {
+        if (Loader.isModLoaded(modInfo.modid) && properties.updateCheck) {
             PreloaderAPI.modules.register("info.inpureprojects.core.Updater.UpdateModule");
         }
     }
@@ -97,7 +95,7 @@ public class INpureCore{
             proxy.print("Processing postinit event for submodule " + s.getClass().getName());
             s.post();
         }
-        for (UpdateManager m : managers){
+        for (UpdateManager m : managers) {
             m.runCheck();
         }
     }

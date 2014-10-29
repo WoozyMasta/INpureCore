@@ -1,6 +1,5 @@
 package info.inpureprojects.core.NEI.gtfoMicroblocks;
 
-import codechicken.microblock.MicroMaterialRegistry;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import cpw.mods.fml.common.Loader;
@@ -9,7 +8,7 @@ import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
 import info.inpureprojects.core.INpureCore;
-import info.inpureprojects.core.NEI.gtfoMicroblocks.Modules.Vanilla;
+import info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects.*;
 import info.inpureprojects.core.modInfo;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -17,16 +16,14 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Created by den on 8/1/2014.
  */
 public class NEIINpureConfig implements IConfigureNEI {
 
+    //public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
     public static boolean loaded = false;
-    public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
     public static IScriptingCore scripting;
 
     public static ArrayList<ItemStack> buildStackList(ItemStack stack, int[] metas) {
@@ -45,9 +42,10 @@ public class NEIINpureConfig implements IConfigureNEI {
 
     @Override
     public void loadConfig() {
-        if (loaded){
+        if (loaded) {
             return;
         }
+        INpureCore.proxy.print("Starting NEI Filter scripting. This might take a moment to load all the modules...");
         File working = new File(INpureCore.dir, "custom_nei_filters");
         scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
         scripting.initialize(working);
@@ -57,19 +55,22 @@ public class NEIINpureConfig implements IConfigureNEI {
         obj.add(new ExposedObject("FML", new FMLObject()));
         obj.add(new ExposedObject("NEI", new NEIObject()));
         // Load custom modules only if proper mod is also loaded.
-        if (Loader.isModLoaded("ForgeMicroblock")){
+        if (Loader.isModLoaded("ForgeMicroblock")) {
             obj.add(new ExposedObject("ForgeMicroblock", new ForgeMicroblockObject()));
         }
-        if (Loader.isModLoaded("ExtraUtilities")){
+        if (Loader.isModLoaded("ExtraUtilities")) {
             obj.add(new ExposedObject("ExtraUtilities", new ExtraUtilitiesObject()));
         }
-        if (Loader.isModLoaded("BuildCraft|Transport")){
+        if (Loader.isModLoaded("BuildCraft|Transport")) {
             obj.add(new ExposedObject("BC", new BCObject()));
         }
+        if (Loader.isModLoaded("appliedenergistics2")){
+            obj.add(new ExposedObject("AE2", new AEObject()));
+        }
         scripting.exposeObjects(obj);
-        try{
+        try {
             scripting.loadPackagesFromDir(working);
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         loaded = true;

@@ -1,6 +1,7 @@
 package info.inpureprojects.core.API.Scripting.Toc;
 
 import org.apache.commons.io.IOUtils;
+import scala.actors.threadpool.Arrays;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +41,10 @@ public class TocManager {
         return s.split(":")[1].trim().replaceAll("\\s", "").toLowerCase();
     }
 
+    private String cleanNoCaseChange(String s) {
+        return s.split(":")[1].trim().replaceAll("\\s", "");
+    }
+
     private TableofContents parse(List<String> lines) {
         TableofContents c = new TableofContents();
         ArrayList<String> f = new ArrayList();
@@ -50,6 +55,11 @@ public class TocManager {
                 c.setAuthor(clean(s));
             } else if (s.contains("## Version:")) {
                 c.setVersion(clean(s));
+            } else if (s.contains("## Saved Variables:")) {
+                String temp = s.replace("## Saved Variables:", "").replaceAll("\\s", "");
+                c.setSavedVariables(Arrays.asList(temp.split(",")));
+            } else if (s.contains("## Bootstrap:")) {
+                c.setBootstrap(cleanNoCaseChange(s));
             } else if (!s.contains("##")) {
                 f.add(s.trim());
             }
@@ -63,6 +73,8 @@ public class TocManager {
         private String title;
         private String author;
         private String version;
+        private List<String> savedVariables;
+        private String bootstrap;
         private List<String> scripts;
 
         public List<String> getScripts() {
@@ -95,6 +107,22 @@ public class TocManager {
 
         public void setVersion(String version) {
             this.version = version;
+        }
+
+        public List<String> getSavedVariables() {
+            return savedVariables;
+        }
+
+        public void setSavedVariables(List<String> savedVariables) {
+            this.savedVariables = savedVariables;
+        }
+
+        public String getBootstrap() {
+            return bootstrap;
+        }
+
+        public void setBootstrap(String bootstrap) {
+            this.bootstrap = bootstrap;
         }
     }
 

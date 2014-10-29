@@ -32,6 +32,17 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         System.out.println("[INpureCore|Preloader]: " + msg);
     }
 
+    public static void forceLoad(File file) {
+        try {
+            Field mLoader = Class.forName("cpw.mods.fml.common.Loader").getDeclaredField("modClassLoader");
+            mLoader.setAccessible(true);
+            ModClassLoader loader = (ModClassLoader) mLoader.get(Loader.instance());
+            loader.addFile(file);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{};
@@ -73,16 +84,5 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
     @Override
     public String getAccessTransformerClass() {
         return null;
-    }
-
-    public static void forceLoad(File file){
-        try{
-            Field mLoader = Class.forName("cpw.mods.fml.common.Loader").getDeclaredField("modClassLoader");
-            mLoader.setAccessible(true);
-            ModClassLoader loader = (ModClassLoader) mLoader.get(Loader.instance());
-            loader.addFile(file);
-        }catch(Throwable t){
-            t.printStackTrace();
-        }
     }
 }

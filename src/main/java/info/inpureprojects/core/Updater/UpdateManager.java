@@ -8,7 +8,6 @@ import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.INpureCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import org.apache.commons.io.IOUtils;
 
@@ -31,12 +30,12 @@ public class UpdateManager {
         FMLCommonHandler.instance().bus().register(this);
     }
 
-    public void runCheck(){
+    public void runCheck() {
         thread.start();
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.PlayerTickEvent evt){
+    public void onTick(TickEvent.PlayerTickEvent evt) {
         if (evt.phase != TickEvent.Phase.START) {
             return;
         }
@@ -45,8 +44,8 @@ public class UpdateManager {
             return;
         }
         lastPoll = 400;
-        if (!alreadyDisplayed && thread.checkComplete){
-            if (thread.updateAvailable){
+        if (!alreadyDisplayed && thread.checkComplete) {
+            if (thread.updateAvailable) {
                 EntityPlayer player = evt.player;
                 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.update.getModName() + "]").appendText(EnumChatFormatting.WHITE + " A new version is available: " + EnumChatFormatting.AQUA + thread.update.getVersion().replace(Loader.MC_VERSION, "") + EnumChatFormatting.WHITE));
                 this.alreadyDisplayed = true;
@@ -55,7 +54,7 @@ public class UpdateManager {
         }
     }
 
-    public static class UThread extends Thread{
+    public static class UThread extends Thread {
 
         private final IUpdateCheck update;
         private boolean updateAvailable = false;
@@ -70,19 +69,19 @@ public class UpdateManager {
         @Override
         public void run() {
             super.run();
-            try{
+            try {
                 URL u = new URL(this.update.getUpdateUrl());
                 BufferedReader in = new BufferedReader(new InputStreamReader(u.openStream()));
                 List<String> lines = IOUtils.readLines(in);
                 this.latestVersion = lines.get(0).split("\\s+")[0];
                 INpureCore.proxy.print("Local: " + this.update.getVersion() + ", Remote: " + this.latestVersion);
-                if (!latestVersion.equals(this.update.getVersion())){
+                if (!latestVersion.equals(this.update.getVersion())) {
                     this.updateAvailable = true;
                     INpureCore.proxy.print("Update found for " + this.update.getModName());
-                }else{
+                } else {
                     INpureCore.proxy.print("No update found for " + this.update.getModName());
                 }
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 t.printStackTrace();
                 checkComplete = false;
             }

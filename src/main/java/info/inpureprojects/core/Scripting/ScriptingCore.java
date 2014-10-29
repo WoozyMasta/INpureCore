@@ -12,6 +12,7 @@ import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.Client.ScriptModContainer;
 import info.inpureprojects.core.Preloader.INpurePreLoader;
 import info.inpureprojects.core.Scripting.Objects.Exposed.Console;
+import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -34,21 +35,22 @@ public class ScriptingCore implements IScriptingCore {
     private ArrayList<TocManager.TableofContents> loaded = new ArrayList();
     private EventBus bus = new EventBus();
     private IScriptingManager.SupportedLanguages lang;
+    private Configuration config;
 
-    static{
+    static {
         injected[0] = false;
         injected[1] = false;
     }
 
     public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
         this.lang = lang;
-        if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]){
+        if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]) {
             File f = new File(INpurePreLoader.INpure, "luaj-jse-3.0.jar");
             Downloader.instance.download("https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/luaj-jse-3.0.jar", f);
             INpurePreLoader.forceLoad(f);
             injected[0] = true;
-        }else if (this.lang.equals(IScriptingManager.SupportedLanguages.RUBY) && !injected[1]){
-            File f =  new File(INpurePreLoader.INpure, "jruby.jar");
+        } else if (this.lang.equals(IScriptingManager.SupportedLanguages.RUBY) && !injected[1]) {
+            File f = new File(INpurePreLoader.INpure, "jruby.jar");
             Downloader.instance.download("https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/jruby.jar", new File(INpurePreLoader.INpure, "jruby.jar"));
             INpurePreLoader.forceLoad(f);
             injected[1] = true;
@@ -58,14 +60,14 @@ public class ScriptingCore implements IScriptingCore {
     @Override
     public void initialize(File workingDir) {
         workingDir.mkdirs();
-        for (EnumScripting s : EnumScripting.values()){
-            if (s.toString().equals(lang.toString())){
+        for (EnumScripting s : EnumScripting.values()) {
+            if (s.toString().equals(lang.toString())) {
                 engine = s.getScriptEngine();
                 break;
             }
         }
         engine.put("workingDir", workingDir);
-        if (lang.equals(IScriptingManager.SupportedLanguages.LUA)){
+        if (lang.equals(IScriptingManager.SupportedLanguages.LUA)) {
             File m = new File(workingDir, "middleclass.lua");
             Downloader.instance.download("https://raw.githubusercontent.com/kikito/middleclass/master/middleclass.lua", m);
             try {
@@ -123,14 +125,29 @@ public class ScriptingCore implements IScriptingCore {
                     System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
                     try {
                         FMLCommonHandler.instance().addModToResourcePack(new ScriptModContainer(c, dir, this));
-                        System.out.println("Resource loading configured for script pack: " + c.getTitle());
                     } catch (Throwable t) {
                         // This is for test cases.
                     }
+                    this.getEngine().put(c.getTitle() + "_version", c.getVersion());
+                    if (c.getBootstrap() != null) {
+                        System.out.println("Bootstrap setting found. Loading: " + c.getBootstrap());
+                        this.loadFile(new File(f.getParent() + "/" + c.getBootstrap()));
+                    }
+                    if (c.getSavedVariables() != null) {
+                        config = new Configuration(new File(dir, c.getTitle() + ".cfg"));
+                        config.load();
+                        for (String s : c.getSavedVariables()) {
+                            if (config.hasKey("scripting", s)) {
+                                this.getEngine().put(s, config.get("scripting", s, ""));
+                            } else {
+                                this.config.get("scripting", s, this.getEngine().get(s).toString());
+                            }
+                        }
+                        config.save();
+                    }
                     for (String s : c.getScripts()) {
                         System.out.println("Loading: " + s);
-                        File file = new File(f.getParent() + "/" + s);
-                        this.loadFile(file);
+                        this.loadFile(new File(f.getParent() + "/" + s));
                         loaded.add(c);
                     }
                 }

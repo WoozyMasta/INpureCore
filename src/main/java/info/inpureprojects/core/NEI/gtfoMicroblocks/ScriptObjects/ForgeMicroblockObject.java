@@ -1,8 +1,9 @@
-package info.inpureprojects.core.NEI.gtfoMicroblocks;
+package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 
 import codechicken.microblock.MicroMaterialRegistry;
 import codechicken.nei.api.API;
 import cpw.mods.fml.common.registry.GameRegistry;
+import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -22,7 +23,7 @@ public class ForgeMicroblockObject {
         }
     }
 
-    public void obliterate_microblocks(int[] metas, String id){
+    public void obliterate_microblocks(int[] metas, String id) {
         ArrayList<ItemStack> stacks = new ArrayList();
         Item i = GameRegistry.findItem("ForgeMicroblock", "microblock");
         for (ItemStack s : NEIINpureConfig.buildStackList(new ItemStack(i), metas)) {

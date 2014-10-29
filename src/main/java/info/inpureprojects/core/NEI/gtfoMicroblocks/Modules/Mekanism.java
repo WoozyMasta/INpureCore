@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
  * Created by den on 9/19/2014.
  */
 @Deprecated
-public class Mekanism extends GtfoFMPModule{
+public class Mekanism extends GtfoFMPModule {
 
     public Mekanism(String id) {
         super(id);
@@ -19,11 +19,11 @@ public class Mekanism extends GtfoFMPModule{
     @Override
     public void run() {
         INpureCore.proxy.print("Gas tanks!");
-        try{
+        try {
             Block b = (Block) Class.forName("mekanism.common.Mekanism").getDeclaredField("GasTank").get(null);
             ItemStack gasTank = new ItemStack(b);
             API.setItemListEntries(gasTank.getItem(), NEIINpureConfig.buildStackList(gasTank, new int[]{100}));
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }
