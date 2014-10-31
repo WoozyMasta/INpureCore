@@ -12,23 +12,23 @@ import java.util.List;
  */
 public class AEObject {
 
-    public List<ItemStack> getSubTypes(){
-        try{
+    public List<ItemStack> getSubTypes() {
+        try {
             Field f = AEApi.instance().items().itemFacade.item().getClass().getDeclaredField("subTypes");
             f.setAccessible(true);
             List<ItemStack> list = (List) f.get(AEApi.instance().items().itemFacade.item());
             return list;
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         return null;
     }
 
-    public int getNumberOfTypes(){
+    public int getNumberOfTypes() {
         return this.getSubTypes().size();
     }
 
-    public Item getFacadeItem(){
+    public Item getFacadeItem() {
         return AEApi.instance().items().itemFacade.item();
     }
 

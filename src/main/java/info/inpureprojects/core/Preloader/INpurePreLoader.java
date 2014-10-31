@@ -10,7 +10,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -24,8 +23,6 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
     public static File mc;
     public static File source;
     public static File versionFolder;
-    public static File INpure;
-    public static ArrayList<File> toInject = new ArrayList();
     private INpureDepHandler dep = new INpureDepHandler();
 
     public static void print(String msg) {
@@ -67,15 +64,13 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         mc = (File) data.get("mcLocation");
         File mods = new File(mc, "mods");
         versionFolder = new File(mods, Loader.MC_VERSION);
-        INpure = new File(versionFolder, "INpureProjects/deps");
-        if (!INpure.exists()) {
-            INpure.mkdirs();
+        if (!versionFolder.exists()) {
+            versionFolder.mkdirs();
         }
         print("Starting library configuration...");
         for (String s : dep.readStream(this.getClass().getClassLoader().getResourceAsStream("resources.inpure"))) {
-            File inject = new File(INpure, FilenameUtils.getName(s));
+            File inject = new File(versionFolder, FilenameUtils.getName(s));
             Downloader.instance.download(s, inject);
-            toInject.add(inject);
         }
         source = (File) data.get("coremodLocation");
         PreloaderAPI.modules = new ModuleManager();

@@ -3,7 +3,6 @@ package info.inpureprojects.core.NEI.gtfoMicroblocks.Modules;
 import appeng.api.AEApi;
 import codechicken.nei.api.API;
 import info.inpureprojects.core.INpureCore;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.lang.reflect.Field;

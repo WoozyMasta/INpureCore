@@ -64,7 +64,7 @@ public class NEIINpureConfig implements IConfigureNEI {
         if (Loader.isModLoaded("BuildCraft|Transport")) {
             obj.add(new ExposedObject("BC", new BCObject()));
         }
-        if (Loader.isModLoaded("appliedenergistics2")){
+        if (Loader.isModLoaded("appliedenergistics2")) {
             obj.add(new ExposedObject("AE2", new AEObject()));
         }
         scripting.exposeObjects(obj);

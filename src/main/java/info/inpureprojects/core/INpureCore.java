@@ -14,7 +14,6 @@ import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.Config.PropertiesHolder;
-import info.inpureprojects.core.Preloader.INpurePreLoader;
 import info.inpureprojects.core.Preloader.ModuleManager;
 import info.inpureprojects.core.Proxy.Proxy;
 import info.inpureprojects.core.Updater.UpdateManager;
@@ -49,16 +48,14 @@ public class INpureCore {
         instance = this;
         PreloaderAPI.preLoaderEvents.register(this);
         log = evt.getModLog();
-        for (File f : INpurePreLoader.toInject) {
-            INpurePreLoader.forceLoad(f);
-        }
-        INpurePreLoader.toInject = null;
         properties = new PropertiesHolder(new Configuration(new File(new File(evt.getModConfigurationDirectory(), "INpureProjects/INpureCore"), "INpureCore.cfg")));
         proxy.client();
         proxy.setupAPI();
         PreloaderAPI.preLoaderEvents.post(new EventPreloaderRegister());
         for (String s : ModuleManager.modules) {
-            proxy.print("Constructing submodule " + s);
+            if (!properties.silence_submodule_logging) {
+                proxy.print("Constructing submodule " + s);
+            }
             try {
                 IINpureSubmodule m = (IINpureSubmodule) Class.forName(s).newInstance();
                 modules.add(m);
@@ -69,7 +66,9 @@ public class INpureCore {
         }
         dir = new File(evt.getModConfigurationDirectory(), "INpureProjects");
         for (IINpureSubmodule s : modules) {
-            proxy.print("Processing preinit event for submodule " + s.getClass().getName());
+            if (!properties.silence_submodule_logging) {
+                proxy.print("Processing preinit event for submodule " + s.getClass().getName());
+            }
             s.pre(dir);
         }
     }
@@ -79,12 +78,17 @@ public class INpureCore {
         if (Loader.isModLoaded(modInfo.modid) && properties.updateCheck) {
             PreloaderAPI.modules.register("info.inpureprojects.core.Updater.UpdateModule");
         }
+        if (properties.extract_scripts) {
+            PreloaderAPI.modules.register("info.inpureprojects.core.Scripting.ScriptExtractor");
+        }
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
         for (IINpureSubmodule s : modules) {
-            proxy.print("Processing init event for submodule " + s.getClass().getName());
+            if (!properties.silence_submodule_logging) {
+                proxy.print("Processing init event for submodule " + s.getClass().getName());
+            }
             s.init();
         }
     }
@@ -92,7 +96,9 @@ public class INpureCore {
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent evt) {
         for (IINpureSubmodule s : modules) {
-            proxy.print("Processing postinit event for submodule " + s.getClass().getName());
+            if (!properties.silence_submodule_logging) {
+                proxy.print("Processing postinit event for submodule " + s.getClass().getName());
+            }
             s.post();
         }
         for (UpdateManager m : managers) {
@@ -104,7 +110,9 @@ public class INpureCore {
     public void onServer(FMLServerAboutToStartEvent evt) {
         for (IINpureSubmodule s : modules) {
             if (s instanceof IINpureSubmoduleExpanded) {
-                proxy.print("Processing ServerAboutToStart event for submodule " + s.getClass().getName());
+                if (!properties.silence_submodule_logging) {
+                    proxy.print("Processing ServerAboutToStart event for submodule " + s.getClass().getName());
+                }
                 ((IINpureSubmoduleExpanded) s).onServerAboutToStart();
             }
         }

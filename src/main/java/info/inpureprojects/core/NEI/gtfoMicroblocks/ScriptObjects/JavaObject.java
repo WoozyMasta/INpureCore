@@ -17,43 +17,39 @@ public class JavaObject {
         return new Random().nextInt(size);
     }
 
-    public void out(String msg) {
-        System.out.println(msg);
-    }
-
-    public Block[] ReflectAllBlocks(String clazz){
+    public Block[] ReflectAllBlocks(String clazz) {
         ArrayList<Block> blocks = new ArrayList();
-        try{
+        try {
             Class c = Class.forName(clazz);
-            for (Field f : c.getDeclaredFields()){
+            for (Field f : c.getDeclaredFields()) {
                 f.setAccessible(true);
-                if (f.getType().equals(Block.class) && Modifier.isStatic(f.getModifiers())){
+                if (f.getType().equals(Block.class) && Modifier.isStatic(f.getModifiers())) {
                     Block b = (Block) f.get(null);
-                    if (b != null){
+                    if (b != null) {
                         blocks.add(b);
                     }
                 }
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         return blocks.toArray(new Block[blocks.size()]);
     }
 
-    public Item[] ReflectAllItems(String clazz){
+    public Item[] ReflectAllItems(String clazz) {
         ArrayList<Item> items = new ArrayList();
-        try{
+        try {
             Class c = Class.forName(clazz);
-            for (Field f : c.getDeclaredFields()){
+            for (Field f : c.getDeclaredFields()) {
                 f.setAccessible(true);
-                if (f.getType().equals(Item.class) && Modifier.isStatic(f.getModifiers())){
+                if (f.getType().equals(Item.class) && Modifier.isStatic(f.getModifiers())) {
                     Item b = (Item) f.get(null);
-                    if (b != null){
+                    if (b != null) {
                         items.add(b);
                     }
                 }
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         return items.toArray(new Item[items.size()]);

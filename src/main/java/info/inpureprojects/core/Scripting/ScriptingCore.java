@@ -45,16 +45,19 @@ public class ScriptingCore implements IScriptingCore {
     public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
         this.lang = lang;
         if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]) {
-            File f = new File(INpurePreLoader.INpure, "luaj-jse-3.0.jar");
-            Downloader.instance.download("https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/luaj-jse-3.0.jar", f);
-            INpurePreLoader.forceLoad(f);
-            injected[0] = true;
+            this.load_lang("luaj-jse-3.0.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/luaj-jse-3.0.jar", 0);
         } else if (this.lang.equals(IScriptingManager.SupportedLanguages.RUBY) && !injected[1]) {
-            File f = new File(INpurePreLoader.INpure, "jruby.jar");
-            Downloader.instance.download("https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/jruby.jar", new File(INpurePreLoader.INpure, "jruby.jar"));
-            INpurePreLoader.forceLoad(f);
-            injected[1] = true;
+            this.load_lang("jruby.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/jruby.jar", 1);
         }
+    }
+
+    private void load_lang(String file, String url, int index) {
+        File f = new File(INpurePreLoader.versionFolder, file);
+        if (!f.exists()) {
+            Downloader.instance.download(url, f);
+            INpurePreLoader.forceLoad(f);
+        }
+        injected[index] = true;
     }
 
     @Override
