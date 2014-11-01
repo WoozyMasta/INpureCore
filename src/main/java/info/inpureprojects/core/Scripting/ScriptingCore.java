@@ -2,6 +2,7 @@ package info.inpureprojects.core.Scripting;
 
 import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.FMLCommonHandler;
+import info.inpureprojects.core.API.Events.EventScriptError;
 import info.inpureprojects.core.API.Scripting.CanBeNull;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
@@ -95,17 +96,25 @@ public class ScriptingCore implements IScriptingCore {
         }
     }
 
-    private void loadFile(File file) throws Exception {
-        this.loadStream(Streams.instance.getStream(file), file.getName());
+    private void loadFile(File file) {
+        try {
+            this.loadStream(Streams.instance.getStream(file), file.getName());
+        } catch (Throwable t) {
+            this.throwScriptError(t);
+        }
     }
 
     private void loadStream(InputStream stream, String fileName) throws Exception {
-        for (EnumScripting s : EnumScripting.values()) {
-            if (s.isCompatible(fileName)) {
-                String script = s.getHandler().Import(stream);
-                engine.eval(script);
-                break;
+        try {
+            for (EnumScripting s : EnumScripting.values()) {
+                if (s.isCompatible(fileName)) {
+                    String script = s.getHandler().Import(stream);
+                    engine.eval(script);
+                    break;
+                }
             }
+        } catch (Throwable t) {
+            this.throwScriptError(t);
         }
     }
 
@@ -120,42 +129,46 @@ public class ScriptingCore implements IScriptingCore {
     }
 
     @Override
-    public void loadPackagesFromDir(File dir) throws Exception {
-        for (File f : FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
-            if (!f.isDirectory()) {
-                if (f.getName().contains(".toc")) {
-                    TocManager.TableofContents c = TocManager.instance.read(f);
-                    System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
-                    try {
+    public void loadPackagesFromDir(File dir) {
+        try {
+            for (File f : FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
+                if (!f.isDirectory()) {
+                    if (f.getName().contains(".toc")) {
+                        TocManager.TableofContents c = TocManager.instance.read(f);
+                        System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
                         FMLCommonHandler.instance().addModToResourcePack(new ScriptModContainer(c, dir, this));
-                    } catch (Throwable t) {
-                        // This is for test cases.
-                    }
-                    this.getEngine().put(c.getTitle() + "_version", c.getVersion());
-                    if (c.getBootstrap() != null) {
-                        System.out.println("Bootstrap setting found. Loading: " + c.getBootstrap());
-                        this.loadFile(new File(f.getParent() + "/" + c.getBootstrap()));
-                    }
-                    if (c.getSavedVariables() != null) {
-                        config = new Configuration(new File(dir, c.getTitle() + ".cfg"));
-                        config.load();
-                        for (String s : c.getSavedVariables()) {
-                            if (config.hasKey("scripting", s)) {
-                                this.getEngine().put(s, config.get("scripting", s, ""));
-                            } else {
-                                this.config.get("scripting", s, this.getEngine().get(s).toString());
-                            }
+                        this.getEngine().put(c.getTitle() + "_version", c.getVersion());
+                        if (c.getBootstrap() != null) {
+                            System.out.println("Bootstrap setting found. Loading: " + c.getBootstrap());
+                            this.loadFile(new File(f.getParent() + "/" + c.getBootstrap()));
                         }
-                        config.save();
-                    }
-                    for (String s : c.getScripts()) {
-                        System.out.println("Loading: " + s);
-                        this.loadFile(new File(f.getParent() + "/" + s));
-                        loaded.add(c);
+                        if (c.getSavedVariables() != null) {
+                            config = new Configuration(new File(dir, c.getTitle() + ".cfg"));
+                            config.load();
+                            for (String s : c.getSavedVariables()) {
+                                if (config.hasKey("scripting", s)) {
+                                    this.getEngine().put(s, config.get("scripting", s, ""));
+                                } else {
+                                    this.config.get("scripting", s, this.getEngine().get(s).toString());
+                                }
+                            }
+                            config.save();
+                        }
+                        for (String s : c.getScripts()) {
+                            System.out.println("Loading: " + s);
+                            this.loadFile(new File(f.getParent() + "/" + s));
+                            loaded.add(c);
+                        }
                     }
                 }
             }
+        } catch (Throwable t) {
+            this.throwScriptError(t);
         }
+    }
+
+    private void throwScriptError(Throwable t) {
+        this.bus.post(new EventScriptError(t));
     }
 
     @Override
@@ -166,5 +179,10 @@ public class ScriptingCore implements IScriptingCore {
     @Override
     public ScriptEngine getEngine() {
         return engine;
+    }
+
+    @Override
+    public EventBus getBus() {
+        return this.bus;
     }
 }

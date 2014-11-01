@@ -2,7 +2,9 @@ package info.inpureprojects.core.Proxy;
 
 import info.inpureprojects.core.Client.FakeLogger;
 import info.inpureprojects.core.INpureCore;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ChatComponentText;
 
 
 /**
@@ -17,5 +19,11 @@ public class ProxyClient extends ProxyCommon {
         if (INpureCore.properties.textureLoggerOverride) {
             TextureMap.logger = new FakeLogger();
         }
+    }
+
+    @Override
+    public void sendMessageToPlayer(String msg) {
+        super.sendMessageToPlayer(msg);
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("[INpureCore]: " + msg));
     }
 }

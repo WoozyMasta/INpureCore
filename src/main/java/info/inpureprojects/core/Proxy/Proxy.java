@@ -15,4 +15,6 @@ public abstract class Proxy {
 
     public abstract void client();
 
+    public abstract void sendMessageToPlayer(String msg);
+
 }

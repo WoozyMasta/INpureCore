@@ -2,20 +2,27 @@ package info.inpureprojects.core.NEI.gtfoMicroblocks;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.Loader;
+import info.inpureprojects.core.API.Events.EventScriptError;
 import info.inpureprojects.core.API.INpureAPI;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
+import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects.*;
+import info.inpureprojects.core.Scripting.TestException;
 import info.inpureprojects.core.modInfo;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by den on 8/1/2014.
@@ -40,6 +47,19 @@ public class NEIINpureConfig implements IConfigureNEI {
         API.hideItem(block);
     }
 
+    @Subscribe
+    public void onScriptError(EventScriptError evt) {
+        INpureCore.proxy.sendMessageToPlayer("A script error has occured. A log file has been created in config/INpureProjects/logs.");
+        File logs = new File(INpureCore.dir, "logs");
+        if (!logs.exists()) {
+            logs.mkdirs();
+        }
+        String fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'").format(new Date());
+        PrintWriter w = Streams.instance.getFilePrintWriter(new File(logs, fileName));
+        evt.getT().printStackTrace(w);
+        Streams.instance.close(w);
+    }
+
     @Override
     public void loadConfig() {
         if (loaded) {
@@ -48,6 +68,7 @@ public class NEIINpureConfig implements IConfigureNEI {
         INpureCore.proxy.print("Starting NEI Filter scripting. This might take a moment to load all the modules...");
         File working = new File(INpureCore.dir, "custom_nei_filters");
         scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
+        scripting.getBus().register(this);
         scripting.initialize(working);
         ArrayList<ExposedObject> obj = new ArrayList();
         // Load default modules
@@ -68,13 +89,11 @@ public class NEIINpureConfig implements IConfigureNEI {
             obj.add(new ExposedObject("AE2", new AEObject()));
         }
         scripting.exposeObjects(obj);
-        try {
-            scripting.loadPackagesFromDir(working);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+        scripting.loadPackagesFromDir(working);
         loaded = true;
-
+        // Error testing.
+        //this.doTestError("This is a test!");
+        // End error testing.
         // TODO: Remove old code after a few versions.
 //        if (INpureCore.properties.hideVanillaCrapFromNEI) {
 //            IGtfoModule vanilla = new Vanilla();
@@ -92,6 +111,14 @@ public class NEIINpureConfig implements IConfigureNEI {
 //                }
 //            }
 //        }
+    }
+
+    private void doTestError(String msg) {
+        try {
+            throw new TestException(msg);
+        } catch (Throwable t) {
+            scripting.getBus().post(new EventScriptError(t));
+        }
     }
 
     @Override

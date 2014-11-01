@@ -47,4 +47,9 @@ public class ProxyCommon extends Proxy {
     public void client() {
 
     }
+
+    @Override
+    public void sendMessageToPlayer(String msg) {
+        this.print(msg);
+    }
 }

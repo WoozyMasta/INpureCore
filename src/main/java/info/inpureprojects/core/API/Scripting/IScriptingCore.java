@@ -1,5 +1,6 @@
 package info.inpureprojects.core.API.Scripting;
 
+import com.google.common.eventbus.EventBus;
 import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 
 import javax.script.ScriptEngine;
@@ -20,10 +21,12 @@ public interface IScriptingCore {
     @CanBeNull
     public void loadPackagesInternal(List<String> list) throws Exception;
 
-    public void loadPackagesFromDir(File dir) throws Exception;
+    public void loadPackagesFromDir(File dir);
 
     public List<TocManager.TableofContents> getLoadedModules();
 
     public ScriptEngine getEngine();
+
+    public EventBus getBus();
 
 }
