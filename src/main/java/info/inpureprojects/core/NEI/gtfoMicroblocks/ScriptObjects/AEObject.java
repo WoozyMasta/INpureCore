@@ -1,6 +1,7 @@
 package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 
 import appeng.api.AEApi;
+import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class AEObject {
 
     public List<ItemStack> getSubTypes() {
+        NEIINpureConfig.logger.debug("getSubTypes called.");
         try {
             Field f = AEApi.instance().items().itemFacade.item().getClass().getDeclaredField("subTypes");
             f.setAccessible(true);
@@ -25,10 +27,13 @@ public class AEObject {
     }
 
     public int getNumberOfTypes() {
-        return this.getSubTypes().size();
+        int i = this.getSubTypes().size();
+        NEIINpureConfig.logger.debug("getNumberOfTypes called. Returned: %s", String.valueOf(i));
+        return i;
     }
 
     public Item getFacadeItem() {
+        NEIINpureConfig.logger.debug("getFacadeItem called.");
         return AEApi.instance().items().itemFacade.item();
     }
 

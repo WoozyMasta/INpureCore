@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Scripting;
 
+import info.inpureprojects.core.Preloader.JavaDetection;
 import info.inpureprojects.core.Scripting.Objects.JavaScriptCompressor;
 import org.apache.commons.io.IOUtils;
 
@@ -12,7 +13,7 @@ import java.io.InputStream;
  */
 public enum EnumScripting {
 
-    JAVASCRIPT(".js", "JavaScript", new jsHandler()),
+    JAVASCRIPT(".js", JavaDetection.detectJava().JavaScript_Callsign, new jsHandler()),
     LUA(".lua", "lua", new luaHandler()),
     RUBY(".rb", "jruby", new luaHandler());
     public static ScriptEngineManager m;
@@ -21,7 +22,7 @@ public enum EnumScripting {
     private handler handler;
 
     static {
-        m = new ScriptEngineManager();
+        m = new ScriptEngineManager(null);
     }
 
     EnumScripting(String extension, String engine, handler h) {

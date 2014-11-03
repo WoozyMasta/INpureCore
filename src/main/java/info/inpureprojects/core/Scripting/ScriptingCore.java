@@ -9,6 +9,7 @@ import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
 import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 import info.inpureprojects.core.API.Utils.Downloader;
+import info.inpureprojects.core.API.Utils.LogWrapper;
 import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.Client.ScriptModContainer;
 import info.inpureprojects.core.Preloader.INpurePreLoader;
@@ -37,6 +38,7 @@ public class ScriptingCore implements IScriptingCore {
     private EventBus bus = new EventBus();
     private IScriptingManager.SupportedLanguages lang;
     private Configuration config;
+    private LogWrapper logger;
 
     static {
         injected[0] = false;
@@ -62,7 +64,8 @@ public class ScriptingCore implements IScriptingCore {
     }
 
     @Override
-    public void initialize(File workingDir) {
+    public void initialize(File workingDir, LogWrapper logger) {
+        this.logger = logger;
         workingDir.mkdirs();
         for (EnumScripting s : EnumScripting.values()) {
             if (s.toString().equals(lang.toString())) {
@@ -78,7 +81,7 @@ public class ScriptingCore implements IScriptingCore {
                 this.loadFile(m);
                 this.loadPackagesInternal(Arrays.asList(globals));
             } catch (Throwable t) {
-                System.out.println("MAJOR ERROR: Internal libraries failed to load!");
+                logger.warn("MAJOR ERROR: Internal libraries failed to load!");
             }
         }
     }
@@ -135,11 +138,11 @@ public class ScriptingCore implements IScriptingCore {
                 if (!f.isDirectory()) {
                     if (f.getName().contains(".toc")) {
                         TocManager.TableofContents c = TocManager.instance.read(f);
-                        System.out.println("Loading table of contents for module: " + c.getTitle() + ". version: " + c.getVersion());
+                        logger.info("Loading table of contents for module: %s, %s, Author: %s", c.getTitle(), c.getVersion(), c.getAuthor());
                         FMLCommonHandler.instance().addModToResourcePack(new ScriptModContainer(c, dir, this));
                         this.getEngine().put(c.getTitle() + "_version", c.getVersion());
                         if (c.getBootstrap() != null) {
-                            System.out.println("Bootstrap setting found. Loading: " + c.getBootstrap());
+                            logger.info("Bootstrap setting found. Loading: %s", c.getBootstrap());
                             this.loadFile(new File(f.getParent() + "/" + c.getBootstrap()));
                         }
                         if (c.getSavedVariables() != null) {
@@ -155,7 +158,7 @@ public class ScriptingCore implements IScriptingCore {
                             config.save();
                         }
                         for (String s : c.getScripts()) {
-                            System.out.println("Loading: " + s);
+                            logger.info("Loading: %s", s);
                             this.loadFile(new File(f.getParent() + "/" + s));
                             loaded.add(c);
                         }

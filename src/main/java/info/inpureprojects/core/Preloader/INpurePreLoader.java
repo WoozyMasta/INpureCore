@@ -7,6 +7,8 @@ import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Utils.Downloader;
 import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -23,10 +25,11 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
     public static File mc;
     public static File source;
     public static File versionFolder;
+    private static Logger log = LogManager.getLogger("INpurePreloader");
     private INpureDepHandler dep = new INpureDepHandler();
 
     public static void print(String msg) {
-        System.out.println("[INpureCore|Preloader]: " + msg);
+        log.info(msg);
     }
 
     public static void forceLoad(File file) {
@@ -57,6 +60,8 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
+        print("Attempting to detect JVM version...");
+        print("Detected JVM: " + JavaDetection.detectJava().getProp());
         isDev = !((Boolean) data.get("runtimeDeobfuscationEnabled"));
         if (isDev) {
             print("We are in dev mode!");

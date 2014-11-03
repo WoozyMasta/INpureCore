@@ -1,9 +1,9 @@
 package info.inpureprojects.core.Proxy;
 
-import cpw.mods.fml.common.FMLLog;
 import info.inpureprojects.core.API.INpureAPI;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
+import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Scripting.Dynamic.DynamicFactory;
 import info.inpureprojects.core.Scripting.ScriptingCore;
 
@@ -13,18 +13,23 @@ import info.inpureprojects.core.Scripting.ScriptingCore;
 public class ProxyCommon extends Proxy {
 
     @Override
+    public void onServerStartClient() {
+
+    }
+
+    @Override
     public void warning(String msg) {
-        FMLLog.warning("[INpureCore]: " + msg);
+        INpureCore.log.warn(msg);
     }
 
     @Override
     public void print(String msg) {
-        FMLLog.info("[INpureCore]: " + msg);
+        INpureCore.log.info(msg);
     }
 
     @Override
     public void severe(String msg) {
-        FMLLog.severe("[INpureCore]: " + msg);
+        INpureCore.log.fatal(msg);
     }
 
     @Override

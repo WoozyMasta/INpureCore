@@ -17,13 +17,16 @@ public class ForgeMicroblockObject {
 
     public String getRandomMaterial() {
         try {
-            return MicroMaterialRegistry.materialName(new Random().nextInt(20));
+            String m = MicroMaterialRegistry.materialName(new Random().nextInt(20));
+            NEIINpureConfig.logger.debug("getRandomMaterial called. Returned: %s", m);
+            return m;
         } catch (Throwable t) {
             return "";
         }
     }
 
     public void obliterate_microblocks(int[] metas, String id) {
+        NEIINpureConfig.logger.debug("obliterate_microblocks called (version in %s). Params: %s, %s", this.getClass().getName(), NEIINpureConfig.logger.IntArrayToString(metas), id);
         ArrayList<ItemStack> stacks = new ArrayList();
         Item i = GameRegistry.findItem("ForgeMicroblock", "microblock");
         for (ItemStack s : NEIINpureConfig.buildStackList(new ItemStack(i), metas)) {

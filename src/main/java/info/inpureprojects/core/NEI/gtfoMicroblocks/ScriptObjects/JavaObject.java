@@ -1,5 +1,6 @@
 package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 
+import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -33,6 +34,7 @@ public class JavaObject {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+        NEIINpureConfig.logger.debug("ReflectAllBlocks called. Params: %s. Total non-null blocks reflected: %s", clazz, String.valueOf(blocks.size()));
         return blocks.toArray(new Block[blocks.size()]);
     }
 
@@ -52,6 +54,7 @@ public class JavaObject {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+        NEIINpureConfig.logger.debug("ReflectAllItems called. Params: %s. Total non-null items reflected: %s", clazz, String.valueOf(items.size()));
         return items.toArray(new Item[items.size()]);
     }
 

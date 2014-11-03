@@ -9,6 +9,7 @@ import info.inpureprojects.core.API.INpureAPI;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
+import info.inpureprojects.core.API.Utils.LogWrapper;
 import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects.*;
@@ -17,6 +18,7 @@ import info.inpureprojects.core.modInfo;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -32,6 +34,15 @@ public class NEIINpureConfig implements IConfigureNEI {
     //public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
     public static boolean loaded = false;
     public static IScriptingCore scripting;
+    private static File logs = new File(INpureCore.dir, "logs");
+    public static final LogWrapper logger = new LogWrapper(LogManager.getLogger("INpureCullingEngine"), new File(logs, "debug.log"));
+    private static int errorCount = 0;
+
+    public NEIINpureConfig() {
+        if (!logs.exists()) {
+            logs.mkdirs();
+        }
+    }
 
     public static ArrayList<ItemStack> buildStackList(ItemStack stack, int[] metas) {
         ArrayList<ItemStack> stacks = new ArrayList();
@@ -41,8 +52,9 @@ public class NEIINpureConfig implements IConfigureNEI {
         return stacks;
     }
 
+    @Deprecated
     public static void hideBlock(Block b) {
-        INpureCore.proxy.print("Get off my curb you good for nothin! (Hiding " + b.getUnlocalizedName() + ")");
+        logger.info("Get off my curb you good for nothin! (Hiding " + b.getUnlocalizedName() + ")");
         ItemStack block = new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE);
         API.hideItem(block);
     }
@@ -50,11 +62,7 @@ public class NEIINpureConfig implements IConfigureNEI {
     @Subscribe
     public void onScriptError(EventScriptError evt) {
         INpureCore.proxy.sendMessageToPlayer("A script error has occured. A log file has been created in config/INpureProjects/logs.");
-        File logs = new File(INpureCore.dir, "logs");
-        if (!logs.exists()) {
-            logs.mkdirs();
-        }
-        String fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'").format(new Date());
+        String fileName = new SimpleDateFormat("yyyyMMddhhmm").format(new Date()).concat("-").concat(String.valueOf(this.errorCount++).concat(".txt"));
         PrintWriter w = Streams.instance.getFilePrintWriter(new File(logs, fileName));
         evt.getT().printStackTrace(w);
         Streams.instance.close(w);
@@ -65,11 +73,11 @@ public class NEIINpureConfig implements IConfigureNEI {
         if (loaded) {
             return;
         }
-        INpureCore.proxy.print("Starting NEI Filter scripting. This might take a moment to load all the modules...");
+        logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");
         File working = new File(INpureCore.dir, "custom_nei_filters");
         scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
         scripting.getBus().register(this);
-        scripting.initialize(working);
+        scripting.initialize(working, logger);
         ArrayList<ExposedObject> obj = new ArrayList();
         // Load default modules
         obj.add(new ExposedObject("java", new JavaObject()));

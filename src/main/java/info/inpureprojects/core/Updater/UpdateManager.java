@@ -6,6 +6,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.INpureCore;
+import info.inpureprojects.core.Utils.ReleaseLevel;
+import info.inpureprojects.core.modInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -44,10 +46,14 @@ public class UpdateManager {
             return;
         }
         lastPoll = 400;
+        if (!modInfo.release.equals(ReleaseLevel.PUBLIC)) {
+            FMLCommonHandler.instance().bus().unregister(this);
+            return;
+        }
         if (!alreadyDisplayed && thread.checkComplete) {
             if (thread.updateAvailable) {
                 EntityPlayer player = evt.player;
-                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.update.getModName() + "]").appendText(EnumChatFormatting.WHITE + " A new version is available: " + EnumChatFormatting.AQUA + thread.update.getVersion().replace(Loader.MC_VERSION, "") + EnumChatFormatting.WHITE));
+                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.update.getModName() + "]").appendText(EnumChatFormatting.WHITE + " A new version is available: " + EnumChatFormatting.AQUA + thread.latestVersion.replace(Loader.MC_VERSION, "") + EnumChatFormatting.WHITE));
                 this.alreadyDisplayed = true;
                 FMLCommonHandler.instance().bus().unregister(this);
             }
@@ -88,5 +94,4 @@ public class UpdateManager {
             checkComplete = true;
         }
     }
-
 }

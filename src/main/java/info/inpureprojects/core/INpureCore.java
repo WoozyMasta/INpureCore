@@ -81,6 +81,9 @@ public class INpureCore {
         if (properties.extract_scripts) {
             PreloaderAPI.modules.register("info.inpureprojects.core.Scripting.ScriptExtractor");
         }
+        if (properties.silence_FML_logger) {
+            PreloaderAPI.modules.register("info.inpureprojects.core.FML.LogSupressor.ModuleFML");
+        }
     }
 
     @Mod.EventHandler
@@ -108,6 +111,7 @@ public class INpureCore {
 
     @Mod.EventHandler
     public void onServer(FMLServerAboutToStartEvent evt) {
+        proxy.onServerStartClient();
         for (IINpureSubmodule s : modules) {
             if (s instanceof IINpureSubmoduleExpanded) {
                 if (!properties.silence_submodule_logging) {

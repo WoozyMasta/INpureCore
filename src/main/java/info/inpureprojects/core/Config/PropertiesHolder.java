@@ -25,12 +25,17 @@ public class PropertiesHolder {
     public boolean extract_scripts = false;
     @Option(category = "submodule", key = "silence_submodule_logging", comment = "Silences some debug output during load. Harmless.", value = false)
     public boolean silence_submodule_logging = false;
+    @Option(category = "tweaks", key = "silence_FML_logging", comment = "Silences the FML logger. Not recommended unless you know what you're doing.", value = false, released = false)
+    public boolean silence_FML_logger = false;
 
     public PropertiesHolder(Configuration config) {
         config.load();
         for (Field f : this.getClass().getDeclaredFields()) {
             if (f.getAnnotation(Option.class) != null) {
                 Option o = f.getAnnotation(Option.class);
+                if (!o.released()){
+                    continue;
+                }
                 Property p = config.get(o.category(), o.key(), o.value());
                 if (!o.comment().equals("")) {
                     p.comment = o.comment();

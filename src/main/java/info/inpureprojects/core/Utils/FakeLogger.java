@@ -1,4 +1,4 @@
-package info.inpureprojects.core.Client;
+package info.inpureprojects.core.Utils;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +10,6 @@ import org.apache.logging.log4j.message.MessageFactory;
  * Created by den on 7/26/2014.
  */
 public class FakeLogger implements Logger {
-
     @Override
     public void catching(Level level, Throwable t) {
 

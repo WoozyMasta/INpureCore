@@ -18,4 +18,6 @@ public @interface Option {
 
     boolean value() default true;
 
+    boolean released() default true;
+
 }
