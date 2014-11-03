@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -64,6 +63,16 @@ public class NEIINpureConfig implements IConfigureNEI {
         API.hideItem(block);
     }
 
+    public static void startReloadProcess() {
+        INpureCore.proxy.sendMessageToPlayer("Starting script reload process. Please stand by...");
+        scripting.getBus().unregister(instance);
+        scripting.shutdown();
+        scripting = null;
+        loaded = false;
+        instance.loadConfig();
+        INpureCore.proxy.sendMessageToPlayer("Reload complete.");
+    }
+
     private void registryEntryPoint(List<String> list) {
         if (INpureCore.properties.dump_registry_to_debug_log) {
             logger.debug("----------------------------------");
@@ -86,22 +95,12 @@ public class NEIINpureConfig implements IConfigureNEI {
         Streams.instance.close(w);
     }
 
-    public static void startReloadProcess(){
-        INpureCore.proxy.sendMessageToPlayer("Starting script reload process. Please stand by...");
-        scripting.getBus().unregister(instance);
-        scripting.shutdown();
-        scripting = null;
-        loaded = false;
-        instance.loadConfig();
-        INpureCore.proxy.sendMessageToPlayer("Reload complete.");
-    }
-
     @Override
     public void loadConfig() {
         if (loaded) {
             return;
         }
-        if (instance == null){
+        if (instance == null) {
             instance = this;
         }
         logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");

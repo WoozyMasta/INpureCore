@@ -118,7 +118,7 @@ public class INpureCore {
     }
 
     @Mod.EventHandler
-    public void onServerStart(FMLServerStartingEvent evt){
+    public void onServerStart(FMLServerStartingEvent evt) {
         evt.registerServerCommand(new CommandReload());
     }
 

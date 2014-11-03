@@ -14,7 +14,7 @@ import java.io.Writer;
  */
 public class ScriptExtractor implements IINpureSubmodule {
 
-    private String[] files = new String[]{"AppliedEnergistics2.js", "Bibliocraft.js", "Bootstrap.js", "BuildCraft.js", "ExtraUtilities.js", "ForgeMicroblock.js", "Mekanism.js", "nei_filters.toc", "ThermalExpansion.js", "vanilla.js", "Tcon.js"};
+    private String[] files = new String[]{"AppliedEnergistics2.js", "Bibliocraft.js", "Bootstrap.js", "BuildCraft.js", "ExtraUtilities.js", "ForgeMicroblock.js", "Mekanism.js", "nei_filters.toc", "ThermalExpansion.js", "vanilla.js", "Tcon.js", "MFR.js"};
 
     @Override
     public void pre(File configFolder) {

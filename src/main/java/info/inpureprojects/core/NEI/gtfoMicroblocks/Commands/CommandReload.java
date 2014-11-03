@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by den on 11/3/2014.
  */
-public class CommandReload implements ICommand{
+public class CommandReload implements ICommand {
 
     @Override
     public String getCommandName() {
@@ -31,13 +31,13 @@ public class CommandReload implements ICommand{
 
     @Override
     public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
-        if (Arrays.asList(p_71515_2_).contains("reload")){
+        if (Arrays.asList(p_71515_2_).contains("reload")) {
             NEIINpureConfig.startReloadProcess();
-        }else if (Arrays.asList(p_71515_2_).contains("tooltips")){
-            if (NEIINpureTooltipConfig.tooltips_enabled){
+        } else if (Arrays.asList(p_71515_2_).contains("tooltips")) {
+            if (NEIINpureTooltipConfig.tooltips_enabled) {
                 INpureCore.proxy.sendMessageToPlayer("Registry tooltips are now hidden.");
                 NEIINpureTooltipConfig.tooltips_enabled = false;
-            }else{
+            } else {
                 INpureCore.proxy.sendMessageToPlayer("Registry tooltips are now shown.");
                 NEIINpureTooltipConfig.tooltips_enabled = true;
             }

@@ -1,7 +1,6 @@
 package info.inpureprojects.core.Preloader;
 
 import com.google.common.eventbus.Subscribe;
-import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import info.inpureprojects.core.Utils.Events.EventNEIReady;
 import info.inpureprojects.core.Utils.Loggers.EventLogger;
@@ -10,8 +9,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by den on 11/1/2014.

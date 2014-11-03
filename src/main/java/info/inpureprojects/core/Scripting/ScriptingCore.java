@@ -45,6 +45,15 @@ public class ScriptingCore implements IScriptingCore {
         injected[1] = false;
     }
 
+    public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
+        this.lang = lang;
+        if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]) {
+            this.load_lang("luaj-jse-3.0.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/luaj-jse-3.0.jar", 0);
+        } else if (this.lang.equals(IScriptingManager.SupportedLanguages.RUBY) && !injected[1]) {
+            this.load_lang("jruby.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/jruby.jar", 1);
+        }
+    }
+
     @Override
     public boolean shutdown() {
         logger.info("Shutdown request received!");
@@ -58,15 +67,6 @@ public class ScriptingCore implements IScriptingCore {
         logger.info("Shutdown complete!");
         this.logger = null;
         return true;
-    }
-
-    public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
-        this.lang = lang;
-        if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]) {
-            this.load_lang("luaj-jse-3.0.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/luaj-jse-3.0.jar", 0);
-        } else if (this.lang.equals(IScriptingManager.SupportedLanguages.RUBY) && !injected[1]) {
-            this.load_lang("jruby.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/jruby.jar", 1);
-        }
     }
 
     private void load_lang(String file, String url, int index) {

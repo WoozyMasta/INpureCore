@@ -7,3 +7,4 @@ var BuildCraft_enabled = true;
 var Bibliocraft_enabled = true;
 var AE2_enabled = true;
 var Tcon_enabled = true;
+var MFR_enabled = true;
