@@ -36,7 +36,6 @@ import java.util.List;
 public class NEIINpureConfig implements IConfigureNEI {
 
     public static NEIINpureConfig instance;
-    //public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
     public static boolean loaded = false;
     public static IScriptingCore scripting;
     public static List<String> reg;
@@ -134,26 +133,6 @@ public class NEIINpureConfig implements IConfigureNEI {
         scripting.exposeObjects(obj);
         scripting.loadPackagesFromDir(working);
         loaded = true;
-        // Error testing.
-        //this.doTestError("This is a test!");
-        // End error testing.
-        // TODO: Remove old code after a few versions.
-//        if (INpureCore.properties.hideVanillaCrapFromNEI) {
-//            IGtfoModule vanilla = new Vanilla();
-//            vanilla.run();
-//        }
-//        if (INpureCore.properties.hideCrapFromNEI) {
-//            for (String s : supported) {
-//                try {
-//                    if (Loader.isModLoaded(s)) {
-//                        IGtfoModule module = (IGtfoModule) Class.forName("info.inpureprojects.core.NEI.gtfoMicroblocks.Modules.".concat(s.replace("|", ""))).getConstructor(new Class[]{String.class}).newInstance(new Object[]{this.getRandomMaterial()});
-//                        module.run();
-//                    }
-//                } catch (Throwable t) {
-//                    INpureCore.proxy.warning("Failed to load NEI Cleanup Module: " + s);
-//                }
-//            }
-//        }
     }
 
     private void doTestError(String msg) {
