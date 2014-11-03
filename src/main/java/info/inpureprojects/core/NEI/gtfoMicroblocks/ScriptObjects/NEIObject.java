@@ -26,7 +26,17 @@ public class NEIObject {
         this.override_item(domain, metas);
         this.override_block(domain, metas);
     }
-    
+
+    public void hide(String modid, String name){
+        this.hide_item(modid, name);
+        this.hide_block(modid, name);
+    }
+
+    public void hide(String domain){
+        this.hide_item(domain);
+        this.hide_block(domain);
+    }
+
     // Item Section
     public void override_item(String modid, String name, int[] metas) {
         NEIINpureConfig.logger.debug("override_item called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
