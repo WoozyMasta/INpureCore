@@ -14,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by den on 10/28/2014.
  */
+// TODO: Simplify and clean up this class.
 public class NEIObject {
 
     public static final String wildcard = "*";
