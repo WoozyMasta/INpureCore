@@ -79,6 +79,8 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         }
         source = (File) data.get("coremodLocation");
         PreloaderAPI.modules = new ModuleManager();
+        FMLLogInterceptor l = new FMLLogInterceptor().setup();
+        PreloaderAPI.preLoaderEvents.register(l);
     }
 
     @Override

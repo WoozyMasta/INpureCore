@@ -1,7 +1,7 @@
 package info.inpureprojects.core.Proxy;
 
 import info.inpureprojects.core.INpureCore;
-import info.inpureprojects.core.Utils.FilterLogger;
+import info.inpureprojects.core.Utils.Loggers.EventLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ChatComponentText;
@@ -17,7 +17,7 @@ public class ProxyClient extends ProxyCommon {
         this.print("Beating Minecraft's resource loading system with a shovel. Please stand by...");
         // This causes all those missing texture errors to vanish from the console. Woo!
         if (INpureCore.properties.textureLoggerOverride) {
-            TextureMap.logger = new FilterLogger(TextureMap.logger);
+            TextureMap.logger = new EventLogger(TextureMap.logger);
         }
     }
 
@@ -29,6 +29,6 @@ public class ProxyClient extends ProxyCommon {
 
     @Override
     public void onServerStartClient() {
-        ((FilterLogger) TextureMap.logger).report();
+
     }
 }

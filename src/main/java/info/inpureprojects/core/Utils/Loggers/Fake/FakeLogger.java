@@ -1,4 +1,4 @@
-package info.inpureprojects.core.Utils;
+package info.inpureprojects.core.Utils.Loggers.Fake;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;

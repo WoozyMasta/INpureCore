@@ -17,25 +17,27 @@ public class NEIObject {
 
     // Generic Section
 
-    public void override(String modid, String name, int[] metas){
+    public void override(String modid, String name, int[] metas) {
         this.override_item(modid, name, metas);
         this.override_block(modid, name, metas);
     }
 
-    public void override(String domain, int[] metas){
+    public void override(String domain, int[] metas) {
         this.override_item(domain, metas);
         this.override_block(domain, metas);
     }
 
-    public void hide(String modid, String name){
+    public void hide(String modid, String name) {
         this.hide_item(modid, name);
         this.hide_block(modid, name);
     }
 
-    public void hide(String domain){
+    public void hide(String domain) {
         this.hide_item(domain);
         this.hide_block(domain);
     }
+
+    //
 
     // Item Section
     public void override_item(String modid, String name, int[] metas) {

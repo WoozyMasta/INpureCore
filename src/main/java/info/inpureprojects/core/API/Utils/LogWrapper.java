@@ -18,7 +18,7 @@ public class LogWrapper {
     public LogWrapper(Logger log, File debug) {
         this.log = log;
         this.debug = debug;
-        if (this.debug.exists()){
+        if (this.debug.exists()) {
             this.debug.delete();
         }
     }

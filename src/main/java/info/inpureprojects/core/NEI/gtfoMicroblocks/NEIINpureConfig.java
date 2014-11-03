@@ -6,6 +6,7 @@ import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.Loader;
 import info.inpureprojects.core.API.Events.EventScriptError;
 import info.inpureprojects.core.API.INpureAPI;
+import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
@@ -14,6 +15,7 @@ import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects.*;
 import info.inpureprojects.core.Scripting.TestException;
+import info.inpureprojects.core.Utils.Events.EventNEIReady;
 import info.inpureprojects.core.modInfo;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -68,12 +70,17 @@ public class NEIINpureConfig implements IConfigureNEI {
         Streams.instance.close(w);
     }
 
+    public static void registryEntryPoint(String reg){
+       logger.debug(reg);
+    }
+
     @Override
     public void loadConfig() {
         if (loaded) {
             return;
         }
         logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");
+        PreloaderAPI.preLoaderEvents.post(new EventNEIReady());
         File working = new File(INpureCore.dir, "custom_nei_filters");
         scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
         scripting.getBus().register(this);
