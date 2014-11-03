@@ -15,6 +15,18 @@ import java.util.ArrayList;
  */
 public class NEIObject {
 
+    // Generic Section
+
+    public void override(String modid, String name, int[] metas){
+        this.override_item(modid, name, metas);
+        this.override_block(modid, name, metas);
+    }
+
+    public void override(String domain, int[] metas){
+        this.override_item(domain, metas);
+        this.override_block(domain, metas);
+    }
+    
     // Item Section
     public void override_item(String modid, String name, int[] metas) {
         NEIINpureConfig.logger.debug("override_item called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
