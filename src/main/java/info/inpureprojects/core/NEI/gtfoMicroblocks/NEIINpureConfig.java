@@ -38,10 +38,10 @@ public class NEIINpureConfig implements IConfigureNEI {
     //public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
     public static boolean loaded = false;
     public static IScriptingCore scripting;
+    public static List<String> reg;
     private static File logs = new File(INpureCore.dir, "logs");
     public static final LogWrapper logger = new LogWrapper(LogManager.getLogger("INpureCullingEngine"), new File(logs, "debug.log"));
     private static int errorCount = 0;
-    public static List<String> reg;
 
     public NEIINpureConfig() {
         if (!logs.exists()) {
@@ -64,17 +64,8 @@ public class NEIINpureConfig implements IConfigureNEI {
         API.hideItem(block);
     }
 
-    @Subscribe
-    public void onScriptError(EventScriptError evt) {
-        INpureCore.proxy.sendMessageToPlayer("A script error has occured. A log file has been created in config/INpureProjects/logs.");
-        String fileName = new SimpleDateFormat("yyyyMMddhhmm").format(new Date()).concat("-").concat(String.valueOf(this.errorCount++).concat(".txt"));
-        PrintWriter w = Streams.instance.getFilePrintWriter(new File(logs, fileName));
-        evt.getT().printStackTrace(w);
-        Streams.instance.close(w);
-    }
-
-    public static void registryEntryPoint(List<String> list){
-        if (INpureCore.properties.dump_registry_to_debug_log){
+    public static void registryEntryPoint(List<String> list) {
+        if (INpureCore.properties.dump_registry_to_debug_log) {
             logger.debug("----------------------------------");
             logger.debug("Dumping GameRegistry to debug log.");
             logger.debug("----------------------------------");
@@ -84,6 +75,15 @@ public class NEIINpureConfig implements IConfigureNEI {
             logger.debug("----------------------------------");
         }
         reg = Collections.unmodifiableList(list);
+    }
+
+    @Subscribe
+    public void onScriptError(EventScriptError evt) {
+        INpureCore.proxy.sendMessageToPlayer("A script error has occured. A log file has been created in config/INpureProjects/logs.");
+        String fileName = new SimpleDateFormat("yyyyMMddhhmm").format(new Date()).concat("-").concat(String.valueOf(this.errorCount++).concat(".txt"));
+        PrintWriter w = Streams.instance.getFilePrintWriter(new File(logs, fileName));
+        evt.getT().printStackTrace(w);
+        Streams.instance.close(w);
     }
 
     @Override

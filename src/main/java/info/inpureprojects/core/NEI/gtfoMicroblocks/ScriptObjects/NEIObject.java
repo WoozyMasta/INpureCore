@@ -46,21 +46,21 @@ public class NEIObject {
     // Item Section
     public void override_item(String modid, String name, int[] metas) {
         NEIINpureConfig.logger.debug("override_item called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
-        if (modid.contains(wildcard) || name.contains(wildcard)){
+        if (modid.contains(wildcard) || name.contains(wildcard)) {
             NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
             String recombine = String.format("%s:%s", modid, name);
-            for (String s : NEIINpureConfig.reg){
-                if (RegxEngine.match(recombine, s)){
+            for (String s : NEIINpureConfig.reg) {
+                if (RegxEngine.match(recombine, s)) {
                     NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
                     this.override_item(s, metas);
                 }
             }
-        }else{
+        } else {
             Item i = GameRegistry.findItem(modid, name);
             if (i == null) {
                 NEIINpureConfig.logger.debug("Cannot find item %s:%s", modid, name);
                 return;
-            }else{
+            } else {
                 NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
             }
             ArrayList<ItemStack> stacks = NEIINpureConfig.buildStackList(new ItemStack(i), metas);
@@ -98,7 +98,7 @@ public class NEIObject {
         if (i == null) {
             NEIINpureConfig.logger.debug("Cannot find item %s:%s", modid, name);
             return;
-        }else{
+        } else {
             NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
         }
         API.hideItem(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE));
@@ -131,7 +131,7 @@ public class NEIObject {
         if (b == null) {
             NEIINpureConfig.logger.debug("Cannot find block %s:%s", modid, name);
             return;
-        }else{
+        } else {
             NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
         }
         API.hideItem(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE));
@@ -162,7 +162,7 @@ public class NEIObject {
         if (b == null) {
             NEIINpureConfig.logger.debug("Cannot find block %s:%s", modid, name);
             return;
-        }else{
+        } else {
             NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
         }
         ItemStack B = new ItemStack(b);

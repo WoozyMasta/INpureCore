@@ -1,7 +1,6 @@
 package info.inpureprojects.core.Preloader;
 
 import com.google.common.eventbus.Subscribe;
-import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import info.inpureprojects.core.Utils.Events.EventNEIReady;

@@ -4,7 +4,6 @@ import com.google.common.eventbus.EventBus;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import info.inpureprojects.core.Utils.Loggers.Fake.FakeLogger;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class EventLogger extends FakeLogger {
 
-    public static final Logger log = LogManager.getLogger("INpureLogFilter");
     private Logger original;
     private EventBus bus = new EventBus();
 
