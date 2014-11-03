@@ -48,7 +48,7 @@ public class NEIObject {
             NEIINpureConfig.logger.warn("Cannot find item %s:%s", modid, name);
             return;
         }
-        API.hideItem(new ItemStack(i));
+        API.hideItem(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE));
     }
 
     public void hide_item(String domain) {
