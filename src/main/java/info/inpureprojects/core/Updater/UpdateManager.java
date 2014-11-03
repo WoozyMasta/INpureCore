@@ -53,7 +53,7 @@ public class UpdateManager {
         if (!alreadyDisplayed && thread.checkComplete) {
             if (thread.updateAvailable) {
                 EntityPlayer player = evt.player;
-                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.update.getModName() + "]").appendText(EnumChatFormatting.WHITE + " A new version is available: " + EnumChatFormatting.AQUA + thread.latestVersion.replace(Loader.MC_VERSION, "") + EnumChatFormatting.WHITE));
+                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + thread.update.getModName() + "]:").appendText(EnumChatFormatting.WHITE + " A new version is available: " + EnumChatFormatting.AQUA + thread.latestVersion.replace(Loader.MC_VERSION, "") + EnumChatFormatting.WHITE));
                 this.alreadyDisplayed = true;
                 FMLCommonHandler.instance().bus().unregister(this);
             }

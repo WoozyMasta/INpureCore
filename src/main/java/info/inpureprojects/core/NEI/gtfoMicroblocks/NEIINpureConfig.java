@@ -65,7 +65,7 @@ public class NEIINpureConfig implements IConfigureNEI {
         API.hideItem(block);
     }
 
-    public static void registryEntryPoint(List<String> list) {
+    private void registryEntryPoint(List<String> list) {
         if (INpureCore.properties.dump_registry_to_debug_log) {
             logger.debug("----------------------------------");
             logger.debug("Dumping GameRegistry to debug log.");
@@ -75,7 +75,7 @@ public class NEIINpureConfig implements IConfigureNEI {
             }
             logger.debug("----------------------------------");
         }
-        reg = Collections.unmodifiableList(list);
+        reg = list;
     }
 
     @Subscribe
@@ -106,7 +106,9 @@ public class NEIINpureConfig implements IConfigureNEI {
             instance = this;
         }
         logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");
-        PreloaderAPI.preLoaderEvents.post(new EventNEIReady());
+        EventNEIReady r = new EventNEIReady();
+        PreloaderAPI.preLoaderEvents.post(r);
+        this.registryEntryPoint(r.getList());
         File working = new File(INpureCore.dir, "custom_nei_filters");
         scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
         scripting.getBus().register(this);

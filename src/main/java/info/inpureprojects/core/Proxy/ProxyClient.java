@@ -5,6 +5,7 @@ import info.inpureprojects.core.Utils.Loggers.EventLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 
 /**
@@ -24,7 +25,7 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public void sendMessageToPlayer(String msg) {
         super.sendMessageToPlayer(msg);
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("[INpureCore]: " + msg));
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "[" + "INpureCore" + "]: ").appendText(EnumChatFormatting.WHITE + msg));
     }
 
     @Override
