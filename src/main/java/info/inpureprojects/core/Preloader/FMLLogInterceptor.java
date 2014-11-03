@@ -49,8 +49,6 @@ public class FMLLogInterceptor {
         list.addAll(registry);
         Collections.sort(list);
         NEIINpureConfig.registryEntryPoint(list);
-        registry.clear();
-        registry = null;
     }
 
     public FMLLogInterceptor setup() {

@@ -45,6 +45,21 @@ public class ScriptingCore implements IScriptingCore {
         injected[1] = false;
     }
 
+    @Override
+    public boolean shutdown() {
+        logger.info("Shutdown request received!");
+        this.engine = null;
+        this.loaded.clear();
+        this.loaded.trimToSize();
+        this.loaded = null;
+        this.bus = null;
+        this.lang = null;
+        this.config = null;
+        logger.info("Shutdown complete!");
+        this.logger = null;
+        return true;
+    }
+
     public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
         this.lang = lang;
         if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]) {

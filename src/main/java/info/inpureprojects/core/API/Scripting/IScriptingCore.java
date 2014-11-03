@@ -30,4 +30,6 @@ public interface IScriptingCore {
 
     public EventBus getBus();
 
+    public boolean shutdown();
+
 }

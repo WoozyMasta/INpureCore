@@ -35,6 +35,7 @@ import java.util.List;
  */
 public class NEIINpureConfig implements IConfigureNEI {
 
+    public static NEIINpureConfig instance;
     //public static final String[] supported = new String[]{"ForgeMicroblock", "ExtraUtilities", "BuildCraft|Transport", "appliedenergistics2", "BiblioCraft", "ThermalExpansion", "Mekanism"};
     public static boolean loaded = false;
     public static IScriptingCore scripting;
@@ -86,10 +87,23 @@ public class NEIINpureConfig implements IConfigureNEI {
         Streams.instance.close(w);
     }
 
+    public static void startReloadProcess(){
+        INpureCore.proxy.sendMessageToPlayer("Starting script reload process. Please stand by...");
+        scripting.getBus().unregister(instance);
+        scripting.shutdown();
+        scripting = null;
+        loaded = false;
+        instance.loadConfig();
+        INpureCore.proxy.sendMessageToPlayer("Reload complete.");
+    }
+
     @Override
     public void loadConfig() {
         if (loaded) {
             return;
+        }
+        if (instance == null){
+            instance = this;
         }
         logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");
         PreloaderAPI.preLoaderEvents.post(new EventNEIReady());

@@ -4,16 +4,14 @@ import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.*;
 import info.inpureprojects.core.API.Events.EventPreloaderRegister;
 import info.inpureprojects.core.API.IINpureSubmodule;
 import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.Config.PropertiesHolder;
+import info.inpureprojects.core.NEI.gtfoMicroblocks.Commands.CommandReload;
 import info.inpureprojects.core.Preloader.ModuleManager;
 import info.inpureprojects.core.Proxy.Proxy;
 import info.inpureprojects.core.Updater.UpdateManager;
@@ -117,6 +115,11 @@ public class INpureCore {
                 ((IINpureSubmoduleExpanded) s).onServerAboutToStart();
             }
         }
+    }
+
+    @Mod.EventHandler
+    public void onServerStart(FMLServerStartingEvent evt){
+        evt.registerServerCommand(new CommandReload());
     }
 
 }
