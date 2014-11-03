@@ -49,15 +49,9 @@ public class FMLLogInterceptor {
         ArrayList<String> list = new ArrayList();
         list.addAll(registry);
         Collections.sort(list);
-        if (INpureCore.properties.dump_registry_to_debug_log){
-            NEIINpureConfig.registryEntryPoint("----------------------------------");
-            NEIINpureConfig.registryEntryPoint("Dumping GameRegistry to debug log.");
-            NEIINpureConfig.registryEntryPoint("----------------------------------");
-            for (String s : list) {
-                NEIINpureConfig.registryEntryPoint(s);
-            }
-            NEIINpureConfig.registryEntryPoint("----------------------------------");
-        }
+        NEIINpureConfig.registryEntryPoint(list);
+        registry.clear();
+        registry = null;
     }
 
     public FMLLogInterceptor setup() {

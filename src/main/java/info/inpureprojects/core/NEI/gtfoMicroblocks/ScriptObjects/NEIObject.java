@@ -3,6 +3,7 @@ package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 import codechicken.nei.api.API;
 import cpw.mods.fml.common.registry.GameRegistry;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
+import info.inpureprojects.core.Utils.Regex.RegxEngine;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
  * Created by den on 10/28/2014.
  */
 public class NEIObject {
+
+    public static final String wildcard = "*";
 
     // Generic Section
 
@@ -42,13 +45,26 @@ public class NEIObject {
     // Item Section
     public void override_item(String modid, String name, int[] metas) {
         NEIINpureConfig.logger.debug("override_item called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
-        Item i = GameRegistry.findItem(modid, name);
-        if (i == null) {
-            NEIINpureConfig.logger.warn("Cannot find item %s:%s", modid, name);
-            return;
+        if (modid.contains(wildcard) || name.contains(wildcard)){
+            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
+            String recombine = String.format("%s:%s", modid, name);
+            for (String s : NEIINpureConfig.reg){
+                if (RegxEngine.match(recombine, s)){
+                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
+                    this.override_item(s, metas);
+                }
+            }
+        }else{
+            Item i = GameRegistry.findItem(modid, name);
+            if (i == null) {
+                NEIINpureConfig.logger.debug("Cannot find item %s:%s", modid, name);
+                return;
+            }else{
+                NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
+            }
+            ArrayList<ItemStack> stacks = NEIINpureConfig.buildStackList(new ItemStack(i), metas);
+            API.setItemListEntries(i, stacks);
         }
-        ArrayList<ItemStack> stacks = NEIINpureConfig.buildStackList(new ItemStack(i), metas);
-        API.setItemListEntries(i, stacks);
     }
 
     public void override_item(Item i, int[] metas) {
@@ -67,10 +83,22 @@ public class NEIObject {
 
     public void hide_item(String modid, String name) {
         NEIINpureConfig.logger.debug("hide_item called. Params: %s, %s", modid, name);
+        if (modid.contains(wildcard) || name.contains(wildcard)) {
+            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
+            String recombine = String.format("%s:%s", modid, name);
+            for (String s : NEIINpureConfig.reg) {
+                if (RegxEngine.match(recombine, s)) {
+                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
+                    this.hide_item(s);
+                }
+            }
+        }
         Item i = GameRegistry.findItem(modid, name);
         if (i == null) {
-            NEIINpureConfig.logger.warn("Cannot find item %s:%s", modid, name);
+            NEIINpureConfig.logger.debug("Cannot find item %s:%s", modid, name);
             return;
+        }else{
+            NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
         }
         API.hideItem(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE));
     }
@@ -88,10 +116,22 @@ public class NEIObject {
 
     public void hide_block(String modid, String name) {
         NEIINpureConfig.logger.debug("hide_block called. Params: %s, %s", modid, name);
+        if (modid.contains(wildcard) || name.contains(wildcard)) {
+            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
+            String recombine = String.format("%s:%s", modid, name);
+            for (String s : NEIINpureConfig.reg) {
+                if (RegxEngine.match(recombine, s)) {
+                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
+                    this.hide_block(s);
+                }
+            }
+        }
         Block b = GameRegistry.findBlock(modid, name);
         if (b == null) {
             NEIINpureConfig.logger.debug("Cannot find block %s:%s", modid, name);
             return;
+        }else{
+            NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
         }
         API.hideItem(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE));
     }
@@ -107,10 +147,22 @@ public class NEIObject {
 
     public void override_block(String modid, String name, int[] metas) {
         NEIINpureConfig.logger.debug("override_block called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
+        if (modid.contains(wildcard) || name.contains(wildcard)) {
+            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
+            String recombine = String.format("%s:%s", modid, name);
+            for (String s : NEIINpureConfig.reg) {
+                if (RegxEngine.match(recombine, s)) {
+                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
+                    this.override_block(s, metas);
+                }
+            }
+        }
         Block b = GameRegistry.findBlock(modid, name);
         if (b == null) {
             NEIINpureConfig.logger.debug("Cannot find block %s:%s", modid, name);
             return;
+        }else{
+            NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
         }
         ItemStack B = new ItemStack(b);
         ArrayList<ItemStack> stacks = NEIINpureConfig.buildStackList(B, metas);

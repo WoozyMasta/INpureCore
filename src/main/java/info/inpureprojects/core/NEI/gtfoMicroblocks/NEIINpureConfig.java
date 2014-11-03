@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by den on 8/1/2014.
@@ -39,6 +41,7 @@ public class NEIINpureConfig implements IConfigureNEI {
     private static File logs = new File(INpureCore.dir, "logs");
     public static final LogWrapper logger = new LogWrapper(LogManager.getLogger("INpureCullingEngine"), new File(logs, "debug.log"));
     private static int errorCount = 0;
+    public static List<String> reg;
 
     public NEIINpureConfig() {
         if (!logs.exists()) {
@@ -70,8 +73,17 @@ public class NEIINpureConfig implements IConfigureNEI {
         Streams.instance.close(w);
     }
 
-    public static void registryEntryPoint(String reg){
-       logger.debug(reg);
+    public static void registryEntryPoint(List<String> list){
+        if (INpureCore.properties.dump_registry_to_debug_log){
+            logger.debug("----------------------------------");
+            logger.debug("Dumping GameRegistry to debug log.");
+            logger.debug("----------------------------------");
+            for (String s : list) {
+                logger.debug(s);
+            }
+            logger.debug("----------------------------------");
+        }
+        reg = Collections.unmodifiableList(list);
     }
 
     @Override
