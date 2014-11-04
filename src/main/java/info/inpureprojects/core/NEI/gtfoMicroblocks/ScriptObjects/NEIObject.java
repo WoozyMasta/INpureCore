@@ -101,6 +101,7 @@ public class NEIObject {
         } else {
             NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
         }
+        API.setItemListEntries(i, NEIINpureConfig.buildStackList(new ItemStack(i), new int[]{0}));
         API.hideItem(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE));
     }
 
@@ -134,6 +135,8 @@ public class NEIObject {
         } else {
             NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
         }
+        ItemStack stack = new ItemStack(b);
+        API.setItemListEntries(stack.getItem(), NEIINpureConfig.buildStackList(stack, new int[]{0}));
         API.hideItem(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE));
     }
 
