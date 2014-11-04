@@ -38,6 +38,7 @@ public class NEIINpureConfig implements IConfigureNEI {
     public static boolean loaded = false;
     public static IScriptingCore scripting;
     public static List<String> reg;
+    public static NEIObject NEILib;
     private static File logs = new File(INpureCore.dir, "logs");
     public static final LogWrapper logger = new LogWrapper(LogManager.getLogger("INpureCullingEngine"), new File(logs, "debug.log"));
     private static int errorCount = 0;
@@ -115,7 +116,7 @@ public class NEIINpureConfig implements IConfigureNEI {
         // Load default modules
         obj.add(new ExposedObject("java", new JavaObject()));
         obj.add(new ExposedObject("FML", new FMLObject()));
-        obj.add(new ExposedObject("NEI", new NEIObject()));
+        obj.add(new ExposedObject("NEI", NEILib = new NEIObject()));
         obj.add(new ExposedObject("CreativeTabs", new CreativeObject()));
         // Load custom modules only if proper mod is also loaded.
         if (Loader.isModLoaded("ForgeMicroblock")) {

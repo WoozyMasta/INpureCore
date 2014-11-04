@@ -4,7 +4,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,51 +18,44 @@ public class CreativeObject {
 
     public CreativeObject() {
         NEIINpureConfig.logger.debug("Setting up CreativeTab library...");
-        for (String s : NEIINpureConfig.reg){
+        for (String s : NEIINpureConfig.reg) {
             GameRegistry.UniqueIdentifier id = NEIObject.getUniqueID(s);
             ItemStack i = null;
-            try{
+            try {
                 i = GameRegistry.findItemStack(id.modId, id.name, 1);
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 continue;
             }
-            if (i != null){
+            if (i != null) {
                 CreativeTabs t = i.getItem().getCreativeTab();
-                if (t != null){
+                if (t != null) {
                     tabs.put(t.getTabLabel(), t);
                 }
             }
         }
-        for (CreativeTabs t : tabs.values()){
+        for (CreativeTabs t : tabs.values()) {
             NEIINpureConfig.logger.debug("Found creative tab: " + t.getTabLabel());
         }
     }
 
-    public String[] getTabList(){
+    public String[] getTabList() {
         ArrayList<String> list = new ArrayList();
         Collections.sort(list);
         return list.toArray(new String[list.size()]);
     }
 
-    public void set_tab(String domain, String tab){
-        try{
-            // Call a scripting command from inside a scripting command? Sure.
-            ItemStack i = (ItemStack) NEIINpureConfig.scripting.getEngine().eval(String.format("NEI.getStack(%s);", domain));
-            if (tabs.get(tab) != null){
-                i.getItem().setCreativeTab(tabs.get(tab));
-            }
-        }catch(Throwable t){
-            t.printStackTrace();
+    public void set_tab(String domain, String tab) {
+        ItemStack i = NEIINpureConfig.NEILib.getStack(domain);
+        if (tabs.get(tab) != null && i != null) {
+            i.getItem().setCreativeTab(tabs.get(tab));
         }
     }
 
-    public void remove_tab(String domain){
-        try{
-            // Call a scripting command from inside a scripting command? Sure.
-            ItemStack i = (ItemStack) NEIINpureConfig.scripting.getEngine().eval(String.format("NEI.getStack(%s);", domain));
-            i.getItem().setCreativeTab(null);
-        }catch(Throwable t){
-            t.printStackTrace();
+    public void remove_tab(String domain) {
+        ItemStack i = NEIINpureConfig.NEILib.getStack(domain);
+        if (i == null) {
+            return;
         }
+        i.getItem().setCreativeTab(null);
     }
 }
