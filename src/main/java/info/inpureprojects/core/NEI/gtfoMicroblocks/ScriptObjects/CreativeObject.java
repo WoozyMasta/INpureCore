@@ -21,7 +21,12 @@ public class CreativeObject {
         NEIINpureConfig.logger.debug("Setting up CreativeTab library...");
         for (String s : NEIINpureConfig.reg){
             GameRegistry.UniqueIdentifier id = NEIObject.getUniqueID(s);
-            ItemStack i = GameRegistry.findItemStack(id.modId, id.name, OreDictionary.WILDCARD_VALUE);
+            ItemStack i = null;
+            try{
+                i = GameRegistry.findItemStack(id.modId, id.name, 1);
+            }catch(Throwable t){
+                continue;
+            }
             if (i != null){
                 CreativeTabs t = i.getItem().getCreativeTab();
                 if (t != null){
