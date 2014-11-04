@@ -8,183 +8,183 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
 /**
  * Created by den on 10/28/2014.
  */
-// TODO: Simplify and clean up this class.
 public class NEIObject {
 
     public static final String wildcard = "*";
 
     // Generic Section
 
-    public void override(String modid, String name, int[] metas) {
-        this.override_item(modid, name, metas);
-        this.override_block(modid, name, metas);
-    }
-
-    public void override(String domain, int[] metas) {
-        this.override_item(domain, metas);
-        this.override_block(domain, metas);
-    }
-
-    public void hide(String modid, String name) {
-        this.hide_item(modid, name);
-        this.hide_block(modid, name);
-    }
-
-    public void hide(String domain) {
-        this.hide_item(domain);
-        this.hide_block(domain);
-    }
-
-    //
-
-    // Item Section
-    public void override_item(String modid, String name, int[] metas) {
-        NEIINpureConfig.logger.debug("override_item called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
+    public ItemStack find(METHOD m, Object... data){
+        String modid = data[0].toString();
+        String name = data[1].toString();
+        NEIINpureConfig.logger.debug("%s called. Params: %s, %s", m.toString().toLowerCase(), modid, name);
         if (modid.contains(wildcard) || name.contains(wildcard)) {
             NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
             String recombine = String.format("%s:%s", modid, name);
             for (String s : NEIINpureConfig.reg) {
                 if (RegxEngine.match(recombine, s)) {
                     NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
-                    this.override_item(s, metas);
+                    GameRegistry.UniqueIdentifier id = getUniqueID(s);
+                    ItemStack stack = this.getStack(id.modId, id.name);
+                    if (m.equals(METHOD.HIDE)){
+                        this.hide_impl(stack);
+                    }else if (m.equals(METHOD.OVERRIDE)){
+                        this.override_impl(stack, (int[]) data[2]);
+                    }
                 }
             }
-        } else {
-            Item i = GameRegistry.findItem(modid, name);
-            if (i == null) {
-                NEIINpureConfig.logger.debug("Cannot find item %s:%s", modid, name);
-                return;
-            } else {
-                NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
-            }
-            ArrayList<ItemStack> stacks = NEIINpureConfig.buildStackList(new ItemStack(i), metas);
-            API.setItemListEntries(i, stacks);
         }
+        return this.getStack(modid, name);
     }
 
+    private ItemStack getStack(String modid, String name){
+        ItemStack i = GameRegistry.findItemStack(modid, name, OreDictionary.WILDCARD_VALUE);
+        if (i == null) {
+            NEIINpureConfig.logger.debug("Cannot find ItemStack %s:%s", modid, name);
+            return null;
+        } else {
+            NEIINpureConfig.logger.debug("Found ItemStack %s:%s. %s", modid, name, i.toString());
+        }
+        return i;
+    }
+
+    public void override(String modid, String name, int[] metas) {
+        this.override_impl(this.find(METHOD.OVERRIDE, modid, name, metas), metas);
+    }
+
+    private void override_impl(ItemStack i, int[] metas){
+        if (i == null || metas == null){
+            return;
+        }
+        API.setItemListEntries(i.getItem(), NEIINpureConfig.buildStackList(i, metas));
+    }
+
+    private void hide_impl(ItemStack i){
+        if (i == null){
+            return;
+        }
+        API.setItemListEntries(i.getItem(), NEIINpureConfig.buildStackList(i, new int[]{0}));
+        API.hideItem(i);
+    }
+
+    public void override(String domain, int[] metas) {
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        this.override(id.modId, id.name, metas);
+    }
+
+    public void hide(String modid, String name) {
+        this.hide_impl(this.find(METHOD.HIDE, modid, name));
+    }
+
+    public void hide(String domain) {
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        this.hide(id.modId, id.name);
+    }
+
+    public static enum METHOD{
+
+        OVERRIDE,
+        HIDE;
+
+    }
+
+    // Deprecated shit below
+
+    //
+
+    // Item Section
+    @Deprecated
+    public void override_item(String modid, String name, int[] metas) {
+        this.deprecationWarning("override_item", "override");
+        this.override(modid, name, metas);
+    }
+
+    @Deprecated
     public void override_item(Item i, int[] metas) {
         GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(i);
         this.override_item(id.modId, id.name, metas);
     }
 
+    @Deprecated
     public void override_item(String domain, int[] metas) {
-        this.override_item(this.getTargetMod(domain), this.getTarget(domain), metas);
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        this.override_item(id.modId, id.name, metas);
     }
 
+    @Deprecated
     public void hide_item(Item i) {
         GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(i);
         this.hide_item(id.modId, id.name);
     }
 
+    @Deprecated
     public void hide_item(String modid, String name) {
-        NEIINpureConfig.logger.debug("hide_item called. Params: %s, %s", modid, name);
-        if (modid.contains(wildcard) || name.contains(wildcard)) {
-            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
-            String recombine = String.format("%s:%s", modid, name);
-            for (String s : NEIINpureConfig.reg) {
-                if (RegxEngine.match(recombine, s)) {
-                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
-                    this.hide_item(s);
-                }
-            }
-        }
-        Item i = GameRegistry.findItem(modid, name);
-        if (i == null) {
-            NEIINpureConfig.logger.debug("Cannot find item %s:%s", modid, name);
-            return;
-        } else {
-            NEIINpureConfig.logger.debug("Found item %s:%s", modid, name);
-        }
-        API.setItemListEntries(i, NEIINpureConfig.buildStackList(new ItemStack(i), new int[]{0}));
-        API.hideItem(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE));
+        this.deprecationWarning("hide_item", "hide");
+        this.hide(modid, name);
     }
 
+    @Deprecated
     public void hide_item(String domain) {
-        this.hide_item(this.getTargetMod(domain), this.getTarget(domain));
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        this.hide_item(id.modId, id.modId);
     }
     //
 
     // Block Section
+    @Deprecated
     public void hide_block(Block b) {
         GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(b);
         this.hide_block(id.modId, id.name);
     }
 
+    @Deprecated
     public void hide_block(String modid, String name) {
-        NEIINpureConfig.logger.debug("hide_block called. Params: %s, %s", modid, name);
-        if (modid.contains(wildcard) || name.contains(wildcard)) {
-            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
-            String recombine = String.format("%s:%s", modid, name);
-            for (String s : NEIINpureConfig.reg) {
-                if (RegxEngine.match(recombine, s)) {
-                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
-                    this.hide_block(s);
-                }
-            }
-        }
-        Block b = GameRegistry.findBlock(modid, name);
-        if (b == null) {
-            NEIINpureConfig.logger.debug("Cannot find block %s:%s", modid, name);
-            return;
-        } else {
-            NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
-        }
-        ItemStack stack = new ItemStack(b);
-        API.setItemListEntries(stack.getItem(), NEIINpureConfig.buildStackList(stack, new int[]{0}));
-        API.hideItem(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE));
+        this.deprecationWarning("hide_block", "hide");
+        this.hide(modid, name);
     }
 
+    @Deprecated
     public void hide_block(String domain) {
-        this.hide_block(this.getTargetMod(domain), this.getTarget(domain));
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        this.hide_block(id.modId, id.name);
     }
 
+    @Deprecated
     public void override_block(Block b, int[] metas) {
         GameRegistry.UniqueIdentifier id = GameRegistry.findUniqueIdentifierFor(b);
         this.override_block(id.modId, id.name, metas);
     }
 
+    @Deprecated
     public void override_block(String modid, String name, int[] metas) {
-        NEIINpureConfig.logger.debug("override_block called. Params: %s, %s, %s", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
-        if (modid.contains(wildcard) || name.contains(wildcard)) {
-            NEIINpureConfig.logger.debug("Wildcard found in parameters. Running through RegxEngine...");
-            String recombine = String.format("%s:%s", modid, name);
-            for (String s : NEIINpureConfig.reg) {
-                if (RegxEngine.match(recombine, s)) {
-                    NEIINpureConfig.logger.debug("Regx match found! %s matches %s.", recombine, s);
-                    this.override_block(s, metas);
-                }
-            }
-        }
-        Block b = GameRegistry.findBlock(modid, name);
-        if (b == null) {
-            NEIINpureConfig.logger.debug("Cannot find block %s:%s", modid, name);
-            return;
-        } else {
-            NEIINpureConfig.logger.debug("Found block %s:%s", modid, name);
-        }
-        ItemStack B = new ItemStack(b);
-        ArrayList<ItemStack> stacks = NEIINpureConfig.buildStackList(B, metas);
-        API.setItemListEntries(B.getItem(), stacks);
+        this.deprecationWarning("override_block", "override");
+        this.override(modid, name, metas);
     }
 
+    @Deprecated
     public void override_block(String domain, int[] metas) {
-        this.override_block(this.getTargetMod(domain), this.getTarget(domain), metas);
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        this.override_block(id.modId, id.modId, metas);
     }
     //
 
-    // Utility methods
-    private String getTargetMod(String domain) {
-        return domain.split(":")[0];
-    }
-
-    private String getTarget(String domain) {
-        return domain.split(":")[1];
+    public static GameRegistry.UniqueIdentifier getUniqueID(String domain) {
+        GameRegistry.UniqueIdentifier id = new GameRegistry.UniqueIdentifier(domain);
+        if (StringUtils.countMatches(domain, ":") > 1){
+            NEIINpureConfig.logger.debug("%s has a bad registry name! Attempting to parse and reassemble correctly...", domain);
+            String d = domain.replace(String.format("%s:", id.modId), "");
+            NEIINpureConfig.logger.debug("Parsed bad name into: %s. If this is not correct please report it as a bug!", d);
+            return new GameRegistry.UniqueIdentifier(String.format("id.modId:%s", d));
+        }else{
+            return id;
+        }
     }
     //
 
@@ -197,6 +197,7 @@ public class NEIObject {
         }
         API.hideItem(new ItemStack(b));*/
         this.hide_block("minecraft:".concat(name));
+        this.deprecationWarning("hide_block_vanilla", "hide");
     }
 
     @Deprecated
@@ -208,6 +209,11 @@ public class NEIObject {
         ItemStack i = new ItemStack(b);
         API.setItemListEntries(i.getItem(), NEIINpureConfig.buildStackList(i, metas));*/
         this.override_block("minecraft:".concat(name), metas);
+        this.deprecationWarning("override_block_vanilla", "override");
+    }
+
+    public void deprecationWarning(String func, String n){
+        NEIINpureConfig.logger.warn("The function %s is deprecated. Please use %s instead! This function will be removed in a future version!", func, n);
     }
 
 }

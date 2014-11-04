@@ -238,6 +238,7 @@
 
 	<target name="copy-sources" depends="package-api">
 		<!-- Copy source -->
+		<delete dir="${sources.dir}"/>
 		<mkdir dir="${sources.dir}"/>
 		<sync todir="${sources.dir}">
 			<fileset dir="${src.dir}"/>
