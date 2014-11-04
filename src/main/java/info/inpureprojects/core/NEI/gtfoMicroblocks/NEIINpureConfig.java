@@ -116,6 +116,7 @@ public class NEIINpureConfig implements IConfigureNEI {
         obj.add(new ExposedObject("java", new JavaObject()));
         obj.add(new ExposedObject("FML", new FMLObject()));
         obj.add(new ExposedObject("NEI", new NEIObject()));
+        obj.add(new ExposedObject("CreativeTabs", new CreativeObject()));
         // Load custom modules only if proper mod is also loaded.
         if (Loader.isModLoaded("ForgeMicroblock")) {
             obj.add(new ExposedObject("ForgeMicroblock", new ForgeMicroblockObject()));

@@ -48,7 +48,12 @@ public class NEIObject {
         return this.getStack(modid, name);
     }
 
-    private ItemStack getStack(String modid, String name){
+    public ItemStack getStack(String domain){
+        GameRegistry.UniqueIdentifier id = getUniqueID(domain);
+        return this.getStack(id.modId, id.name);
+    }
+
+    public ItemStack getStack(String modid, String name){
         ItemStack i = GameRegistry.findItemStack(modid, name, OreDictionary.WILDCARD_VALUE);
         if (i == null) {
             NEIINpureConfig.logger.debug("Cannot find ItemStack %s:%s", modid, name);
