@@ -13,6 +13,10 @@ import java.util.ArrayList;
  */
 public class ExtraUtilitiesObject {
 
+    public ExtraUtilitiesObject() {
+        NEIINpureConfig.logger.debug("Setting up ExtraUtilities Library...");
+    }
+
     public void obliterate_microblocks(int[] metas, String id) {
         NEIINpureConfig.logger.debug("obliterate_microblocks called (version in %s). Params: %s, %s", this.getClass().getName(), NEIINpureConfig.logger.IntArrayToString(metas), id);
         Item i = GameRegistry.findItem("ExtraUtilities", "microblocks");

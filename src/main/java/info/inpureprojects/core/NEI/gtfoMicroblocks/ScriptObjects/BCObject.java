@@ -13,6 +13,10 @@ import java.util.LinkedList;
  */
 public class BCObject {
 
+    public BCObject() {
+        NEIINpureConfig.logger.debug("Setting up BuildCraft Library...");
+    }
+
     public void obliterate_facades(int index) {
         NEIINpureConfig.logger.debug("obliterate_microblocks called (version in %s). Params: %s", this.getClass().getName(), String.valueOf(index));
         try {

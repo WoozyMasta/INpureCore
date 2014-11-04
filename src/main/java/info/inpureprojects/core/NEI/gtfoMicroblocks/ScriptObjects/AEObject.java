@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class AEObject {
 
+    public AEObject() {
+        NEIINpureConfig.logger.debug("Setting up Applied Energistics 2 Library...");
+    }
+
     public List<ItemStack> getSubTypes() {
         NEIINpureConfig.logger.debug("getSubTypes called.");
         try {

@@ -15,6 +15,10 @@ import java.util.Random;
  */
 public class ForgeMicroblockObject {
 
+    public ForgeMicroblockObject() {
+        NEIINpureConfig.logger.debug("Setting up ForgeMicroblock Library...");
+    }
+
     public String getRandomMaterial() {
         try {
             String m = MicroMaterialRegistry.materialName(new Random().nextInt(20));

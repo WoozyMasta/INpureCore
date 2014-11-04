@@ -14,6 +14,10 @@ import java.util.Random;
  */
 public class JavaObject {
 
+    public JavaObject() {
+        NEIINpureConfig.logger.debug("Setting up Java Library...");
+    }
+
     public int random(int size) {
         return new Random().nextInt(size);
     }

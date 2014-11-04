@@ -17,6 +17,10 @@ import java.util.ArrayList;
  */
 public class NEIObject {
 
+    public NEIObject() {
+        NEIINpureConfig.logger.debug("Setting up NEI Library...");
+    }
+
     public static final String wildcard = "*";
 
     // Generic Section
