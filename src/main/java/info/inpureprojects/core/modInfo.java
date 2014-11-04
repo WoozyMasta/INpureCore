@@ -1,6 +1,6 @@
 package info.inpureprojects.core;
 
-import info.inpureprojects.core.Utils.ReleaseLevel;
+import info.inpureprojects.core.API.ReleaseLevel;
 
 /**
  * Created by den on 7/16/2014.

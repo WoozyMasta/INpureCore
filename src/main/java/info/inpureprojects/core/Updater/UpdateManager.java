@@ -6,7 +6,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.INpureCore;
-import info.inpureprojects.core.Utils.ReleaseLevel;
+import info.inpureprojects.core.API.ReleaseLevel;
 import info.inpureprojects.core.modInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
@@ -46,7 +46,7 @@ public class UpdateManager {
             return;
         }
         lastPoll = 400;
-        if (!modInfo.release.equals(ReleaseLevel.PUBLIC)) {
+        if (this.thread.update.getLevel().equals(ReleaseLevel.PUBLIC)) {
             FMLCommonHandler.instance().bus().unregister(this);
             return;
         }

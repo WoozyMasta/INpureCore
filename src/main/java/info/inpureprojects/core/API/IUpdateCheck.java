@@ -13,4 +13,6 @@ public interface IUpdateCheck {
 
     public String getModName();
 
+    public ReleaseLevel getLevel();
+
 }

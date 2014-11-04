@@ -2,6 +2,7 @@ package info.inpureprojects.core.Updater;
 
 import info.inpureprojects.core.API.IINpureSubmodule;
 import info.inpureprojects.core.API.IUpdateCheck;
+import info.inpureprojects.core.API.ReleaseLevel;
 import info.inpureprojects.core.API.Updater;
 import info.inpureprojects.core.modInfo;
 
@@ -45,5 +46,10 @@ public class UpdateModule implements IINpureSubmodule, IUpdateCheck {
     @Override
     public String getUpdateUrl() {
         return "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/VERSION";
+    }
+
+    @Override
+    public ReleaseLevel getLevel() {
+        return modInfo.release;
     }
 }
