@@ -1,6 +1,7 @@
 package info.inpureprojects.core.Preloader;
 
 import com.google.common.eventbus.Subscribe;
+import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import info.inpureprojects.core.Utils.Events.EventNEIReady;
 import info.inpureprojects.core.Utils.Loggers.EventLogger;
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +19,7 @@ import java.util.Set;
 /**
  * Created by den on 11/1/2014.
  */
-public class FMLLogInterceptor {
+public class FMLLogInterceptor{
 
     private Logger fmlOriginal;
     private Field myLog;
@@ -66,4 +68,15 @@ public class FMLLogInterceptor {
         }
         return this;
     }
+
+    public void unhook(){
+        try{
+            this.FMLFiltered.getBus().unregister(this);
+            myLog.set(relaunch, fmlOriginal);
+            log.info("System detached from FML. Normal logging systems restored.");
+        }catch(Throwable t){
+            t.printStackTrace();
+        }
+    }
+
 }

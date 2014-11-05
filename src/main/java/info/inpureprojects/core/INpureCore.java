@@ -27,7 +27,7 @@ import java.util.ArrayList;
 @Mod(modid = modInfo.modid, name = modInfo.name, version = modInfo.version, dependencies = modInfo.deps)
 public class INpureCore {
 
-    @Mod.Instance
+    @Mod.Instance(modInfo.modid)
     public static INpureCore instance;
     @SidedProxy(clientSide = modInfo.proxyClient, serverSide = modInfo.proxyCommon)
     public static Proxy proxy;
@@ -43,7 +43,6 @@ public class INpureCore {
 
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
-        instance = this;
         PreloaderAPI.preLoaderEvents.register(this);
         log = evt.getModLog();
         properties = new PropertiesHolder(new Configuration(new File(new File(evt.getModConfigurationDirectory(), "INpureProjects/INpureCore"), "INpureCore.cfg")));

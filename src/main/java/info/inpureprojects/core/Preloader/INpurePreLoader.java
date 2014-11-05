@@ -27,6 +27,7 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
     public static File versionFolder;
     private static Logger log = LogManager.getLogger("INpurePreloader");
     private INpureDepHandler dep = new INpureDepHandler();
+    public static FMLLogInterceptor fmlLogInterceptor;
 
     public static void print(String msg) {
         log.info(msg);
@@ -79,8 +80,9 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         }
         source = (File) data.get("coremodLocation");
         PreloaderAPI.modules = new ModuleManager();
-        FMLLogInterceptor l = new FMLLogInterceptor().setup();
-        PreloaderAPI.preLoaderEvents.register(l);
+        fmlLogInterceptor = new FMLLogInterceptor().setup();
+        PreloaderAPI.preLoaderEvents.register(fmlLogInterceptor);
+        PreloaderAPI.modules.register("info.inpureprojects.core.Preloader.FMLLogInterceptorModule");
     }
 
     @Override
