@@ -1,334 +1,90 @@
-<project name="INpureCore" default="install" basedir=".">
+<project name="INpureCore" default="main" basedir=".">
 	<property environment="env"/>
 	
-	<!-- Basic directories -->
 	<property name="src.dir" value="src/main/java"/>
-	<property name="resources.dir" value="src/main/resources"/>
-	<property name="build.dir" value="build"/>
-	<property name="download.dir" value="${build.dir}/downloads"/>
-	
+	<property name="api.dir" value="src/api/java"/>
+	<property name="utils.dir" value="utils"/>
+	<property name="deps.dir" value="deps"/>
+	<property name="download.dir" value="downloads"/>
+	<property name="build.dir" value="."/>
+	<property name="gradle.output.dir" value="${build.dir}/build/libs"/>
+	<property name="gradle.output" value="${gradle.output.dir}/modid-1.0.jar"/>
+	<property name="reobf.dir" value="${build.dir}/reobf"/>
+	<property name="bin.dir" value="${build.dir}/bin"/>
+	<property name="lib.dir" value="${build.dir}/libs"/>
+	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.2.1232/forge-1.7.10-10.13.2.1232-src.zip"/>
 	<!-- Project information -->
 	<property name="build.name" value="${ant.project.name}"/>
 	<property name="class.pckg" value="info/inpureprojects/core"/>
 	<!-- Version file -->
 	<property name="verclass.dir" value="${src.dir}/${class.pckg}" />
 	<property name="verclass.name" value="modInfo.java"/>
-
-	<!-- Forge version -->
-	<property name="mc.version"  value="1.7.10"/>
-	<property name="forge.major" value="10"/>
-	<property name="forge.minor" value="13"/>
-	<property name="forge.patch" value="1"/>
-	<property name="forge.build" value="1217"/>
 	
-	<!-- Packaging -->
-	<property name="dist.dir" value="${build.dir}/dist"/>
-	<property name="classes.dir" value="${build.dir}/packaging"/>
-	<property name="apiclasses.dir" value="${build.dir}/api-packaging"/>
-	
-	<!-- Forge paths -->
-	<property name="forge.version" value="${mc.version}-${forge.major}.${forge.minor}.${forge.patch}.${forge.build}"/>
-	<property name="forge.dir" value="${build.dir}/forge"/>
-	<property name="forgebuild.dir" value="${forge.dir}/build"/>
-	<property name="compile.dir" value="${forgebuild.dir}/tmp/compile"/>
-	<property name="lib.dir" value="${forgebuild.dir}/libs"/>
-	<property name="sources.dir" value="${forgebuild.dir}/sources/minecraft"/>
-	<property name="transformers.dir" value="${forge.dir}/src/main/resources/"/>
-	<property name="forge.stsh" value="${build.dir}/.gradle/caches/minecraft/net/minecraftforge/forge/${forge.version}"/>
-	<property name="forge.jar" value="${forge.stsh}/forgeSrc-${forge.version}.jar"/>
-	<property name="reobf.cmd" value="${download.dir}/bon.jar"/>
-	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${forge.version}/forge-${forge.version}-src.zip"/>
+	<property name="packaging.dir" value="${basedir}/build/dist"/>
 	
 	<!-- Classpaths -->
-	<path id="mcp.classpath">
-		<pathelement location="${forge.jar}"/>
-		<fileset dir="${lib.dir}">
-			<include name="*.jar"/>
-			<include name="**/*.jar"/>
-			<exclude name="${reobf.jar}"/>
-		</fileset>
-		<fileset dir="${build.dir}/.gradle/caches">
-			<include name="modules*/files*/**/*.jar"/>
-			<exclude name="modules*/files*/commons-io/commons-io/1.4/**/*.jar"/>
-			<exclude name="modules*/files*/com.google.guava/guava/14*/**/*.jar"/>
-			<exclude name="modules*/files*/com.google.guava/guava/15*/**/*.jar"/>
-		</fileset>
-	</path>
 	<path id="gson">
-		<fileset dir="${build.dir}/.gradle/caches">
-			<include name="modules*/files*/com.google.code.gson/**/*.jar"/>
+		<fileset dir="${download.dir}">
+			<include name="gson.jar"/>
 		</fileset>
 	</path>
 	
-	<!-- Task skipping -->
 	<target name="properties">
-		<!-- Enforce some paths -->
-		<mkdir dir="${build.dir}"/>
+		<available property="has.folders" type="dir" file="${download.dir}"/>
+		<available property="has.forge" file="${download.dir}/forge.zip"/>
+	</target>
+	
+	<target name="make.dirs" unless="has.folders" depends="properties">
+		<mkdir dir="${deps.dir}"/>
+		<mkdir dir="${api.dir}"/>
 		<mkdir dir="${download.dir}"/>
-		<!-- Set properties -->
-		<available property="has.api" file="${src.dir}/${class.pckg}/api"/>
-		<available property="forge.exists" file="${download.dir}/forge-${forge.version}-src.zip"/>
-		<available property="bon.exists" file="${reobf.cmd}"/>
-		<condition property="forge.already.installed">
-			<available file="${forge.jar}" type="file"/>
-		</condition>
-		<condition property="have.libs">
-			<and>
-				<istrue value="${forge.exists}"/>
-				<available file="${lib.dir}/codechickenlib.jar" type="file"/>
-				<available file="${lib.dir}/CoFHLib.jar" type="file"/>
-			</and>
-		</condition>
-	</target>
-	
-	<!-- Dependency downloading -->
-
-	<target name="download-core" depends="properties" unless="forge.exists">
-	</target>
-
-	<target name="get-dependencies" depends="get-version" unless="have.libs">
-		<delete dir="${lib.dir}/"/>
-		<mkdir dir="${lib.dir}/"/>
-
-		<echo message="Downloading CCL... "/>
-		<get src="http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.10-1.1.1.88/CodeChickenLib-1.7.10-1.1.1.88-dev.jar" dest="${download.dir}/codechickenlib.jar"/>
-		<echo message="Downloading CoFHLib... "/>
-		<get src="https://github.com/CoFH/CoFHLib/archive/master.zip" dest="${download.dir}/CoFHLib.zip"/>
-		<!-- Begin hack -->
-		<unzip src="${download.dir}/CoFHLib.zip" dest="${download.dir}"/>
-		<delete dir="${compile.dir}" failonerror="false"/>
-		<mkdir dir="${compile.dir}"/>
-		<javac srcdir="${download.dir}/CoFHLib-master/src/main/java" destdir="${compile.dir}"
-			target="1.6" source="1.6"
-			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
-			<include name="**/*.java"/>
-		      <classpath>
-				<fileset file="${download.dir}/codechickenlib.jar"/>
-		      </classpath>
-		</javac>
-		<jar destfile="${download.dir}/CoFHLib.jar" compress="true" level="9" basedir="${compile.dir}"/>
-		<!-- End hack -->
-		<delete dir="${compile.dir}" failonerror="false"/>
-		<echo message="Downloading CoFHCore... "/>
-		<get src="https://github.com/CoFH/CoFHCore/archive/master.zip" dest="${download.dir}/CoFHCore.zip"/>
-		<delete dir="${download.dir}/CoFHCore-master" failonerror="false"/>
-		<unzip src="${download.dir}/CoFHCore.zip" dest="${download.dir}"/>
-		<echo message="Compiling CoFHCore... "/>
-		<!-- Begin hack -->
-		<delete dir="${compile.dir}" failonerror="false"/>
-		<mkdir dir="${compile.dir}"/>
-		<javac srcdir="${download.dir}/CoFHCore-master/src/main/java" destdir="${compile.dir}"
-			target="1.6" source="1.6"
-			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
-			<include name="**/*.java"/>
-		      <classpath>
-				<fileset file="${download.dir}/codechickenlib.jar"/>
-				<fileset file="${download.dir}/CoFHLib.jar"/>
-		      </classpath>
-		</javac>
-		<jar destfile="${download.dir}/CoFHCore.jar" compress="true" level="9" basedir="${compile.dir}"/>
-		<delete dir="${compile.dir}" failonerror="false"/>
-		<echo message="Downloading AppEng API..." />
-		<get src="http://ae2.ae-mod.info/builds/appliedenergistics2-deobf-rv0-beta-4.jar" dest="${download.dir}/AppEng.jar"/>
-		<!-- End hack -->
-	</target>
-
-	<target name="dependencies-hack">
-		<copy file="./libs/commons-codec-1.9.jar" todir="${lib.dir}"/>
-		<copy file="./libs/ForgeMultipart-1.7.10-1.1.0.299-dev.jar" todir="${lib.dir}"/>
-		<copy file="./libs/NotEnoughItems-1.7.10-1.0.2.15-dev.jar" todir="${lib.dir}"/>
-		<copy file="./libs/junit.jar" todir="${lib.dir}"/>
-		<copy file="./libs/jruby.jar" todir="${lib.dir}"/>
-		<copy file="./libs/luaj-jse-3.0.jar" todir="${lib.dir}"/>
-	</target>
-	
-	<target name="extract-dependencies" depends="setup-forge,get-dependencies" unless="have.libs">
-		<echo message="Extracting CCL... " />
-		<copy file="${download.dir}/codechickenlib.jar" todir="${lib.dir}"/>
-		<echo message="Extracting CoFHLib... " />
-		<copy file="${download.dir}/CoFHLib.jar" todir="${lib.dir}"/>
-		<echo message="Extracting CoFHCore..."/>
-		<copy file="${download.dir}/CoFHCore.jar" todir="${lib.dir}"/>
-		<echo message="Extracting AppEng API... " />
-		<copy file="${download.dir}/AppEng.jar" todir="${lib.dir}"/>
-		<antcall target="dependencies-hack"/>
-	</target>
-	
-	<macrodef name="move-transformers"><sequential>
-
-		<copy file="${resources.dir}/CoFH_at.cfg" tofile="${transformers.dir}/z_CoFH_at.cfg"/>
-		<copy file="${resources.dir}/cofhlib_at.cfg" tofile="${transformers.dir}/z_cofhlib_at.cfg"/>
-		<copy file="${resources.dir}/nei_at.cfg" tofile="${transformers.dir}/z_nei_at.cfg"/>
-		<copy file="${resources.dir}/nei_at.cfg" tofile="${transformers.dir}/z_nei_at.cfg"/>
-		<copy file="${resources.dir}/META-INF/inpure_at.cfg" tofile="${transformers.dir}/z_inpure_at.cfg"/>
-		<copy file="${resources.dir}/META-INF/openbees_at.cfg" tofile="${transformers.dir}/z_openbees_at.cfg"/>
-		
-	</sequential></macrodef>
-	
-	<!-- Building process -->
-	<target name="install" depends="build">
-		<!-- Cleanup -->
-		<delete dir="${apiclasses.dir}"/>
-		<delete dir="${classes.dir}"/>
-		<delete>
-			<fileset dir="${dist.dir}">
-				<exclude name="${build.name}${build.full}${build.number}.jar"/>
-				<exclude name="${build.name}${build.full}dev-${build.number}.jar"/>
-				<exclude name="${build.name}-API${build.full}${build.number}.zip"/>
-			</fileset>
-		</delete>
-	</target>
-
-	<macrodef name="install-lite">
-		<attribute name="build"/>
-		<attribute name="classes" default="${compile.dir}"/>
-		<sequential>
-			<copy todir="${classes.dir}" preservelastmodified="true">
-				<fileset dir="@{classes}">
-					<include name="**/*.class"/>
-				</fileset>
-				<fileset dir="${resources.dir}"/>
-			</copy>
-			<update-languages/>
-			<manifest file="${classes.dir}/MANIFEST.MF">
-				<attribute name="FMLCorePlugin" value="info.inpureprojects.core.Preloader.INpurePreLoader"/>
-				<attribute name="FMLCorePluginContainsFMLMod" value="true"/>
-				<attribute name="FMLAT" value="inpure_at.cfg"/>
-			</manifest>
-			<jar destfile="${dist.dir}/${build.name}${build.full}@{build}.jar"
-				compress="true" level="9" basedir="${classes.dir}"
-				manifest="${classes.dir}/MANIFEST.MF">
-				<exclude name="MANIFEST.MF"/>
-			</jar>
-		</sequential>
-	</macrodef>
-
-	<target name="build" depends="extract-dependencies,get-build-number,copy-sources">
-		<!-- Recompile -->
-		<echo message="Compiling..."/>
-		<mkdir dir="${compile.dir}"/>
-		
-		<depend srcdir="${sources.dir}" destdir="${compile.dir}"
-			cache="${forgebuild.dir}/tmp/depcache" closure="true">
-			<include name="**/*.java"/>
-		</depend>
-		<javac srcdir="${sources.dir}" destdir="${compile.dir}" target="1.6" source="1.6"
-			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
-			<include name="**/*.java"/>
-		</javac>
-		
-		<!-- Dev jar -->
-		<echo message="Building jar..."/>
-		<local name="build"/><property name="build" value="dev-${build.number}"/>
-		<install-lite build="${build}"/>
-
-		<!-- Reobf -->
-		<echo message="Reobfuscating..."/>
-		<java classpath="${reobf.cmd}" classname="immibis.bon.cui.MCPRemap">
-			<arg  line="-q -m"/>
-			<arg value="-to SRG"/>
-			<arg value="-from MCP"/>
-			<arg value="-mcp ${forge.stsh}/unpacked"/>
-			<arg value="-in ${dist.dir}/${build.name}${build.full}${build}.jar"/>
-			<arg value="-out ${dist.dir}/${build.name}${build.full}${build.number}.jar"/>
-			<arg value="-ref ${forge.jar}"/>
-			<arg value="-jref ${lib.dir}"/>
-		</java>
-	</target>
-
-	<target name="copy-sources" depends="package-api">
-		<!-- Copy source -->
-		<delete dir="${sources.dir}"/>
-		<mkdir dir="${sources.dir}"/>
-		<sync todir="${sources.dir}">
-			<fileset dir="${src.dir}"/>
-		</sync>
-	</target>
-
-	<target name="package-api" depends="get-version" if="has.api">
-		<!-- Copy & package API -->
-		<copy todir="${apiclasses.dir}/${class.pckg}/api">
-			<fileset dir="${src.dir}/${class.pckg}/api"/>
-		</copy>
-		<zip destfile="${dist.dir}/${build.name}-API${build.full}${build.number}.zip" basedir="${apiclasses.dir}"/>
-	</target>
-
-	<target name="setup-forge" depends="download-forge" unless="forge.already.installed">
-		<delete dir="${forge.dir}" failonerror="false"/>
-		<mkdir dir="${forge.dir}"/>
-		<unzip dest="${forge.dir}">
-			<fileset dir="${download.dir}">
-				<include name="forge-${forge.version}-src.zip"/>
-			</fileset>
-		</unzip>
-		
-		<!-- Cleanup -->
-		<delete>
-			<fileset dir="${forge.dir}">
-				<include name="*.txt"/>
-				<include name="src/**/*.info"/>
-			</fileset>
-		</delete>
-		<delete dir="${forge.dir}/eclipse" failonerror="false"/>
-		<delete dir="${forge.dir}/src/main/java" failonerror="false"/>
-		<delete dir="${build.dir}/.gradle/caches/minecraft/net/minecraftforge/forge/${forge.version}/srgs" failonerror="false"/>
-		
-		<!-- Change executables' permissions -->
-		<chmod file="${forge.dir}/gradlew" perm="+x"/>
-
-		<move-transformers/>
-
-		<!-- Install forge -->
-		<exec executable="./gradlew" failonerror="true" dir="${forge.dir}/" vmlauncher="false">
-			<arg line="-g ../.gradle"/>
-			<arg line="extractMinecraftSrc"/>
-			<arg line="eclipseClasspath"/>
-		</exec>
-
-		<mkdir dir="${compile.dir}"/>
+		<mkdir dir="${reobf.dir}"/>
+		<mkdir dir="${bin.dir}"/>
 		<mkdir dir="${lib.dir}"/>
-		<javac srcdir="${forgebuild.dir}/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
-			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false"/>
-		<jar destfile="${forge.jar}" compress="true" level="9" basedir="${compile.dir}"/>
-		<copy file="${forge.jar}" todir="${forgebuild.dir}/dirtyArtifacts/"/>
-		<delete dir="${compile.dir}"/>
-	</target>
-
-	<target name="download-forge" depends="setup-bon,download-core" unless="forge.exists">
-		<echo message="Downloading forge... "/>
-		<get src="${forge.url}" dest="${download.dir}/forge-${forge.version}-src.zip"/>
 	</target>
 	
-	<target name="setup-bon" depends="properties" unless="bon.exists">
-		<echo message="Downloading BON..."/>
-		<get src="https://github.com/skyboy/bearded-octo-nemesis/releases/download/1.1/BON.jar" dest="${reobf.cmd}"/>
+	<target name="setup.forge" depends="make.dirs" unless="has.forge">
+		<echo message="Downloading ForgeGradle..."/>
+		<get dest="${download.dir}/forge.zip">
+			<url url="${forge.url}"/>
+		</get>
+		<get dest="${download.dir}/gson.jar">
+			<url url="http://search.maven.org/remotecontent?filepath=com/google/code/gson/gson/2.3/gson-2.3.jar"/>
+		</get>
+		<echo message="Unzipping ForgeGradle..."/>
+		<unzip src="${download.dir}/forge.zip" dest="${build.dir}" overwrite="false"/>
+		<echo message="Cleaning up ForgeGradle files..."/>
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="*.txt"/>
+			</fileset>
+		</delete>
+		<delete dir="${build.dir}/eclipse"/>
+		<delete dir="${build.dir}/src/main/java/com"/>
+		<echo message="Running ForgeGradle Setup..."/>
+		<chmod dir="${build.dir}" perm="ugo+rx" includes="gradlew"/>
+		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c gradlew.bat setupDecompWorkspace setupDevWorkspace idea --refresh-dependencies"/>
+		</exec>
+		<exec dir="${build.dir}" executable="sh" osfamily="unix">
+			<arg line="gradlew setupDecompWorkspace setupDevWorkspace idea --refresh-dependencies"/>
+		</exec>
 	</target>
 	
-	<macrodef name="update-languages">
-		<sequential>
-			<script language="javascript"><![CDATA[
-				importPackage(java.io);
-				var path = "/assets/cofh/language/";
-				var languages = new File(project.getProperty("resources.dir") + path);
-				if (languages.exists() && languages.isDirectory()) {
-					var out = "";
-					for each(var i in languages.list()) {
-						if (i != null && i.length() > 5 && i.indexOf(".lang") == i.length() - 5) {
-							out += i.substring(0, i.length() - 5) + ", ";
-						}
-					}
-					if (out.length > 0) {
-						var os = new PrintWriter(project.getProperty("classes.dir") + path + ".languages");
-						os.write("["+out.substring(0, out.length - 2)+"]");
-						os.flush();
-						os.close();
-					}
-				}
-			]]></script>
-		</sequential>
-	</macrodef>
+	<target name="setup" depends="setup.forge">
+		<echo message="Setup: Complete."/>
+	</target>
 	
-	<target name="verify-version">
+	<target name="compile" depends="setup">
+		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c gradlew.bat build"/>
+		</exec>
+		<exec dir="${build.dir}" executable="sh" osfamily="unix">
+			<arg line="gradlew build"/>
+		</exec>
+	</target>
+	
+	<target name="get-version" depends="compile">
 		<script language="javascript"><![CDATA[
 			var name = project.getProperty("build.full");
 			if (name == null || name == "") {
@@ -338,9 +94,6 @@
 				}
 			}
 		]]></script>
-	</target>
-
-	<target name="get-version" depends="verify-version,setup-forge" unless="build.full">
 		<local name="grep.out"/><local name="mfrv"/><local name="mcv"/>
 		<!-- Read version out of file -->
 		<script language="javascript"><![CDATA[
@@ -404,7 +157,7 @@
 		<echo message="Version: ${mfrv}  Channel: ${build.channel}"/>
 		<property name="build.full" value="-[${mcv}]${mfrv}-"/>
 	</target>
-
+	
 	<target name="get-build-number" depends="build-number-there" unless="build.number">
 		<echo message="!! No build number set !!"/>
 		<property name="build.number" value="CUSTOM_BUILD"/>
@@ -414,23 +167,16 @@
 		<echo message="Using build number ${env.BUILD_NUMBER}..."/>
 		<property name="build.number" value="${env.BUILD_NUMBER}"/>
 	</target>
-
-	<target name="clean">
-		<delete dir="${build.dir}"/>
+	
+	<target name="package" depends="build-number-there">
+		<mkdir dir="${packaging.dir}"/>
+		<unzip src="${basedir}/build/libs/INpureCore-1.0.jar" dest="${packaging.dir}/classes"/>
+		<jar destfile="${packaging.dir}/${build.name}${build.full}${build.number}.jar" basedir="${packaging.dir}/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
+		<delete dir="${packaging.dir}/classes"/>
+	</target>
+	
+	<target name="main" depends="package">
+		<echo message="Build script execution complete."/>
 	</target>
 
-	<target name="rebuild">
-		<delete file="${forge.jar}" failonerror="false"/>
-		<delete dir="${forge.dir}"/>
-		<delete dir="${download.dir}"/>
-		<antcall target="install"/>
-	</target>
-
-	<target name="refresh-deps">
-		<delete dir="${lib.dir}"/>
-		<delete dir="${download.dir}"/>
-		<antcall target="install"/>
-	</target>
-
-	<target name="jar" depends="install"/>
 </project>
