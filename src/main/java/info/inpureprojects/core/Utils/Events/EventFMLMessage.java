@@ -31,4 +31,9 @@ public class EventFMLMessage extends Event {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public boolean isCancelable() {
+        return true;
+    }
 }

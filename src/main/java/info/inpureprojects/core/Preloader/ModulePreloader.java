@@ -5,17 +5,13 @@ import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import java.io.File;
 
 /**
- * Created by den on 11/5/2014.
+ * Created by den on 11/7/2014.
  */
-public class FMLLogInterceptorModule implements IINpureSubmoduleExpanded{
+public class ModulePreloader implements IINpureSubmoduleExpanded {
 
     @Override
     public void onServerAboutToStart() {
-        try{
-            INpurePreLoader.fmlLogInterceptor.unhook();
-        }catch(Throwable t){
-            t.printStackTrace();
-        }
+        INpurePreLoader.fmlLogInterceptor.unhook();
     }
 
     @Override

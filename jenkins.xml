@@ -169,6 +169,7 @@
 	</target>
 	
 	<target name="package" depends="build-number-there">
+        <delete dir="${packaging.dir}"/>
 		<mkdir dir="${packaging.dir}"/>
 		<unzip src="${basedir}/build/libs/INpureCore-1.0.jar" dest="${packaging.dir}/classes"/>
 		<jar destfile="${packaging.dir}/${build.name}${build.full}${build.number}.jar" basedir="${packaging.dir}/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>

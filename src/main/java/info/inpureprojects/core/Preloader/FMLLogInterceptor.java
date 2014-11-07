@@ -1,15 +1,16 @@
 package info.inpureprojects.core.Preloader;
 
 import com.google.common.eventbus.Subscribe;
-import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
+import info.inpureprojects.core.API.PreloaderAPI;
+import info.inpureprojects.core.API.Utils.LogWrapper;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import info.inpureprojects.core.Utils.Events.EventNEIReady;
+import info.inpureprojects.core.Utils.Loggers.EventFilter;
 import info.inpureprojects.core.Utils.Loggers.EventLogger;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,14 +20,17 @@ import java.util.Set;
 /**
  * Created by den on 11/1/2014.
  */
-public class FMLLogInterceptor{
+public class FMLLogInterceptor {
 
+    public LogWrapper log = new LogWrapper(LogManager.getLogger("INpureLogInterceptor"), null);
     private Logger fmlOriginal;
     private Field myLog;
     private Object relaunch;
+    @Deprecated
     private EventLogger FMLFiltered;
-    private Logger log = LogManager.getLogger("INpureLogInterceptor");
+    private EventFilter filter;
     private Set<String> registry = new LinkedHashSet<String>();
+    private boolean hooked = false;
 
     @Subscribe
     public void onFMLMessage(EventFMLMessage evt) {
@@ -53,6 +57,28 @@ public class FMLLogInterceptor{
     }
 
     public FMLLogInterceptor setup() {
+        filter = new EventFilter();
+        filter.getBus().register(this);
+        try {
+            Class c = Class.forName("cpw.mods.fml.relauncher.FMLRelaunchLog");
+            relaunch = c.getDeclaredField("log").get(null);
+            myLog = relaunch.getClass().getDeclaredField("myLog");
+            myLog.setAccessible(true);
+            this.fmlOriginal = (Logger) myLog.get(relaunch);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        ((org.apache.logging.log4j.core.Logger) this.fmlOriginal).addFilter(filter);
+        PreloaderAPI.preLoaderEvents.register(this);
+        log.info("System attached to FML. Now intercepting all logging calls.");
+        return this;
+    }
+
+    @Deprecated
+    public FMLLogInterceptor setup_old() {
+        if (hooked) {
+            return this;
+        }
         try {
             Class c = Class.forName("cpw.mods.fml.relauncher.FMLRelaunchLog");
             relaunch = c.getDeclaredField("log").get(null);
@@ -63,18 +89,33 @@ public class FMLLogInterceptor{
             FMLFiltered.getBus().register(this);
             myLog.set(relaunch, FMLFiltered);
             log.info("System attached to FML. Now intercepting all logging calls.");
+            hooked = true;
         } catch (Throwable t) {
             t.printStackTrace();
         }
         return this;
     }
 
-    public void unhook(){
-        try{
+    public void unhook() {
+        if (hooked) {
+            this.filter.getBus().unregister(this);
+            PreloaderAPI.preLoaderEvents.unregister(this);
+            log.info("System no longer monitoring FML console messages.");
+            hooked = false;
+        }
+    }
+
+    @Deprecated
+    public void unhook_old() {
+        if (!hooked) {
+            return;
+        }
+        try {
             this.FMLFiltered.getBus().unregister(this);
             myLog.set(relaunch, fmlOriginal);
             log.info("System detached from FML. Normal logging systems restored.");
-        }catch(Throwable t){
+            hooked = false;
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }

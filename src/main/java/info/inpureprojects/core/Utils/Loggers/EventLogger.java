@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Created by den on 11/2/2014.
  */
+@Deprecated
 public class EventLogger extends FakeLogger {
 
     private Logger original;

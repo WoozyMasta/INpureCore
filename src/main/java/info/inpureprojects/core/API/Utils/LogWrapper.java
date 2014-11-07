@@ -18,9 +18,12 @@ public class LogWrapper {
     public LogWrapper(Logger log, File debug) {
         this.log = log;
         this.debug = debug;
-        if (this.debug.exists()) {
-            this.debug.delete();
+        if (this.debug != null) {
+            if (this.debug.exists()) {
+                this.debug.delete();
+            }
         }
+
     }
 
     public Logger getLog() {
@@ -65,8 +68,29 @@ public class LogWrapper {
         this.writeToLog(String.format(msg, data));
     }
 
+    public void bigWarning(String msg) {
+        this.log.warn("--------------------------");
+        this.log.warn(String.format(msg));
+        this.log.warn("--------------------------");
+        this.writeToLog("--------------------------");
+        this.writeToLog(String.format(msg));
+        this.writeToLog("--------------------------");
+    }
+
+    public void bigWarning(String msg, Object... data) {
+        this.log.warn("--------------------------");
+        this.log.warn(String.format(msg, data));
+        this.log.warn("--------------------------");
+        this.writeToLog("--------------------------");
+        this.writeToLog(String.format(msg, data));
+        this.writeToLog("--------------------------");
+    }
+
     private void writeToLog(String msg) {
         try {
+            if (debug == null) {
+                return;
+            }
             FileUtils.writeStringToFile(debug, msg.concat(SystemUtils.LINE_SEPARATOR), true);
         } catch (Throwable t) {
             t.printStackTrace();
