@@ -173,9 +173,14 @@
         <delete dir="${packaging.dir}"/>
  		<unzip src="${basedir}/build/libs/INpureCore-1.0.jar" dest="${packaging.dir}/classes"/>
 		<jar destfile="${packaging.dir}/${build.name}${build.full}${build.number}.jar" basedir="${packaging.dir}/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
-		<jar destfile="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/src" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
+		<jar destfile="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/src/main/java" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
 		<jar destfile="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/build/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}/src/main/resources"/>
+		</jar>
+		<jar destfile="${packaging.dir}/api/${build.name}${build.full}${build.number}.jar" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
+			<fileset dir="${basedir}/src/main/java">
+				<include name="info/inpureprojects/core/API/**"/>
+			</fileset>
 		</jar>
 		<jar destfile="${packaging.dir}/javadoc/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/javadoc" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
 		<delete dir="${packaging.dir}/classes"/>
@@ -196,6 +201,11 @@
 		<echo message="Writing pom data..."/>
 		<artifact:pom id="mypom" groupId="info.inpureprojects" artifactId="${build.name}" version="${build.full.sub1}${build.number}" name="INpureCore">
 			<license name="IDGAF" url="http://inpureprojects.info/downloads/Minecraft/LICENSE.txt"/>
+			<dependency groupId="appeng" artifactId="appliedenergistics2" version="rv1-stable-1" classifier="dev"/>
+			<dependency groupId="codechicken" artifactId="NotEnoughItems" version="1.7.10-1.0.3.57" classifier="dev"/>
+			<dependency groupId="org.jruby" artifactId="jruby-complete" version="1.7.16.1"/>
+			<dependency groupId="org.luaj" artifactId="luaj-jse" version="2.0"/>
+			<dependency groupId="codechicken" artifactId="ForgeMultipart" version="1.7.10-1.1.0.313" classifier="dev"/>
 		</artifact:pom>
 		<!-- There seems to be a bug in maven-ant-tasks here. In order to avoid deploy exploding into a fireball you need to save your pom to a file temporarily and load it into a new id. -->
 		<artifact:writepom pomRefId="mypom" file="pom.xml"/>
@@ -214,6 +224,7 @@
 			<attach file="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" type="jar" classifier="sources"/>
 			<attach file="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" type="jar" classifier="dev"/>
 			<attach file="${packaging.dir}/javadoc/${build.name}${build.full}${build.number}.jar" type="jar" classifier="javadoc"/>
+			<attach file="${packaging.dir}/api/${build.name}${build.full}${build.number}.jar" type="jar" classifier="api"/>
 		</artifact:deploy>
 	</target>
 	

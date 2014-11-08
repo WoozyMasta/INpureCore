@@ -19,6 +19,6 @@ gradlew
 gradlew.bat
 Tests/middleclass.lua
 deps/
-*.xml
 *.number
 javadoc/*
+pom.xml

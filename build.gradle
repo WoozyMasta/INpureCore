@@ -26,20 +26,36 @@ minecraft {
     assetDir = "eclipse/assets"
 }
 
+repositories {
+     maven { // the repo from which to get NEI and stuff
+         name 'CB Repo'
+         url "http://chickenbones.net/maven/"
+     }
+	 
+	 maven { // The repo from which to get waila
+         name "Mobius Repo"
+         url "http://mobiusstrip.eu/maven"
+     }
+	 
+	 maven {
+            name = "inpure"
+            url = "http://files.inpureprojects.info/maven"
+     }
+	 
+	 maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
+}
+
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    compile 'appeng:appliedenergistics2:rv1-stable-1:dev'
+	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev'
+	compile 'org.jruby:jruby-complete:1.7.16.1'
+	compile 'org.luaj:luaj-jse:2.0'
+	compile 'commons-codec:commons-codec:1.9'
+	compile 'org.apache.commons:commons-compress:1.9'
+	compile 'codechicken:ForgeMultipart:1.7.10-1.1.0.313:dev'
 }
 
 processResources
