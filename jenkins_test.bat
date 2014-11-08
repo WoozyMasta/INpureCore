@@ -1,2 +1,3 @@
-call ant -buildfile jenkins_new.xml
+set buildfile=jenkins.xml
+call ant -buildfile %buildfile%
 pause
