@@ -28,8 +28,8 @@ public class NEIObject {
         if (StringUtils.countMatches(domain, ":") > 1) {
             NEIINpureConfig.logger.debug("%s has a bad registry name! Attempting to parse and reassemble correctly...", domain);
             String d = domain.replace(String.format("%s:", id.modId), "");
-            NEIINpureConfig.logger.debug("Parsed bad name into: %s. If this is not correct please report it as a bug!", d);
-            return new GameRegistry.UniqueIdentifier(String.format("id.modId:%s", d));
+            NEIINpureConfig.logger.debug("Parsed bad name into: modid: %s, name: %s. If this is not correct please report it as a bug!", id.modId, d);
+            return new GameRegistry.UniqueIdentifier(String.format("%s:%s", id.modId, d));
         } else {
             return id;
         }
