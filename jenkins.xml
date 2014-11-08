@@ -173,12 +173,12 @@
         <delete dir="${packaging.dir}"/>
  		<unzip src="${basedir}/build/libs/INpureCore-1.0.jar" dest="${packaging.dir}/classes"/>
 		<jar destfile="${packaging.dir}/${build.name}${build.full}${build.number}.jar" basedir="${packaging.dir}/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
-		<delete dir="${packaging.dir}/classes"/>
 		<jar destfile="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/src" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
 		<jar destfile="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/build/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}/src/main/resources"/>
 		</jar>
 		<jar destfile="${packaging.dir}/javadoc/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/javadoc" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
+		<delete dir="${packaging.dir}/classes"/>
 	</target>
 	
 	<target name="maven.setup" depends="package" unless="has.maven">
