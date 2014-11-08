@@ -22,7 +22,7 @@ group= "info.inpureprojects.core" // http://maven.apache.org/guides/mini/guide-n
 archivesBaseName = "INpureCore"
 
 minecraft {
-    version = "1.7.10-10.13.2.1232"
+    version = "1.7.10-10.13.2.1235"
     assetDir = "eclipse/assets"
 }
 
@@ -51,7 +51,7 @@ repositories {
 dependencies {
     compile 'appeng:appliedenergistics2:rv1-stable-1:dev'
 	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev'
-	compile 'org.jruby:jruby-complete:1.7.16.1'
+	compile 'org.jruby:jruby-core:1.7.16.1'
 	compile 'org.luaj:luaj-jse:2.0'
 	compile 'commons-codec:commons-codec:1.9'
 	compile 'org.apache.commons:commons-compress:1.9'
