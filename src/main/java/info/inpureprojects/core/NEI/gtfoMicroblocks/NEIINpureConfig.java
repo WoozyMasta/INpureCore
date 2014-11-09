@@ -2,9 +2,9 @@ package info.inpureprojects.core.NEI.gtfoMicroblocks;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
-import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.Loader;
 import info.inpureprojects.core.API.Events.EventScriptError;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.API.INpureAPI;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
@@ -14,7 +14,6 @@ import info.inpureprojects.core.API.Utils.LogWrapper;
 import info.inpureprojects.core.API.Utils.Streams;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects.*;
-import info.inpureprojects.core.Scripting.TestException;
 import info.inpureprojects.core.Utils.Events.EventNEIReady;
 import info.inpureprojects.core.modInfo;
 import net.minecraft.block.Block;
@@ -87,7 +86,7 @@ public class NEIINpureConfig implements IConfigureNEI {
         reg = list;
     }
 
-    @Subscribe
+    @INpureEventBus.INpureSubscribe
     public void onScriptError(EventScriptError evt) {
         INpureCore.proxy.sendMessageToPlayer("A script error has occured. A log file has been created in config/INpureProjects/logs.");
         String fileName = new SimpleDateFormat("yyyyMMddhhmm").format(new Date()).concat("-").concat(String.valueOf(this.errorCount++).concat(".txt"));
@@ -98,47 +97,43 @@ public class NEIINpureConfig implements IConfigureNEI {
 
     @Override
     public void loadConfig() {
-        if (loaded) {
-            return;
-        }
-        if (instance == null) {
-            instance = this;
-        }
-        logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");
-        EventNEIReady r = new EventNEIReady();
-        PreloaderAPI.preLoaderEvents.post(r);
-        this.registryEntryPoint(r.getList());
-        File working = new File(INpureCore.dir, "custom_nei_filters");
-        scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
-        scripting.getBus().register(this);
-        scripting.initialize(working, logger);
-        ArrayList<ExposedObject> obj = new ArrayList();
-        // Load default modules
-        obj.add(new ExposedObject("java", new JavaObject()));
-        obj.add(new ExposedObject("FML", new FMLObject()));
-        obj.add(new ExposedObject("NEI", NEILib = new NEIObject()));
-        obj.add(new ExposedObject("CreativeTabs", new CreativeObject()));
-        // Load custom modules only if proper mod is also loaded.
-        if (Loader.isModLoaded("ForgeMicroblock")) {
-            obj.add(new ExposedObject("ForgeMicroblock", new ForgeMicroblockObject()));
-        }
-        if (Loader.isModLoaded("ExtraUtilities")) {
-            obj.add(new ExposedObject("ExtraUtilities", new ExtraUtilitiesObject()));
-        }
-        if (Loader.isModLoaded("BuildCraft|Transport")) {
-            obj.add(new ExposedObject("BC", new BCObject()));
-        }
-        if (Loader.isModLoaded("appliedenergistics2")) {
-            obj.add(new ExposedObject("AE2", new AEObject()));
-        }
-        scripting.exposeObjects(obj);
-        scripting.loadPackagesFromDir(working);
-        loaded = true;
-    }
-
-    private void doTestError(String msg) {
         try {
-            throw new TestException(msg);
+            if (loaded) {
+                return;
+            }
+            if (instance == null) {
+                instance = this;
+            }
+            logger.info("Starting NEI Filter scripting. This might take a moment to load all the modules...");
+            File working = new File(INpureCore.dir, "custom_nei_filters");
+            scripting = INpureAPI.manager.create(IScriptingManager.SupportedLanguages.JAVASCRIPT);
+            scripting.getBus().register(this);
+            scripting.initialize(working, logger);
+            EventNEIReady r = new EventNEIReady();
+            PreloaderAPI.preLoaderEvents.post(r);
+            this.registryEntryPoint(r.getList());
+            ArrayList<ExposedObject> obj = new ArrayList();
+            // Load default modules
+            obj.add(new ExposedObject("java", new JavaObject()));
+            obj.add(new ExposedObject("FML", new FMLObject()));
+            obj.add(new ExposedObject("NEI", NEILib = new NEIObject()));
+            obj.add(new ExposedObject("CreativeTabs", new CreativeObject()));
+            // Load custom modules only if proper mod is also loaded.
+            if (Loader.isModLoaded("ForgeMicroblock")) {
+                obj.add(new ExposedObject("ForgeMicroblock", new ForgeMicroblockObject()));
+            }
+            if (Loader.isModLoaded("ExtraUtilities")) {
+                obj.add(new ExposedObject("ExtraUtilities", new ExtraUtilitiesObject()));
+            }
+            if (Loader.isModLoaded("BuildCraft|Transport")) {
+                obj.add(new ExposedObject("BC", new BCObject()));
+            }
+            if (Loader.isModLoaded("appliedenergistics2")) {
+                obj.add(new ExposedObject("AE2", new AEObject()));
+            }
+            scripting.exposeObjects(obj);
+            scripting.loadPackagesFromDir(working);
+            loaded = true;
         } catch (Throwable t) {
             scripting.getBus().post(new EventScriptError(t));
         }

@@ -1,6 +1,6 @@
 package info.inpureprojects.core.API.Scripting;
 
-import com.google.common.eventbus.EventBus;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.API.Scripting.Toc.TocManager;
 import info.inpureprojects.core.API.Utils.LogWrapper;
 
@@ -28,7 +28,7 @@ public interface IScriptingCore {
 
     public ScriptEngine getEngine();
 
-    public EventBus getBus();
+    public INpureEventBus getBus();
 
     public boolean shutdown();
 

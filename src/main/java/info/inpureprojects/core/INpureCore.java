@@ -1,11 +1,11 @@
 package info.inpureprojects.core;
 
-import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import info.inpureprojects.core.API.Events.EventPreloaderRegister;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.API.IINpureSubmodule;
 import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.API.IUpdateCheck;
@@ -70,7 +70,7 @@ public class INpureCore {
         }
     }
 
-    @Subscribe
+    @INpureEventBus.INpureSubscribe
     public void registerModules(EventPreloaderRegister evt) {
         if (Loader.isModLoaded(modInfo.modid) && properties.updateCheck) {
             PreloaderAPI.modules.register("info.inpureprojects.core.Updater.UpdateModule");

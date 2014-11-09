@@ -19,10 +19,10 @@ public class CreativeObject {
     public CreativeObject() {
         NEIINpureConfig.logger.debug("Setting up CreativeTab library...");
         for (String s : NEIINpureConfig.reg) {
-            GameRegistry.UniqueIdentifier id = NEIObject.getUniqueID(s);
+            NEIObject.UniqueIDSettable id = NEIObject.getUniqueID(s);
             ItemStack i = null;
             try {
-                i = GameRegistry.findItemStack(id.modId, id.name, 1);
+                i = GameRegistry.findItemStack(id.getModId(), id.getName(), 1);
             } catch (Throwable t) {
                 continue;
             }

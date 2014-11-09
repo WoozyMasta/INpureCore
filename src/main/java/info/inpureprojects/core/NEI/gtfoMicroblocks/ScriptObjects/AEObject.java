@@ -1,8 +1,8 @@
 package info.inpureprojects.core.NEI.gtfoMicroblocks.ScriptObjects;
 
 import appeng.api.AEApi;
+import cpw.mods.fml.common.registry.GameRegistry;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.NEIINpureConfig;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.lang.reflect.Field;
@@ -36,9 +36,10 @@ public class AEObject {
         return i;
     }
 
-    public Item getFacadeItem() {
-        NEIINpureConfig.logger.debug("getFacadeItem called.");
-        return AEApi.instance().items().itemFacade.item();
+    public String getFacadeItem() {
+        NEIObject.UniqueIDSettable id = new NEIObject.UniqueIDSettable(GameRegistry.findUniqueIdentifierFor(AEApi.instance().items().itemFacade.item()));
+        NEIINpureConfig.logger.debug("getFacadeItem called. Returned: %s:%s", id.getModId(), id.getName());
+        return String.format("%s:%s", id.getModId(), id.getName());
     }
 
 }

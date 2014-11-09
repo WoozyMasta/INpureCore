@@ -1,6 +1,6 @@
 package info.inpureprojects.core.Utils.Loggers;
 
-import com.google.common.eventbus.EventBus;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
@@ -13,9 +13,9 @@ import org.apache.logging.log4j.message.Message;
  */
 public class EventFilter implements Filter {
 
-    private EventBus bus = new EventBus();
+    private INpureEventBus bus = new INpureEventBus();
 
-    public EventBus getBus() {
+    public INpureEventBus getBus() {
         return bus;
     }
 

@@ -1,8 +1,8 @@
 package info.inpureprojects.core.Scripting;
 
-import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.FMLCommonHandler;
 import info.inpureprojects.core.API.Events.EventScriptError;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.API.Scripting.CanBeNull;
 import info.inpureprojects.core.API.Scripting.ExposedObject;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
@@ -35,7 +35,7 @@ public class ScriptingCore implements IScriptingCore {
     private static final boolean[] injected = new boolean[2];
     private ScriptEngine engine;
     private ArrayList<TocManager.TableofContents> loaded = new ArrayList();
-    private EventBus bus = new EventBus();
+    private INpureEventBus bus = new INpureEventBus();
     private IScriptingManager.SupportedLanguages lang;
     private Configuration config;
     private LogWrapper logger;
@@ -200,7 +200,7 @@ public class ScriptingCore implements IScriptingCore {
     }
 
     @Override
-    public EventBus getBus() {
+    public INpureEventBus getBus() {
         return this.bus;
     }
 }

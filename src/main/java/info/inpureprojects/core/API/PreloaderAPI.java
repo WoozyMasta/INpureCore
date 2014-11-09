@@ -1,6 +1,6 @@
 package info.inpureprojects.core.API;
 
-import com.google.common.eventbus.EventBus;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 
 /**
  * Created by den on 8/2/2014.
@@ -8,7 +8,7 @@ import com.google.common.eventbus.EventBus;
 public class PreloaderAPI {
 
     public static IModuleManager modules;
-    public static EventBus preLoaderEvents = new EventBus();
+    public static INpureEventBus preLoaderEvents = new INpureEventBus();
 
     public static boolean isDev() {
         try {

@@ -45,7 +45,7 @@ public class UpdateManager {
             return;
         }
         lastPoll = 400;
-        if (this.thread.update.getLevel().equals(ReleaseLevel.PUBLIC)) {
+        if (!this.thread.update.getLevel().equals(ReleaseLevel.PUBLIC)) {
             FMLCommonHandler.instance().bus().unregister(this);
             return;
         }

@@ -1,6 +1,6 @@
 package info.inpureprojects.core.Client;
 
-import com.google.common.eventbus.Subscribe;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 
 /**
@@ -8,7 +8,7 @@ import info.inpureprojects.core.Utils.Events.EventFMLMessage;
  */
 public class ClientLogListener {
 
-    @Subscribe
+    @INpureEventBus.INpureSubscribe
     public void onEvent(EventFMLMessage evt) {
         evt.setCanceled(true);
     }

@@ -1,12 +1,11 @@
 package info.inpureprojects.core.Preloader;
 
-import com.google.common.eventbus.Subscribe;
+import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Utils.LogWrapper;
 import info.inpureprojects.core.Utils.Events.EventFMLMessage;
 import info.inpureprojects.core.Utils.Events.EventNEIReady;
 import info.inpureprojects.core.Utils.Loggers.EventFilter;
-import info.inpureprojects.core.Utils.Loggers.EventLogger;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,13 +25,10 @@ public class FMLLogInterceptor {
     private Logger fmlOriginal;
     private Field myLog;
     private Object relaunch;
-    @Deprecated
-    private EventLogger FMLFiltered;
     private EventFilter filter;
     private Set<String> registry = new LinkedHashSet<String>();
-    private boolean hooked = false;
 
-    @Subscribe
+    @INpureEventBus.INpureSubscribe
     public void onFMLMessage(EventFMLMessage evt) {
         if (evt.getLevel().equals(Level.TRACE)) {
             if (evt.getMessage().contains("Registry add: ")) {
@@ -48,12 +44,13 @@ public class FMLLogInterceptor {
         }
     }
 
-    @Subscribe
+    @INpureEventBus.INpureSubscribe
     public void onNEIReady(EventNEIReady evt) {
         ArrayList<String> list = new ArrayList();
         list.addAll(registry);
         Collections.sort(list);
         evt.setList(Collections.unmodifiableList(list));
+        this.log.info("NEI has entered the ready state. Sending data to culling system. List contains %s entries.", registry.size());
     }
 
     public FMLLogInterceptor setup() {
@@ -74,50 +71,10 @@ public class FMLLogInterceptor {
         return this;
     }
 
-    @Deprecated
-    public FMLLogInterceptor setup_old() {
-        if (hooked) {
-            return this;
-        }
-        try {
-            Class c = Class.forName("cpw.mods.fml.relauncher.FMLRelaunchLog");
-            relaunch = c.getDeclaredField("log").get(null);
-            myLog = relaunch.getClass().getDeclaredField("myLog");
-            myLog.setAccessible(true);
-            this.fmlOriginal = (Logger) myLog.get(relaunch);
-            FMLFiltered = new EventLogger(this.fmlOriginal);
-            FMLFiltered.getBus().register(this);
-            myLog.set(relaunch, FMLFiltered);
-            log.info("System attached to FML. Now intercepting all logging calls.");
-            hooked = true;
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-        return this;
-    }
-
     public void unhook() {
-        if (hooked) {
-            this.filter.getBus().unregister(this);
-            PreloaderAPI.preLoaderEvents.unregister(this);
-            log.info("System no longer monitoring FML console messages.");
-            hooked = false;
-        }
-    }
-
-    @Deprecated
-    public void unhook_old() {
-        if (!hooked) {
-            return;
-        }
-        try {
-            this.FMLFiltered.getBus().unregister(this);
-            myLog.set(relaunch, fmlOriginal);
-            log.info("System detached from FML. Normal logging systems restored.");
-            hooked = false;
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+        this.filter.getBus().unregister(this);
+        PreloaderAPI.preLoaderEvents.unregister(this);
+        log.info("System no longer monitoring FML console messages.");
     }
 
 }
