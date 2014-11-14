@@ -46,10 +46,10 @@
 		<echo message="Running ForgeGradle Setup..."/>
 		<chmod dir="${build.dir}" perm="ugo+rx" includes="gradlew"/>
 		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c gradlew.bat setupDecompWorkspace setupDevWorkspace idea --refresh-dependencies"/>
+			<arg line="/c gradlew.bat -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
-			<arg line="gradlew setupDecompWorkspace setupDevWorkspace idea --refresh-dependencies"/>
+			<arg line="gradlew -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
 	</target>
 	
@@ -59,10 +59,10 @@
 	
 	<target name="compile" depends="setup">
 		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c gradlew.bat build"/>
+			<arg line="/c gradlew.bat -g .gradle build"/>
 		</exec>
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
-			<arg line="gradlew build"/>
+			<arg line="gradlew -g .gradle build"/>
 		</exec>
 	</target>
 	
@@ -77,10 +77,10 @@
 	
 	<target name="clean">
 		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c gradlew.bat cleanCache"/>
+			<arg line="/c gradlew.bat -g .gradle cleanCache"/>
 		</exec>
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
-			<arg line="gradlew cleanCache"/>
+			<arg line="gradlew -g .gradle cleanCache"/>
 		</exec>
 		<delete dir="${deps.dir}"/>
 		<delete dir="${download.dir}"/>
@@ -88,6 +88,7 @@
 		<delete dir="${build.dir}/build"/>
 		<delete dir="${build.dir}/eclipse"/>
 		<delete dir="${build.dir}/gradle"/>
+		<delete dir="${build.dir}/.gradle"/>
 		<delete file="${build.dir}/gradlew"/>
 		<delete file="${build.dir}/gradlew.bat"/>
 		<delete dir="${reobf.dir}"/>
