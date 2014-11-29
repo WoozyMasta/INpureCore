@@ -17,6 +17,7 @@
 	<target name="properties">
 		<available property="has.folders" type="dir" file="${download.dir}"/>
 		<available property="has.forge" file="${download.dir}/forge.zip"/>
+		<available property="has.libs" file="${lib.dir}/jruby.jar"/>
 	</target>
 	
 	<target name="make.dirs" unless="has.folders" depends="properties">
@@ -28,7 +29,10 @@
 		<mkdir dir="${lib.dir}"/>
 	</target>
 	
-	<target name="setup.forge" depends="make.dirs" unless="has.forge">
+	<target name="download.libs" depends="make.dirs" unless="has.libs">
+	</target>
+	
+	<target name="setup.forge" depends="download.libs" unless="has.forge">
 		<echo message="Downloading ForgeGradle..."/>
 		<get dest="${download.dir}/forge.zip">
 			<url url="${forge.url}"/>
@@ -93,6 +97,7 @@
 		<delete file="${build.dir}/gradlew.bat"/>
 		<delete dir="${reobf.dir}"/>
 		<delete dir="${bin.dir}"/>
+		<delete dir="${lib.dir}"/>
 		<delete>
 			<fileset dir="." includes="**/*.iml"/>
 			<fileset dir="." includes="**/*.ipr"/>

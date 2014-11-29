@@ -49,11 +49,7 @@ repositories {
 }
 
 dependencies {
-	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
-	compile 'org.luaj:luaj-jse:2.0'
-	compile 'org.jruby:jruby-complete:1.7.16.1'
-	compile 'org.apache.commons:commons-compress:1.9'
-	compile 'commons-codec:commons-codec:1.9'
+	compile 'info.inpureprojects:INpureLib:[1.7.10]1.0.0B0-2:dev'
     compile 'appeng:appliedenergistics2:rv1-stable-1:dev'
 	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev'
 	compile 'codechicken:ForgeMultipart:1.7.10-1.1.0.313:dev'
