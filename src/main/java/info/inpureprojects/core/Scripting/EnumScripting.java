@@ -3,6 +3,8 @@ package info.inpureprojects.core.Scripting;
 import info.inpureprojects.core.Preloader.JavaDetection;
 import info.inpureprojects.core.Scripting.Objects.JavaScriptCompressor;
 import org.apache.commons.io.IOUtils;
+import org.jruby.embed.jsr223.JRubyEngineFactory;
+import org.luaj.vm2.script.LuaScriptEngineFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -23,6 +25,8 @@ public enum EnumScripting {
 
     static {
         m = new ScriptEngineManager(null);
+        m.registerEngineName("jruby", new JRubyEngineFactory());
+        m.registerEngineName("lua", new LuaScriptEngineFactory());
     }
 
     EnumScripting(String extension, String engine, handler h) {

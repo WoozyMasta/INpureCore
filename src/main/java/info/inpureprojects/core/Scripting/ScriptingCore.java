@@ -32,6 +32,7 @@ public class ScriptingCore implements IScriptingCore {
 
     private static final String[] globals = new String[]{"scripts/env.lua"};
     private static final ExposedObject[] bundled = new ExposedObject[]{new ExposedObject("out", new Console())};
+    @Deprecated
     private static final boolean[] injected = new boolean[2];
     private ScriptEngine engine;
     private ArrayList<TocManager.TableofContents> loaded = new ArrayList();
@@ -47,11 +48,6 @@ public class ScriptingCore implements IScriptingCore {
 
     public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
         this.lang = lang;
-        if (this.lang.equals(IScriptingManager.SupportedLanguages.LUA) && !injected[0]) {
-            this.load_lang("luaj-jse-3.0.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/luaj-jse-3.0.jar", 0);
-        } else if (this.lang.equals(IScriptingManager.SupportedLanguages.RUBY) && !injected[1]) {
-            this.load_lang("jruby.jar", "https://raw.githubusercontent.com/INpureProjects/INpureCore/master/libs/jruby.jar", 1);
-        }
     }
 
     @Override
@@ -69,6 +65,7 @@ public class ScriptingCore implements IScriptingCore {
         return true;
     }
 
+    @Deprecated
     private void load_lang(String file, String url, int index) {
         File f = new File(INpurePreLoader.versionFolder, file);
         if (!f.exists()) {
