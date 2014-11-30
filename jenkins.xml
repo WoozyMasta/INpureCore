@@ -210,7 +210,7 @@
 		<echo message="Writing pom data..."/>
 		<artifact:pom id="mypom" groupId="${maven.group}" artifactId="${build.name}" version="${build.full.sub1}${build.number}" name="${ant.project.name}">
 			<license name="IDGAF" url="${maven.license}"/>
-			<dependency groupId="info.inpureprojects" artifactId="INpureLib" version="[1.7.10]1.0.0B0-2" classifier="dev"/>
+			<dependency groupId="info.inpureprojects" artifactId="INpureLib" version="[1.7.10]1.0.0B0-3" classifier="dev"/>
 			<dependency groupId="appeng" artifactId="appliedenergistics2" version="rv1-stable-1" classifier="dev"/>
 			<dependency groupId="codechicken" artifactId="NotEnoughItems" version="1.7.10-1.0.3.57" classifier="dev"/>
 			<dependency groupId="codechicken" artifactId="ForgeMultipart" version="1.7.10-1.1.0.313" classifier="dev"/>

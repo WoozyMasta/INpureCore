@@ -50,10 +50,10 @@
 		<echo message="Running ForgeGradle Setup..."/>
 		<chmod dir="${build.dir}" perm="ugo+rx" includes="gradlew"/>
 		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c gradlew.bat -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
+			<arg line="/c gradlew.bat setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
-			<arg line="gradlew -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
+			<arg line="gradlew setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
 	</target>
 	
@@ -81,10 +81,10 @@
 	
 	<target name="clean">
 		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c gradlew.bat -g .gradle cleanCache"/>
+			<arg line="/c gradlew.bat cleanCache"/>
 		</exec>
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
-			<arg line="gradlew -g .gradle cleanCache"/>
+			<arg line="gradlew cleanCache"/>
 		</exec>
 		<delete dir="${deps.dir}"/>
 		<delete dir="${download.dir}"/>
