@@ -6,7 +6,6 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Utils.Downloader;
 import info.inpureprojects.core.Preloader.DepHandler.INpureDepHandler;
-import info.inpureprojects.gemloader.GemLoader;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,8 +84,6 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         PreloaderAPI.modules = new ModuleManager();
         fmlLogInterceptor = new FMLLogInterceptor().setup();
         PreloaderAPI.modules.register("info.inpureprojects.core.Preloader.ModulePreloader");
-        GemLoader g = new GemLoader();
-        g.injectData(data);
     }
 
     @Override
