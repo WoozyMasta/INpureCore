@@ -198,8 +198,8 @@
 		<get dest="${download.dir}/maven">
 			<url url="${inpurelibs}/maven-ant-tasks-2.1.3.jar"/>
 		</get>
-		<get dest="${download.dir}/ant-contrib">
-			<url url="${inpurelibs}/ant-contrib.jar"/>
+		<get dest="${download.dir}/ant-contrib/ant-contrib.jar">
+			<url url="${inpurelibs}/ant-contrib-1.0b3.jar"/>
 		</get>
 	</target>
 	
