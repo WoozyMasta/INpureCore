@@ -50,7 +50,7 @@
 			<url url="${forge.url}"/>
 		</get>
 		<get dest="${download.dir}/gson.jar">
-			<url url="http://files.inpureprojects.info/libs/gson-2.3.jar"/>
+			<url url="http://files.inpureprojects.info/libs/gson-2.3.1.jar"/>
 		</get>
 		<echo message="Unzipping ForgeGradle..."/>
 		<unzip src="${download.dir}/forge.zip" dest="${build.dir}" overwrite="false"/>
