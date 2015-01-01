@@ -52,6 +52,12 @@
 		<get dest="${download.dir}/gson.jar">
 			<url url="http://files.inpureprojects.info/libs/gson-2.3.1.jar"/>
 		</get>
+		<get dest="${lib.dir}">
+			<url url="http://files.inpureprojects.info/libs/commons-codec-1.9.jar"/>
+			<url url="http://files.inpureprojects.info/libs/commons-compress-1.8.1.jar"/>
+			<url url="http://files.inpureprojects.info/libs/jruby.jar"/>
+			<url url="http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"/>
+		</get>
 		<echo message="Unzipping ForgeGradle..."/>
 		<unzip src="${download.dir}/forge.zip" dest="${build.dir}" overwrite="false"/>
 		<echo message="Cleaning up ForgeGradle files..."/>
