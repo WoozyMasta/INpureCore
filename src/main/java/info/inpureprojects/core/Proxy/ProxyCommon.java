@@ -1,6 +1,8 @@
 package info.inpureprojects.core.Proxy;
 
+import info.inpureprojects.core.API.Events.EventScriptAPIReady;
 import info.inpureprojects.core.API.INpureAPI;
+import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
 import info.inpureprojects.core.INpureCore;
@@ -45,7 +47,7 @@ public class ProxyCommon extends Proxy {
                 return DynamicFactory.instance.create(core, obj, Interface);
             }
         };
-
+        PreloaderAPI.preLoaderEvents.post(new EventScriptAPIReady());
     }
 
     @Override

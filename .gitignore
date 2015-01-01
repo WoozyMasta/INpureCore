@@ -22,3 +22,4 @@ deps/
 *.number
 javadoc/*
 pom.xml
+libs/*

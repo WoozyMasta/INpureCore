@@ -12,7 +12,7 @@
 	<property name="reobf.dir" value="${build.dir}/reobf"/>
 	<property name="bin.dir" value="${build.dir}/bin"/>
 	<property name="lib.dir" value="${build.dir}/libs"/>
-	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.2.1235/forge-1.7.10-10.13.2.1235-src.zip"/>
+	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.2.1277/forge-1.7.10-10.13.2.1277-src.zip"/>
 	
 	<target name="properties">
 		<available property="has.folders" type="dir" file="${download.dir}"/>
@@ -30,6 +30,12 @@
 	</target>
 	
 	<target name="download.libs" depends="make.dirs" unless="has.libs">
+		<get dest="${lib.dir}">
+			<url url="http://files.inpureprojects.info/libs/commons-codec-1.9.jar"/>
+			<url url="http://files.inpureprojects.info/libs/commons-compress-1.8.1.jar"/>
+			<url url="http://files.inpureprojects.info/libs/jruby.jar"/>
+			<url url="http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"/>
+		</get>
 	</target>
 	
 	<target name="setup.forge" depends="download.libs" unless="has.forge">
@@ -50,10 +56,10 @@
 		<echo message="Running ForgeGradle Setup..."/>
 		<chmod dir="${build.dir}" perm="ugo+rx" includes="gradlew"/>
 		<exec dir="${build.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c gradlew.bat setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
+			<arg line="/c gradlew.bat -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
-			<arg line="gradlew setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
+			<arg line="gradlew -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
 	</target>
 	

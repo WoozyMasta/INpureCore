@@ -1,2 +1,5 @@
-##url= http://files.inpureprojects.info/maven/info/inpureprojects/INpureLib/%5b1.7.10%5d1.0.0B0-2/
-INpureLib-%5b1.7.10%5d1.0.0B0-2.jar
+##url=http://files.inpureprojects.info/libs
+commons-codec-1.9.jar
+commons-compress-1.8.1.jar
+jruby.jar
+luaj-jse-3.0.jar
