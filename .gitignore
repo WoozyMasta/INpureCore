@@ -23,3 +23,5 @@ deps/
 javadoc/*
 pom.xml
 libs/*
+mcp/
+src.zip

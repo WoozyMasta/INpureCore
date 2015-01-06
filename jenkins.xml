@@ -10,7 +10,7 @@
 	<property name="download.dir" value="downloads"/>
 	<property name="build.dir" value="."/>
 	<property name="gradle.output.dir" value="${build.dir}/build/libs"/>
-	<property name="gradle.output" value="${gradle.output.dir}/modid-1.0.jar"/>
+	<property name="gradle.output" value="${gradle.output.dir}/INpureCore-1.0.jar"/>
 	<property name="reobf.dir" value="${build.dir}/reobf"/>
 	<property name="bin.dir" value="${build.dir}/bin"/>
 	<property name="lib.dir" value="${build.dir}/libs"/>
@@ -55,11 +55,9 @@
 		<get dest="${lib.dir}">
 			<url url="http://files.inpureprojects.info/libs/commons-codec-1.9.jar"/>
 			<url url="http://files.inpureprojects.info/libs/commons-compress-1.8.1.jar"/>
-			<url url="http://files.inpureprojects.info/libs/jruby.jar"/>
-			<url url="http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"/>
 			<url url="http://files.inpureprojects.info/libs/groovy-2.3.9.jar"/>
-			<url url="http://files.inpureprojects.info/libs/commons-io-2.4.jar"/>
 			<url url="http://files.inpureprojects.info/libs/groovy-jsr223-2.3.9.jar"/>
+			<url url="http://files.inpureprojects.info/libs/commons-io-2.4.jar"/>
 		</get>
 		<get dest="${download.dir}">
 			<url url="http://files.inpureprojects.info/libs/jarjar-1.4.jar"/>
@@ -192,8 +190,6 @@
 			<fileset dir="${basedir}/build/classes/main"/>
 			<zipfileset src="${lib.dir}/commons-codec-1.9.jar"/>
 			<zipfileset src="${lib.dir}/commons-compress-1.8.1.jar"/>
-			<zipfileset src="${lib.dir}/jruby.jar"/>
-			<zipfileset src="${lib.dir}/luaj-jse-3.0.jar"/>
 			<zipfileset src="${lib.dir}/groovy-2.3.9.jar"/>
 			<zipfileset src="${lib.dir}/commons-io-2.4.jar"/>
 			<zipfileset src="${lib.dir}/groovy-jsr223-2.3.9.jar"/>
