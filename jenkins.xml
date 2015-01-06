@@ -199,7 +199,6 @@
 				<include name="${maven.api.dir}"/>
 			</fileset>
 		</jar>
-		<jar destfile="${packaging.dir}/javadoc/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/javadoc" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
 		<delete dir="${packaging.dir}/classes"/>
 	</target>
 	
@@ -251,7 +250,6 @@
 			<pom refid="mypom1"/>
 			<attach file="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" type="jar" classifier="sources"/>
 			<attach file="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" type="jar" classifier="dev"/>
-			<attach file="${packaging.dir}/javadoc/${build.name}${build.full}${build.number}.jar" type="jar" classifier="javadoc"/>
 			<attach file="${packaging.dir}/api/${build.name}${build.full}${build.number}.jar" type="jar" classifier="api"/>
 		</artifact:deploy>
 	</target>
