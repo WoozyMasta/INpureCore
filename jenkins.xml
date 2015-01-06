@@ -227,6 +227,7 @@
 		<echo message="Writing pom data..."/>
 		<artifact:pom id="mypom" groupId="${maven.group}" artifactId="${build.name}" version="${build.full.sub1}${build.number}" name="${ant.project.name}">
 			<license name="IDGAF" url="${maven.license}"/>
+			<dependency groupId="codechicken" artifactId="CodeChickenCore" version="1.8-1.0.5.34" classifier="dev"/>
 			<dependency groupId="codechicken" artifactId="NotEnoughItems" version="1.8-1.0.5.82" classifier="dev"/>
 		</artifact:pom>
 		

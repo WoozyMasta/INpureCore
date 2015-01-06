@@ -50,6 +50,7 @@ repositories {
 }
 
 dependencies {
+	compile 'codechicken:CodeChickenCore:1.8-1.0.5.34:dev'
 	compile 'codechicken:NotEnoughItems:1.8-1.0.5.82:dev'
 	//
 	compile files("libs/commons-codec-1.9.jar")
