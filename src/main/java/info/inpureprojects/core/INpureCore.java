@@ -10,13 +10,13 @@ import info.inpureprojects.core.API.IINpureSubmodule;
 import info.inpureprojects.core.API.IINpureSubmoduleExpanded;
 import info.inpureprojects.core.API.IUpdateCheck;
 import info.inpureprojects.core.API.PreloaderAPI;
+import info.inpureprojects.core.API.Utils.LogWrapper;
 import info.inpureprojects.core.Config.PropertiesHolder;
 import info.inpureprojects.core.NEI.gtfoMicroblocks.Commands.CommandReload;
 import info.inpureprojects.core.Preloader.ModuleManager;
 import info.inpureprojects.core.Proxy.Proxy;
 import info.inpureprojects.core.Updater.UpdateManager;
 import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class INpureCore {
     public static Proxy proxy;
     public static PropertiesHolder properties;
     public static ArrayList<IINpureSubmodule> modules = new ArrayList();
-    public static Logger log;
+    public static LogWrapper log;
     public static ArrayList<UpdateManager> managers = new ArrayList();
     public static File dir;
 
@@ -44,7 +44,7 @@ public class INpureCore {
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent evt) {
         PreloaderAPI.preLoaderEvents.register(this);
-        log = evt.getModLog();
+        log = new LogWrapper(evt.getModLog(), null);
         properties = new PropertiesHolder(new Configuration(new File(new File(evt.getModConfigurationDirectory(), "INpureProjects/INpureCore"), "INpureCore.cfg")));
         proxy.client();
         proxy.setupAPI();

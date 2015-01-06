@@ -3,6 +3,7 @@ package info.inpureprojects.core.Scripting;
 import info.inpureprojects.core.Preloader.JavaDetection;
 import info.inpureprojects.core.Scripting.Objects.JavaScriptCompressor;
 import org.apache.commons.io.IOUtils;
+import org.codehaus.groovy.jsr223.GroovyScriptEngineFactory;
 import org.jruby.embed.jsr223.JRubyEngineFactory;
 import org.luaj.vm2.script.LuaScriptEngineFactory;
 
@@ -17,7 +18,8 @@ public enum EnumScripting {
 
     JAVASCRIPT(".js", JavaDetection.detectJava().JavaScript_Callsign, new jsHandler()),
     LUA(".lua", "lua", new luaHandler()),
-    RUBY(".rb", "jruby", new luaHandler());
+    RUBY(".rb", "jruby", new luaHandler()),
+    GROOVY(".groovy", "groovy", new luaHandler());
     public static ScriptEngineManager m;
     private String extension;
     private String engine;
@@ -27,6 +29,7 @@ public enum EnumScripting {
         m = new ScriptEngineManager(null);
         m.registerEngineName("jruby", new JRubyEngineFactory());
         m.registerEngineName("lua", new LuaScriptEngineFactory());
+        m.registerEngineName("groovy", new GroovyScriptEngineFactory());
     }
 
     EnumScripting(String extension, String engine, handler h) {

@@ -22,7 +22,8 @@ public interface IScriptingManager {
 
         JAVASCRIPT,
         LUA,
-        RUBY;
+        RUBY,
+        GROOVY;
 
     }
 

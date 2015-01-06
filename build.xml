@@ -35,6 +35,9 @@
 			<url url="http://files.inpureprojects.info/libs/commons-compress-1.8.1.jar"/>
 			<url url="http://files.inpureprojects.info/libs/jruby.jar"/>
 			<url url="http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"/>
+			<url url="http://files.inpureprojects.info/libs/groovy-2.3.9.jar"/>
+			<url url="http://files.inpureprojects.info/libs/commons-io-2.4.jar"/>
+			<url url="http://files.inpureprojects.info/libs/groovy-jsr223-2.3.9.jar"/>
 		</get>
 	</target>
 	

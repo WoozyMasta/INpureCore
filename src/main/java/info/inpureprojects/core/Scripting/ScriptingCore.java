@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,8 +33,7 @@ public class ScriptingCore implements IScriptingCore {
 
     private static final String[] globals = new String[]{"scripts/env.lua"};
     private static final ExposedObject[] bundled = new ExposedObject[]{new ExposedObject("out", new Console())};
-    @Deprecated
-    private static final boolean[] injected = new boolean[2];
+    private static HashMap<String, LangSupport> supported = new HashMap<String, LangSupport>();
     private ScriptEngine engine;
     private ArrayList<TocManager.TableofContents> loaded = new ArrayList();
     private INpureEventBus bus = new INpureEventBus();
@@ -42,8 +42,9 @@ public class ScriptingCore implements IScriptingCore {
     private LogWrapper logger;
 
     static {
-        injected[0] = false;
-        injected[1] = false;
+        supported.put("lua", new LangSupport("luaj-jse-3.0.jar", "http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"));
+        supported.put("ruby", new LangSupport("jruby.jar", "http://files.inpureprojects.info/libs/jruby.jar"));
+        supported.put("groovy", new LangSupport("groovy-2.3.9.jar", "http://files.inpureprojects.info/libs/groovy-2.3.9.jar").setSecondaryFileName("groovy-jsr223-2.3.9.jar").setSecondaryURL("http://files.inpureprojects.info/libs/groovy-jsr223-2.3.9.jar"));
     }
 
     public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
@@ -65,14 +66,12 @@ public class ScriptingCore implements IScriptingCore {
         return true;
     }
 
-    @Deprecated
-    private void load_lang(String file, String url, int index) {
+    private void load_lang(String file, String url) {
         File f = new File(INpurePreLoader.versionFolder, file);
         if (!f.exists()) {
             Downloader.instance.download(url, f);
             INpurePreLoader.forceLoad(f);
         }
-        injected[index] = true;
     }
 
     @Override
@@ -81,6 +80,14 @@ public class ScriptingCore implements IScriptingCore {
         workingDir.mkdirs();
         for (EnumScripting s : EnumScripting.values()) {
             if (s.toString().equals(lang.toString())) {
+                if (supported.containsKey(s.toString().toLowerCase())) {
+                    LangSupport l = supported.get(s.toString().toLowerCase());
+                    load_lang(l.getFileName(), l.getUrl().toString());
+                    if (l.isHasSecondaryDep()) {
+                        load_lang(l.getSecondaryFileName(), l.getSecondaryUrl().toString());
+                    }
+                }
+                logger.info("Engine: %s", s.toString());
                 engine = s.getScriptEngine();
                 break;
             }
@@ -140,6 +147,14 @@ public class ScriptingCore implements IScriptingCore {
             for (String str : list) {
                 this.loadStream(this.getClass().getClassLoader().getResourceAsStream(str), str);
             }
+        }
+    }
+
+    @Override
+    @CanBeNull
+    public void loadSinglePackageInternal(String scriptFile) throws Exception {
+        if (scriptFile != null) {
+            this.loadPackagesInternal(Arrays.asList(new String[]{scriptFile}));
         }
     }
 

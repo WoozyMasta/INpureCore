@@ -22,6 +22,9 @@ public interface IScriptingCore {
     @CanBeNull
     public void loadPackagesInternal(List<String> list) throws Exception;
 
+    @CanBeNull
+    public void loadSinglePackageInternal(String scriptFile) throws Exception;
+
     public void loadPackagesFromDir(File dir);
 
     public List<TocManager.TableofContents> getLoadedModules();

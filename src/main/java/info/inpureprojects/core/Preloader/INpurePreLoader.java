@@ -76,7 +76,7 @@ public class INpurePreLoader implements IFMLLoadingPlugin {
         print("Starting library configuration...");
         for (String s : dep.readStream(this.getClass().getClassLoader().getResourceAsStream("resources.inpure"))) {
             File inject = new File(versionFolder, FilenameUtils.getName(s));
-            if (!isDev){
+            if (!isDev) {
                 Downloader.instance.download(s, inject);
             }
         }

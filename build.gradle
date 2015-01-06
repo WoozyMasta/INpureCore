@@ -15,6 +15,7 @@ buildscript {
     }
 }
 
+apply plugin: 'groovy'
 apply plugin: 'forge'
 
 version = "1.0"
@@ -49,9 +50,21 @@ repositories {
 }
 
 dependencies {
+	// I don't know why I need these two. They should be included with Forge, but debugging in IDEA shits itself.
+	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+	compile 'org.apache.commons:commons-lang3:3.0'
+	//
     compile 'appeng:appliedenergistics2:rv1-stable-1:dev'
 	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev'
 	compile 'codechicken:ForgeMultipart:1.7.10-1.1.0.313:dev'
+	//
+	compile files("libs/commons-codec-1.9.jar")
+	compile files("libs/commons-compress-1.8.1.jar")
+	compile files("libs/groovy-2.3.9.jar")
+	compile files("libs/jruby.jar")
+	compile files("libs/luaj-jse-3.0.jar")
+	compile files("libs/commons-io-2.4.jar")
+	compile files("libs/groovy-jsr223-2.3.9.jar")
 }
 
 processResources

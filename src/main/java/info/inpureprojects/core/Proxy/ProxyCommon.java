@@ -31,7 +31,7 @@ public class ProxyCommon extends Proxy {
 
     @Override
     public void severe(String msg) {
-        INpureCore.log.fatal(msg);
+        INpureCore.log.bigWarning(msg);
     }
 
     @Override
