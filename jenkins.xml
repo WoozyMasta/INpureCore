@@ -181,11 +181,20 @@
 	<target name="package" depends="build-number-there">
         <delete dir="${packaging.dir}"/>
  		<unzip src="${basedir}/build/libs/${ant.project.name}-1.0.jar" dest="${packaging.dir}/classes"/>
+		<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${download.dir}/jarjar-1.4.jar"/>
 		<jar destfile="${packaging.dir}/${build.name}${build.full}${build.number}.jar" basedir="${packaging.dir}/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
 		<jar destfile="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/src/main/java" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
-		<jar destfile="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/build/classes/main" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
+		<jarjar jarfile="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}/src/main/resources"/>
-		</jar>
+			<fileset dir="${basedir}/build/classes/main"/>
+			<zipfileset src="${lib.dir}/commons-codec-1.9.jar"/>
+			<zipfileset src="${lib.dir}/commons-compress-1.8.1.jar"/>
+			<zipfileset src="${lib.dir}/jruby.jar"/>
+			<zipfileset src="${lib.dir}/luaj-jse-3.0.jar"/>
+			<zipfileset src="${lib.dir}/groovy-2.3.9.jar"/>
+			<zipfileset src="${lib.dir}/commons-io-2.4.jar"/>
+			<zipfileset src="${lib.dir}/groovy-jsr223-2.3.9.jar"/>
+		</jarjar>
 		<jar destfile="${packaging.dir}/api/${build.name}${build.full}${build.number}.jar" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}/src/main/java">
 				<include name="${maven.api.dir}"/>
@@ -205,6 +214,9 @@
 		<get dest="${download.dir}/ant-contrib/ant-contrib.jar">
 			<url url="${inpurelibs}/ant-contrib-1.0b3.jar"/>
 		</get>
+		<get dest="${download.dir}">
+			<url url="http://files.inpureprojects.info/libs/jarjar-1.4.jar"/>
+		</get>
 	</target>
 	
 	<target name="maven" depends="maven.setup" xmlns:artifact="urn:maven-artifact-ant">
@@ -223,6 +235,8 @@
 			<dependency groupId="appeng" artifactId="appliedenergistics2" version="rv1-stable-1" classifier="dev"/>
 			<dependency groupId="codechicken" artifactId="NotEnoughItems" version="1.7.10-1.0.3.57" classifier="dev"/>
 			<dependency groupId="codechicken" artifactId="ForgeMultipart" version="1.7.10-1.1.0.313" classifier="dev"/>
+			<dependency groupId="org.apache.logging.log4j" artifactId="log4j-core" version="2.0-beta9"/>
+			<dependency groupId="org.apache.commons" artifactId="commons-lang3" version="3.0"/>
 		</artifact:pom>
 		
 		<!-- There seems to be a bug in maven-ant-tasks here. In order to avoid deploy exploding into a fireball you need to save your pom to a file temporarily and load it into a new id. -->
