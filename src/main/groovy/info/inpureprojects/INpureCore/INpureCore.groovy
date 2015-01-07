@@ -21,6 +21,9 @@ class INpureCore {
     static final libs_url = "http://files.inpureprojects.info/libs"
     static LogWrapper log;
 
+    @Mod.Instance(modInfo.modid)
+    static INpureCore instance
+
     @Mod.EventHandler
     void preinit(FMLPreInitializationEvent evt){
         log = new LogWrapper(evt.getModLog(), null)

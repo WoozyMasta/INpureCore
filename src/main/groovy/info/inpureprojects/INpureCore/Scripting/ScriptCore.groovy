@@ -3,6 +3,8 @@ package info.inpureprojects.INpureCore.Scripting
 import info.inpureprojects.INpureCore.API.IScriptingCore
 import info.inpureprojects.INpureCore.API.TocManager
 import info.inpureprojects.INpureCore.INpureCore
+import net.minecraftforge.fml.common.DummyModContainer
+import net.minecraftforge.fml.common.FMLCommonHandler
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
@@ -48,6 +50,7 @@ class ScriptCore implements IScriptingCore{
                     TocManager.TableofContents toc = TocManager.instance.read(f);
                     INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
                     INpureCore.log.info("by: %s", toc.author)
+                    FMLCommonHandler.instance().addModToResourcePack(new ModContainerScript(toc, f))
                     for (String s : toc.scripts){
                         INpureCore.log.info("Reading Script: %s", s);
                         FileInputStream read = new FileInputStream(new File(f.getParentFile(), s))
@@ -64,6 +67,7 @@ class ScriptCore implements IScriptingCore{
         TocManager.TableofContents toc = TocManager.instance.read(this.getClass().getClassLoader().getResourceAsStream(path))
         INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
         INpureCore.log.info("by: %s", toc.author)
+        FMLCommonHandler.instance().addModToResourcePack(new DummyModContainer("INpureScriptLoader:${toc.title}"))
         for (String s : toc.scripts){
             INpureCore.log.info("Reading Script: %s", s)
             this.loadStream(this.getClass().getClassLoader().getResourceAsStream(s))
