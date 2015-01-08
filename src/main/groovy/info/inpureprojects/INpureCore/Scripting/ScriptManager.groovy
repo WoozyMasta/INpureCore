@@ -12,4 +12,9 @@ class ScriptManager implements IScriptManager{
     IScriptingCore createNewCore() {
         return new ScriptCore();
     }
+
+    @Override
+    IScriptingCore createFakeCore() {
+        return new ScriptCore(true);
+    }
 }

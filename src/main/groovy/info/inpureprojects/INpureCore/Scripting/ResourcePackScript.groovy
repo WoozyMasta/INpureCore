@@ -31,7 +31,6 @@ class ResourcePackScript implements IResourcePack{
         File firstDir = new File(script.getSource(), loc.getResourceDomain())
         File resourceDir = new File(firstDir, "/resources");
         File actualFile = new File(resourceDir, "/" + loc.getResourcePath())
-        INpureCore.log.info(actualFile.getAbsolutePath())
         return actualFile
     }
 
@@ -42,7 +41,7 @@ class ResourcePackScript implements IResourcePack{
 
     @Override
     Set getResourceDomains() {
-        return set;
+        return set
     }
 
     @Override
@@ -57,6 +56,6 @@ class ResourcePackScript implements IResourcePack{
 
     @Override
     String getPackName() {
-        return "INpure_ScriptLoader:${set.toArray()[0]}"
+        return "INpureAssetLoader:${set.toArray()[0]}"
     }
 }

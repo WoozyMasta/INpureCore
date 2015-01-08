@@ -7,4 +7,7 @@ public interface IScriptManager {
 
     public IScriptingCore createNewCore();
 
+    // Used for pure asset loaders.
+    public IScriptingCore createFakeCore();
+
 }

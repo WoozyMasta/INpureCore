@@ -31,6 +31,12 @@ class ScriptCore implements IScriptingCore{
         engine = manager.getEngineByName("groovy")
     }
 
+    ScriptCore(boolean fake){
+        if (!fake){
+            engine = manager.getEngineByName("groovy")
+        }
+    }
+
     private void loadStream(InputStream stream){
         InputStreamReader reader = new InputStreamReader(stream)
         engine.eval(reader)
