@@ -13,6 +13,8 @@
 	<property name="bin.dir" value="${build.dir}/bin"/>
 	<property name="lib.dir" value="${build.dir}/libs"/>
 	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8-11.14.0.1281-1.8/forge-1.8-11.14.0.1281-1.8-src.zip"/>
+	<property name="ccc.dir" value="{build.dir}/ccc"/>
+	<property name="mcp.dir" value="${build.dir}/mcp"/>
 	
 	<target name="properties">
 		<available property="has.folders" type="dir" file="${download.dir}"/>
@@ -62,6 +64,9 @@
 		<exec dir="${build.dir}" executable="sh" osfamily="unix">
 			<arg line="gradlew -g .gradle setupDecompWorkspace setupDevWorkspace extractMinecraftSrc idea --refresh-dependencies"/>
 		</exec>
+		<mkdir dir="${ccc.dir}"/>
+		<mkdir dir="${mcp.dir}"/>
+		
 	</target>
 	
 	<target name="setup" depends="setup.forge">

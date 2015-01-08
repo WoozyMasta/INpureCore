@@ -1,5 +1,6 @@
 package info.inpureprojects.INpureCore.Scripting
 
+import info.inpureprojects.INpureCore.INpureCore
 import net.minecraft.client.resources.IResourcePack
 import net.minecraft.client.resources.data.IMetadataSection
 import net.minecraft.client.resources.data.IMetadataSerializer
@@ -13,29 +14,30 @@ import java.awt.image.BufferedImage
  */
 class ResourcePackScript implements IResourcePack{
 
-    private Set<String> set = new HashSet<String>();
-    private ModContainerScript script;
+    private Set<String> set = new HashSet<String>()
+    private ModContainerScript script
 
     public ResourcePackScript(ModContainer container) {
-        set.add(container.getModId());
+        set.add(container.getModId())
         script = (ModContainerScript) container;
     }
 
     @Override
     InputStream getInputStream(ResourceLocation loc) throws IOException {
-        return new FileInputStream(this.getFileFromLoc(loc));
+        return new FileInputStream(this.getFileFromLoc(loc))
     }
 
     private File getFileFromLoc(ResourceLocation loc) {
-        File firstDir = new File(script.getSource(), loc.getResourceDomain());
+        File firstDir = new File(script.getSource(), loc.getResourceDomain())
         File resourceDir = new File(firstDir, "/resources");
-        File actualFile = new File(resourceDir, "/" + loc.getResourcePath());
-        return actualFile;
+        File actualFile = new File(resourceDir, "/" + loc.getResourcePath())
+        INpureCore.log.info(actualFile.getAbsolutePath())
+        return actualFile
     }
 
     @Override
     boolean resourceExists(ResourceLocation p_110589_1_) {
-        return this.getFileFromLoc(p_110589_1_).exists();
+        return this.getFileFromLoc(p_110589_1_).exists()
     }
 
     @Override

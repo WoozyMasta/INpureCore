@@ -184,7 +184,7 @@
  		<unzip src="${basedir}/build/libs/${ant.project.name}-1.0.jar" dest="${packaging.dir}/classes"/>
 		<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${download.dir}/jarjar-1.4.jar"/>
 		<jar destfile="${packaging.dir}/${build.name}${build.full}${build.number}.jar" basedir="${packaging.dir}/classes" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
-		<jar destfile="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/src/main/java" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
+		<jar destfile="${packaging.dir}/src/${build.name}${build.full}${build.number}.jar" basedir="${basedir}/src/main" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF"/>
 		<jarjar jarfile="${packaging.dir}/dev/${build.name}${build.full}${build.number}.jar" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}/src/main/resources"/>
 			<fileset dir="${basedir}/build/classes/main"/>
