@@ -50,7 +50,7 @@ class ScriptCore implements IScriptingCore{
                     TocManager.TableofContents toc = TocManager.instance.read(f);
                     INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
                     INpureCore.log.info("by: %s", toc.author)
-                    FMLCommonHandler.instance().addModToResourcePack(new ModContainerScript(toc, f))
+                    FMLCommonHandler.instance().addModToResourcePack(new ModContainerScript(toc, f.getParentFile()))
                     for (String s : toc.scripts){
                         INpureCore.log.info("Reading Script: %s", s);
                         FileInputStream read = new FileInputStream(new File(f.getParentFile(), s))
