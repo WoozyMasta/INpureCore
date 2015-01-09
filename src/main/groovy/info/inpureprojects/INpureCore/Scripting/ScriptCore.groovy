@@ -76,7 +76,7 @@ class ScriptCore implements IScriptingCore{
         FMLCommonHandler.instance().addModToResourcePack(new ModContainerInternal(toc))
         for (String s : toc.scripts){
             INpureCore.log.info("Reading Script: %s", s)
-            def loader = s.replace("/", ".")
+            def loader = FilenameUtils.removeExtension(s.replace("/", "."))
             def scriptClass = Class.forName(loader)
             assert scriptClass != null : INpureCore.log.bigWarning("Failed to load script: %s", s)
             scriptClass.newInstance()
