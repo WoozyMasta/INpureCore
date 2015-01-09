@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.DummyModContainer
 import net.minecraftforge.fml.common.FMLCommonHandler
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 import org.codehaus.groovy.jsr223.GroovyScriptEngineFactory
 
@@ -38,9 +39,8 @@ class ScriptCore implements IScriptingCore{
     }
 
     private void loadStream(InputStream stream){
-        InputStreamReader reader = new InputStreamReader(stream)
-        engine.eval(reader)
-        reader.close()
+        def script = IOUtils.toString(stream)
+        engine.eval(script)
     }
 
     @Override
