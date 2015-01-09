@@ -73,7 +73,7 @@ class ScriptCore implements IScriptingCore{
         TocManager.TableofContents toc = TocManager.instance.read(this.getClass().getClassLoader().getResourceAsStream(path))
         INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
         INpureCore.log.info("by: %s", toc.author)
-        FMLCommonHandler.instance().addModToResourcePack(new DummyModContainer("INpureScriptLoader:${toc.title}"))
+        FMLCommonHandler.instance().addModToResourcePack(new ModContainerInternal(toc))
         for (String s : toc.scripts){
             INpureCore.log.info("Reading Script: %s", s)
             this.loadStream(this.getClass().getClassLoader().getResourceAsStream(s))
