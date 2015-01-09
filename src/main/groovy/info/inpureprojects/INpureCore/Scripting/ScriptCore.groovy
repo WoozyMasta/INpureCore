@@ -76,7 +76,12 @@ class ScriptCore implements IScriptingCore{
         FMLCommonHandler.instance().addModToResourcePack(new ModContainerInternal(toc))
         for (String s : toc.scripts){
             INpureCore.log.info("Reading Script: %s", s)
-            this.loadStream(this.getClass().getClassLoader().getResourceAsStream(s))
+            InputStream stream = this.getClass().getClassLoader().getResourceAsStream(s)
+            if (stream != null){
+                this.loadStream(stream)
+            }else{
+                INpureCore.log.bigWarning("Failed to load script: %s", s)
+            }
         }
     }
 }
