@@ -77,11 +77,8 @@ class ScriptCore implements IScriptingCore{
         for (String s : toc.scripts){
             INpureCore.log.info("Reading Script: %s", s)
             InputStream stream = this.getClass().getClassLoader().getResourceAsStream(s)
-            if (stream != null){
-                this.loadStream(stream)
-            }else{
-                INpureCore.log.bigWarning("Failed to load script: %s", s)
-            }
+            assert stream != null : INpureCore.log.bigWarning("Failed to load script: %s", s)
+            this.loadStream(stream)
         }
     }
 }
