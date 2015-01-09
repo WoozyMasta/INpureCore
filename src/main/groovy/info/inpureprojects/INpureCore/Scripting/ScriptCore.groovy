@@ -44,11 +44,6 @@ class ScriptCore implements IScriptingCore{
     }
 
     @Override
-    void loadInternalScript(String path) {
-        this.loadStream(this.getClass().getClassLoader().getResourceAsStream(path))
-    }
-
-    @Override
     void loadTocs(File folder) {
         for (File f : FileUtils.listFiles(folder, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
             if (!f.isDirectory()){
@@ -65,21 +60,6 @@ class ScriptCore implements IScriptingCore{
                     }
                 }
             }
-        }
-    }
-
-    @Override
-    void loadInternalToc(String path) {
-        def toc = TocManager.instance.read(this.getClass().getClassLoader().getResourceAsStream(path))
-        INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
-        INpureCore.log.info("by: %s", toc.author)
-        FMLCommonHandler.instance().addModToResourcePack(new ModContainerInternal(toc))
-        for (String s : toc.scripts){
-            INpureCore.log.info("Reading Script: %s", s)
-            def loader = FilenameUtils.removeExtension(s.replace("/", "."))
-            def scriptClass = Class.forName(loader)
-            assert scriptClass != null : INpureCore.log.bigWarning("Failed to load script: %s", s)
-            scriptClass.getDeclaredMethod("main", String[]).invoke(null, [] as String[])
         }
     }
 }

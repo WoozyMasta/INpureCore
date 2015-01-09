@@ -9,8 +9,4 @@ public interface IScriptingCore {
 
     public void loadTocs(File folder);
 
-    public void loadInternalScript(String path);
-
-    public void loadInternalToc(String path);
-
 }
