@@ -53,13 +53,13 @@ class ScriptCore implements IScriptingCore{
         for (File f : FileUtils.listFiles(folder, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
             if (!f.isDirectory()){
                 if (FilenameUtils.isExtension(f.getName(), "toc")){
-                    TocManager.TableofContents toc = TocManager.instance.read(f);
+                    def toc = TocManager.instance.read(f);
                     INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
                     INpureCore.log.info("by: %s", toc.author)
                     FMLCommonHandler.instance().addModToResourcePack(new ModContainerScript(toc, f.getParentFile()))
                     for (String s : toc.scripts){
                         INpureCore.log.info("Reading Script: %s", s);
-                        FileInputStream read = new FileInputStream(new File(f.getParentFile(), s))
+                        def read = new FileInputStream(new File(f.getParentFile(), s))
                         this.loadStream(read);
                         read.close()
                     }
@@ -70,13 +70,13 @@ class ScriptCore implements IScriptingCore{
 
     @Override
     void loadInternalToc(String path) {
-        TocManager.TableofContents toc = TocManager.instance.read(this.getClass().getClassLoader().getResourceAsStream(path))
+        def toc = TocManager.instance.read(this.getClass().getClassLoader().getResourceAsStream(path))
         INpureCore.log.info("Loading: %s, %s", toc.title, toc.version)
         INpureCore.log.info("by: %s", toc.author)
         FMLCommonHandler.instance().addModToResourcePack(new ModContainerInternal(toc))
         for (String s : toc.scripts){
             INpureCore.log.info("Reading Script: %s", s)
-            InputStream stream = this.getClass().getClassLoader().getResourceAsStream(s)
+            def stream = this.getClass().getClassLoader().getResourceAsStream(s)
             assert stream != null : INpureCore.log.bigWarning("Failed to load script: %s", s)
             this.loadStream(stream)
         }
