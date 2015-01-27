@@ -27,9 +27,21 @@ public enum EnumScripting {
 
     static {
         m = new ScriptEngineManager(null);
-        m.registerEngineName("jruby", new JRubyEngineFactory());
-        m.registerEngineName("lua", new LuaScriptEngineFactory());
-        m.registerEngineName("groovy", new GroovyScriptEngineFactory());
+        try {
+            m.registerEngineName("jruby", new JRubyEngineFactory());
+        } catch (Throwable t) {
+
+        }
+        try {
+            m.registerEngineName("lua", new LuaScriptEngineFactory());
+        } catch (Throwable t) {
+
+        }
+        try {
+            m.registerEngineName("groovy", new GroovyScriptEngineFactory());
+        } catch (Throwable t) {
+
+        }
     }
 
     EnumScripting(String extension, String engine, handler h) {
