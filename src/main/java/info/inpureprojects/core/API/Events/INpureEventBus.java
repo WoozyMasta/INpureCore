@@ -1,7 +1,8 @@
 package info.inpureprojects.core.API.Events;
 
 import cpw.mods.fml.common.eventhandler.Event;
-import info.inpureprojects.core.Preloader.INpurePreLoader;
+import info.inpureprojects.core.API.Utils.LogWrapper;
+import org.apache.logging.log4j.LogManager;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 // Fuck it. We'll implement our own eventbus because the google one keeps derping out.
 public class INpureEventBus {
 
+    private static LogWrapper log = new LogWrapper(LogManager.getLogger("INpureEventBus"), null);
     private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
     public void register(Object o) {
@@ -25,7 +27,7 @@ public class INpureEventBus {
         for (Method m : o.getClass().getDeclaredMethods()) {
             if (m.getAnnotation(INpureSubscribe.class) != null) {
                 if (m.getParameterTypes().length > 1) {
-                    INpurePreLoader.print("Cannot have an event handler with more than 1 parameter!");
+                    log.warn("Cannot have an event handler with more than 1 parameter!");
                     return;
                 }
                 Class eventType = m.getParameterTypes()[0];
@@ -41,7 +43,7 @@ public class INpureEventBus {
 
     public void post(Object evt) {
         if (!(evt instanceof Event)) {
-            INpurePreLoader.print("Cannot post object that does not extend event base class!");
+            log.warn("Cannot post object that does not extend event base class!");
         }
         for (Listener l : listeners) {
             l.handleEvent(evt);
