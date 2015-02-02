@@ -23,7 +23,7 @@ group= "info.inpureprojects.core" // http://maven.apache.org/guides/mini/guide-n
 archivesBaseName = "INpureCore"
 
 minecraft {
-    version = "1.7.10-10.13.2.1235"
+    version = "1.7.10-10.13.2.1291"
     assetDir = "eclipse/assets"
 }
 
@@ -55,7 +55,8 @@ dependencies {
 	compile 'org.apache.commons:commons-lang3:3.0'
 	//
     compile 'appeng:appliedenergistics2:rv1-stable-1:dev'
-	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev'
+	compile 'codechicken:CodeChickenCore:1.7.10-1.0.4.35:dev'
+	compile 'codechicken:NotEnoughItems:1.7.10-1.0.4.83:dev'
 	compile 'codechicken:ForgeMultipart:1.7.10-1.1.0.313:dev'
 	//
 	compile files("libs/commons-codec-1.9.jar")
