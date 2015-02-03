@@ -44,7 +44,7 @@ public class NEIINpureConfig implements IConfigureNEI {
     private static File logs = new File(INpureCore.dir, "logs");
     public static final LogWrapper logger = new LogWrapper(LogManager.getLogger("INpureCullingEngine"), new File(logs, "debug.log"));
     private static int errorCount = 0;
-    private static final int delay = 400;
+    private static final int delay = 100;
     private int count = 0;
 
     public NEIINpureConfig() {
