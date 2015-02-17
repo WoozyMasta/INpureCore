@@ -48,6 +48,10 @@ public class FMLLogInterceptor {
     public void onNEIReady(EventNEIReady evt) {
         ArrayList<String> list = new ArrayList();
         list.addAll(registry);
+        if (list.isEmpty()) {
+            log.info("Log parsing appears to have failed. Attempting to dig the data out of FML directly...");
+            TechnicHandler.instance.reparse(list);
+        }
         Collections.sort(list);
         evt.setList(Collections.unmodifiableList(list));
         this.log.info("NEI has entered the ready state. Sending data to culling system. List contains %s entries.", registry.size());

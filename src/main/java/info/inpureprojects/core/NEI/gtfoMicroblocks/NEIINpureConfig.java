@@ -36,6 +36,7 @@ import java.util.List;
  */
 public class NEIINpureConfig implements IConfigureNEI {
 
+    private static final int delay = 100;
     public static NEIINpureConfig instance;
     public static boolean loaded = false;
     public static IScriptingCore scripting;
@@ -44,7 +45,6 @@ public class NEIINpureConfig implements IConfigureNEI {
     private static File logs = new File(INpureCore.dir, "logs");
     public static final LogWrapper logger = new LogWrapper(LogManager.getLogger("INpureCullingEngine"), new File(logs, "debug.log"));
     private static int errorCount = 0;
-    private static final int delay = 100;
     private int count = 0;
 
     public NEIINpureConfig() {
@@ -117,8 +117,8 @@ public class NEIINpureConfig implements IConfigureNEI {
     }
 
     @SubscribeEvent
-    public void runCommands(TickEvent.ClientTickEvent evt){
-        if (count > delay){
+    public void runCommands(TickEvent.ClientTickEvent evt) {
+        if (count > delay) {
             try {
                 if (loaded) {
                     return;
@@ -160,7 +160,7 @@ public class NEIINpureConfig implements IConfigureNEI {
                 scripting.getBus().post(new EventScriptError(t));
             }
             FMLCommonHandler.instance().bus().unregister(this);
-        }else{
+        } else {
             count++;
         }
     }
