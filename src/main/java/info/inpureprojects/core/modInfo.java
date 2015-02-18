@@ -9,9 +9,9 @@ public class modInfo {
 
     public static final String modid = "inpure|core";
     public static final String name = "INpureCore";
-    public static final String version = "1.7.10R1.0.0B8";
+    public static final String version = "1.7.10R1.0.0B9";
     public static final String deps = "after:ExtraUtilities";
-    public static final ReleaseLevel release = ReleaseLevel.PRIVATE;
+    public static final ReleaseLevel release = ReleaseLevel.PUBLIC;
     private static final String proxy_path = "info.inpureprojects.core.Proxy.";
     public static final String proxyClient = proxy_path + "ProxyClient";
     public static final String proxyCommon = proxy_path + "ProxyCommon";
