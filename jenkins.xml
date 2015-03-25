@@ -55,11 +55,7 @@
 		<get dest="${lib.dir}">
 			<url url="http://files.inpureprojects.info/libs/commons-codec-1.9.jar"/>
 			<url url="http://files.inpureprojects.info/libs/commons-compress-1.8.1.jar"/>
-			<url url="http://files.inpureprojects.info/libs/jruby.jar"/>
-			<url url="http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"/>
-			<url url="http://files.inpureprojects.info/libs/groovy-2.3.9.jar"/>
 			<url url="http://files.inpureprojects.info/libs/commons-io-2.4.jar"/>
-			<url url="http://files.inpureprojects.info/libs/groovy-jsr223-2.3.9.jar"/>
 		</get>
 		<get dest="${download.dir}">
 			<url url="http://files.inpureprojects.info/libs/jarjar-1.4.jar"/>
@@ -192,11 +188,7 @@
 			<fileset dir="${basedir}/build/classes/main"/>
 			<zipfileset src="${lib.dir}/commons-codec-1.9.jar"/>
 			<zipfileset src="${lib.dir}/commons-compress-1.8.1.jar"/>
-			<zipfileset src="${lib.dir}/jruby.jar"/>
-			<zipfileset src="${lib.dir}/luaj-jse-3.0.jar"/>
-			<zipfileset src="${lib.dir}/groovy-2.3.9.jar"/>
 			<zipfileset src="${lib.dir}/commons-io-2.4.jar"/>
-			<zipfileset src="${lib.dir}/groovy-jsr223-2.3.9.jar"/>
 		</jarjar>
 		<jar destfile="${packaging.dir}/api/${build.name}${build.full}${build.number}.jar" manifest="${packaging.dir}/classes/META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}/src/main/java">

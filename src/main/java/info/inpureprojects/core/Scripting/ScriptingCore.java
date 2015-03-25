@@ -31,7 +31,6 @@ import java.util.List;
  */
 public class ScriptingCore implements IScriptingCore {
 
-    private static final String[] globals = new String[]{"scripts/env.lua"};
     private static final ExposedObject[] bundled = new ExposedObject[]{new ExposedObject("out", new Console())};
     private static HashMap<String, LangSupport> supported = new HashMap<String, LangSupport>();
     private ScriptEngine engine;
@@ -40,12 +39,6 @@ public class ScriptingCore implements IScriptingCore {
     private IScriptingManager.SupportedLanguages lang;
     private Configuration config;
     private LogWrapper logger;
-
-    static {
-        supported.put("lua", new LangSupport("luaj-jse-3.0.jar", "http://files.inpureprojects.info/libs/luaj-jse-3.0.jar"));
-        supported.put("ruby", new LangSupport("jruby.jar", "http://files.inpureprojects.info/libs/jruby.jar"));
-        supported.put("groovy", new LangSupport("groovy-2.3.9.jar", "http://files.inpureprojects.info/libs/groovy-2.3.9.jar").setSecondaryFileName("groovy-jsr223-2.3.9.jar").setSecondaryURL("http://files.inpureprojects.info/libs/groovy-jsr223-2.3.9.jar"));
-    }
 
     public ScriptingCore(IScriptingManager.SupportedLanguages lang) {
         this.lang = lang;
@@ -93,16 +86,6 @@ public class ScriptingCore implements IScriptingCore {
             }
         }
         engine.put("workingDir", workingDir);
-        if (lang.equals(IScriptingManager.SupportedLanguages.LUA)) {
-            File m = new File(workingDir, "middleclass.lua");
-            Downloader.instance.download("https://raw.githubusercontent.com/kikito/middleclass/master/middleclass.lua", m);
-            try {
-                this.loadFile(m);
-                this.loadPackagesInternal(Arrays.asList(globals));
-            } catch (Throwable t) {
-                logger.warn("MAJOR ERROR: Internal libraries failed to load!");
-            }
-        }
     }
 
     @Override

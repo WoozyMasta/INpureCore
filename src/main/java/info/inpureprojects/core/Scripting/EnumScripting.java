@@ -3,9 +3,6 @@ package info.inpureprojects.core.Scripting;
 import info.inpureprojects.core.Preloader.JavaDetection;
 import info.inpureprojects.core.Scripting.Objects.JavaScriptCompressor;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.groovy.jsr223.GroovyScriptEngineFactory;
-import org.jruby.embed.jsr223.JRubyEngineFactory;
-import org.luaj.vm2.script.LuaScriptEngineFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -16,10 +13,7 @@ import java.io.InputStream;
  */
 public enum EnumScripting {
 
-    JAVASCRIPT(".js", JavaDetection.detectJava().JavaScript_Callsign, new jsHandler()),
-    LUA(".lua", "lua", new luaHandler()),
-    RUBY(".rb", "jruby", new luaHandler()),
-    GROOVY(".groovy", "groovy", new luaHandler());
+    JAVASCRIPT(".js", JavaDetection.detectJava().JavaScript_Callsign, new jsHandler());
     public static ScriptEngineManager m;
     private String extension;
     private String engine;
@@ -27,21 +21,6 @@ public enum EnumScripting {
 
     static {
         m = new ScriptEngineManager(null);
-        try {
-            m.registerEngineName("jruby", new JRubyEngineFactory());
-        } catch (Throwable t) {
-
-        }
-        try {
-            m.registerEngineName("lua", new LuaScriptEngineFactory());
-        } catch (Throwable t) {
-
-        }
-        try {
-            m.registerEngineName("groovy", new GroovyScriptEngineFactory());
-        } catch (Throwable t) {
-
-        }
     }
 
     EnumScripting(String extension, String engine, handler h) {
@@ -85,17 +64,4 @@ public enum EnumScripting {
         }
     }
 
-    public static class luaHandler extends handler {
-
-        @Override
-        public String Import(InputStream stream) {
-            try {
-                String in = IOUtils.toString(stream);
-                return in;
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-            return null;
-        }
-    }
 }

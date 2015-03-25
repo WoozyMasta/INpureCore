@@ -1,16 +1,11 @@
 package info.inpureprojects.core.Scripting.Dynamic;
 
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
-import org.luaj.vm2.LuaFunction;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import javax.script.Invocable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 
 /**
  * Created by den on 7/18/2014.
@@ -29,43 +24,6 @@ public class DynamicFactory {
         return null;
     }
 
-    public static enum specialHandlers {
-
-        LuaTable(new specialHandler() {
-            @Override
-            public void handle(Object o, String target, Object[] arg) {
-                LuaTable table = (LuaTable) o;
-                LuaValue a = table.get(target);
-                LuaFunction f = (LuaFunction) a;
-                if (arg == null) {
-                    f.invoke(table);
-                } else {
-                    ArrayList<LuaValue> list = new ArrayList();
-                    list.add(table);
-                    for (Object o1 : arg) {
-                        list.add(CoerceJavaToLua.coerce(o1));
-                    }
-                    f.invoke(list.toArray(new LuaValue[list.size()]));
-                }
-            }
-
-            @Override
-            public boolean isObjectCompatible(Object o) {
-                return (o.getClass().getName().equals("org.luaj.vm2.LuaTable"));
-            }
-        });
-
-        private specialHandler handler;
-
-        specialHandlers(specialHandler handler) {
-            this.handler = handler;
-        }
-
-        public specialHandler getHandler() {
-            return handler;
-        }
-    }
-
     public static class DynamicHandler implements InvocationHandler {
 
         private IScriptingCore core;
@@ -82,15 +40,6 @@ public class DynamicFactory {
                 if (core.getEngine() instanceof Invocable) {
                     Invocable invoc = (Invocable) core.getEngine();
                     return invoc.invokeMethod(this.scriptClass, method.getName(), args);
-                } else {
-                    // The lua engine does not implement Invocable.
-                    // I've made this extendable via an enum in case of supporting more languages later.
-                    for (specialHandlers h : specialHandlers.values()) {
-                        if (h.getHandler().isObjectCompatible(this.scriptClass)) {
-                            h.getHandler().handle(this.scriptClass, method.getName(), args);
-                            break;
-                        }
-                    }
                 }
             } catch (Throwable t) {
             }

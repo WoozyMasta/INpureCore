@@ -20,10 +20,7 @@ public interface IScriptingManager {
 
     public static enum SupportedLanguages {
 
-        JAVASCRIPT,
-        LUA,
-        RUBY,
-        GROOVY;
+        JAVASCRIPT;
 
     }
 

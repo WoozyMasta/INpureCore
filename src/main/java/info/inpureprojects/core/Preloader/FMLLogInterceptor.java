@@ -1,5 +1,6 @@
 package info.inpureprojects.core.Preloader;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import info.inpureprojects.core.API.Events.INpureEventBus;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Utils.LogWrapper;
@@ -71,6 +72,14 @@ public class FMLLogInterceptor {
         }
         ((org.apache.logging.log4j.core.Logger) this.fmlOriginal).addFilter(filter);
         PreloaderAPI.preLoaderEvents.register(this);
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            try {
+                Object o = Class.forName("info.inpureprojects.core.Preloader.PreloaderClient").newInstance();
+                filter.getBus().register(o);
+            } catch (Throwable t) {
+
+            }
+        }
         log.info("System attached to FML. Now intercepting all logging calls.");
         return this;
     }

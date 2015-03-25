@@ -61,11 +61,7 @@ dependencies {
 	//
 	compile files("libs/commons-codec-1.9.jar")
 	compile files("libs/commons-compress-1.8.1.jar")
-	compile files("libs/groovy-2.3.9.jar")
-	compile files("libs/jruby.jar")
-	compile files("libs/luaj-jse-3.0.jar")
 	compile files("libs/commons-io-2.4.jar")
-	compile files("libs/groovy-jsr223-2.3.9.jar")
 }
 
 processResources
