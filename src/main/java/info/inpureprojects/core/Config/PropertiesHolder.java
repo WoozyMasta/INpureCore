@@ -29,6 +29,8 @@ public class PropertiesHolder {
     public boolean dump_registry_to_debug_log = false;
     @Option(category = "tweaks", key = "complain_about_bad_names", comment = "Post one message per mod in the log if that mod is registering bad GameRegistry names.")
     public boolean complain_about_bad_names = true;
+    @Option(category = "tweaks", key = "silence_cant_keep_up")
+    public boolean silence_cant_keep_up = false;
 
     public PropertiesHolder(Configuration config) {
         config.load();

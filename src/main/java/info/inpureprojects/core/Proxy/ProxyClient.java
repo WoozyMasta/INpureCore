@@ -17,6 +17,7 @@ public class ProxyClient extends ProxyCommon {
 
     @Override
     public void client() {
+        super.client();
         this.print("Beating Minecraft's resource loading system with a shovel. Please stand by...");
         // This causes all those missing texture errors to vanish from the console. Woo!
         if (INpureCore.properties.textureLoggerOverride) {
