@@ -57,17 +57,24 @@ public class ProxyCommon extends Proxy {
 
     @Override
     public void client() {
-        if (INpureCore.properties.silence_cant_keep_up){
-            try{
+        if (INpureCore.properties.silence_cant_keep_up) {
+            try {
                 Class c = Class.forName("net.minecraft.server.MinecraftServer");
-                Field f = c.getDeclaredField("logger");
+                Field f = null;
+                for (Field field : c.getDeclaredFields()){
+                    if (field.getType().equals(org.apache.logging.log4j.Logger.class)){
+                        f = field;
+                        INpureCore.log.info("Found MinecraftServer logger: %s", f.getName());
+                        break;
+                    }
+                }
                 f.setAccessible(true);
                 Logger mcLogger = (Logger) f.get(null);
                 EventFilter filter = new EventFilter();
                 filter.getBus().register(new CommonLogListener());
                 mcLogger.addFilter(filter);
                 f.setAccessible(false);
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 t.printStackTrace();
             }
         }

@@ -10,7 +10,7 @@ public class CommonLogListener {
 
     @INpureEventBus.INpureSubscribe
     public void onEvent(EventFMLMessage evt) {
-        if (evt.getMessage().contains("keep up")){
+        if (evt.getMessage().contains("keep up")) {
             evt.setCanceled(true);
         }
     }
