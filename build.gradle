@@ -56,7 +56,7 @@ dependencies {
 	//
     compile 'appeng:appliedenergistics2:rv1-stable-1:dev'
 	compile 'codechicken:CodeChickenCore:1.7.10-1.0.4.35:dev'
-	compile 'codechicken:NotEnoughItems:1.7.10-1.0.4.83:dev'
+	compile 'codechicken:NotEnoughItems:1.7.10-1.0.4.95:dev'
 	compile 'codechicken:ForgeMultipart:1.7.10-1.1.0.313:dev'
 	//
 	compile files("libs/commons-codec-1.9.jar")
