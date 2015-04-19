@@ -12,6 +12,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by den on 10/28/2014.
@@ -84,6 +85,24 @@ public class NEIObject {
             return;
         }
         API.setItemListEntries(i.getItem(), NEIINpureConfig.buildStackList(i, metas));
+    }
+
+    public void override_with_nbt(String modid, String name) {
+        NEIINpureConfig.logger.debug("%s called. Params: %s, %s, %s", "override_with_nbt", modid, name);
+        for (String s : this.find(modid, name)) {
+            this.override_with_nbt_impl(this.getStack(s));
+        }
+    }
+
+    private void override_with_nbt_impl(ItemStack i) {
+        if (i == null) {
+            return;
+        }
+        List<ItemStack> stacks = new ArrayList<ItemStack>();
+        i.getItem().getSubItems(i.getItem(), null, stacks);
+        ArrayList<ItemStack> stackList = new ArrayList<ItemStack>();
+        stackList.add(stacks.get(0));
+        API.setItemListEntries(i.getItem(), stackList);
     }
 
     private void hide_impl(ItemStack i) {

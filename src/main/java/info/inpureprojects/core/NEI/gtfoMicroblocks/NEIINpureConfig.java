@@ -94,7 +94,7 @@ public class NEIINpureConfig implements IConfigureNEI {
     @INpureEventBus.INpureSubscribe
     public void onScriptError(EventScriptError evt) {
         INpureCore.proxy.sendMessageToPlayer("A script error has occured. A log file has been created in config/INpureProjects/logs.");
-        String fileName = new SimpleDateFormat("yyyyMMddhhmm").format(new Date()).concat("-").concat(String.valueOf(this.errorCount++).concat(".txt"));
+        String fileName = new SimpleDateFormat("yyyyMMddhhmm").format(new Date()).concat("-").concat(String.valueOf(errorCount++).concat(".txt"));
         PrintWriter w = Streams.instance.getFilePrintWriter(new File(logs, fileName));
         evt.getT().printStackTrace(w);
         Streams.instance.close(w);

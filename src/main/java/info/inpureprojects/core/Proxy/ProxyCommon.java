@@ -61,8 +61,8 @@ public class ProxyCommon extends Proxy {
             try {
                 Class c = Class.forName("net.minecraft.server.MinecraftServer");
                 Field f = null;
-                for (Field field : c.getDeclaredFields()){
-                    if (field.getType().equals(org.apache.logging.log4j.Logger.class)){
+                for (Field field : c.getDeclaredFields()) {
+                    if (field.getType().equals(org.apache.logging.log4j.Logger.class)) {
                         f = field;
                         INpureCore.log.info("Found MinecraftServer logger: %s", f.getName());
                         break;
