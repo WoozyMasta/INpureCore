@@ -31,6 +31,8 @@ public class PropertiesHolder {
     public boolean complain_about_bad_names = true;
     @Option(category = "tweaks", key = "silence_cant_keep_up")
     public boolean silence_cant_keep_up = false;
+    @Option(category = "scripting", key = "use_community_scripts", comment = "Download community scripts from web. Disable if offline.", value = true)
+    public boolean use_community_scripts = false;
 
     public PropertiesHolder(Configuration config) {
         config.load();

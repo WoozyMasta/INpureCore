@@ -16,11 +16,13 @@ import info.inpureprojects.core.Preloader.INpurePreLoader;
 import info.inpureprojects.core.Scripting.Objects.Exposed.Console;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import javax.script.ScriptEngine;
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -138,6 +140,19 @@ public class ScriptingCore implements IScriptingCore {
     public void loadSinglePackageInternal(String scriptFile) throws Exception {
         if (scriptFile != null) {
             this.loadPackagesInternal(Arrays.asList(new String[]{scriptFile}));
+        }
+    }
+
+    @Override
+    public void loadScriptFromURL(URL url) {
+        InputStream in = null;
+        try {
+            in = url.openStream();
+            this.engine.eval(IOUtils.toString(in));
+        }catch(Throwable t){
+            t.printStackTrace();
+        }finally{
+            IOUtils.closeQuietly(in);
         }
     }
 

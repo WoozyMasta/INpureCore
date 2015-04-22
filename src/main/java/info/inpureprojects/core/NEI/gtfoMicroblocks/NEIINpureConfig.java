@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -155,6 +156,10 @@ public class NEIINpureConfig implements IConfigureNEI {
                 }
                 scripting.exposeObjects(obj);
                 scripting.loadPackagesFromDir(working);
+                if (INpureCore.properties.use_community_scripts){
+                    logger.info("Querying Valaelea for community scripts...");
+                    scripting.loadScriptFromURL(new URL("http://inpureprojects.info:8080/INpureBot_Web/query"));
+                }
                 loaded = true;
             } catch (Throwable t) {
                 scripting.getBus().post(new EventScriptError(t));

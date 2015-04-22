@@ -6,6 +6,7 @@ import info.inpureprojects.core.API.Utils.LogWrapper;
 
 import javax.script.ScriptEngine;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface IScriptingCore {
     public void loadSinglePackageInternal(String scriptFile) throws Exception;
 
     public void loadPackagesFromDir(File dir);
+
+    public void loadScriptFromURL(URL url);
 
     public List<TocManager.TableofContents> getLoadedModules();
 
