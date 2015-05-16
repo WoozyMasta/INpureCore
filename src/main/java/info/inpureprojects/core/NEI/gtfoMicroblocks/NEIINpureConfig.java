@@ -156,7 +156,7 @@ public class NEIINpureConfig implements IConfigureNEI {
                 }
                 scripting.exposeObjects(obj);
                 scripting.loadPackagesFromDir(working);
-                if (INpureCore.properties.use_community_scripts){
+                if (INpureCore.properties.use_community_scripts) {
                     logger.info("Querying Valaelea for community scripts...");
                     scripting.loadScriptFromURL(new URL("http://inpureprojects.info:8080/INpureBot_Web/query"));
                 }

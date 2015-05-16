@@ -5,14 +5,9 @@ import info.inpureprojects.core.API.INpureAPI;
 import info.inpureprojects.core.API.PreloaderAPI;
 import info.inpureprojects.core.API.Scripting.IScriptingCore;
 import info.inpureprojects.core.API.Scripting.IScriptingManager;
-import info.inpureprojects.core.Common.CommonLogListener;
 import info.inpureprojects.core.INpureCore;
 import info.inpureprojects.core.Scripting.Dynamic.DynamicFactory;
 import info.inpureprojects.core.Scripting.ScriptingCore;
-import info.inpureprojects.core.Utils.Loggers.EventFilter;
-import org.apache.logging.log4j.core.Logger;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by den on 7/16/2014.
@@ -57,27 +52,6 @@ public class ProxyCommon extends Proxy {
 
     @Override
     public void client() {
-        if (INpureCore.properties.silence_cant_keep_up) {
-            try {
-                Class c = Class.forName("net.minecraft.server.MinecraftServer");
-                Field f = null;
-                for (Field field : c.getDeclaredFields()) {
-                    if (field.getType().equals(org.apache.logging.log4j.Logger.class)) {
-                        f = field;
-                        INpureCore.log.info("Found MinecraftServer logger: %s", f.getName());
-                        break;
-                    }
-                }
-                f.setAccessible(true);
-                Logger mcLogger = (Logger) f.get(null);
-                EventFilter filter = new EventFilter();
-                filter.getBus().register(new CommonLogListener());
-                mcLogger.addFilter(filter);
-                f.setAccessible(false);
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
     }
 
     @Override

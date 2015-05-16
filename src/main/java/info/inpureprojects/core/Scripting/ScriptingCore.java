@@ -149,9 +149,9 @@ public class ScriptingCore implements IScriptingCore {
         try {
             in = url.openStream();
             this.engine.eval(IOUtils.toString(in));
-        }catch(Throwable t){
+        } catch (Throwable t) {
             t.printStackTrace();
-        }finally{
+        } finally {
             IOUtils.closeQuietly(in);
         }
     }

@@ -29,9 +29,9 @@ public class PropertiesHolder {
     public boolean dump_registry_to_debug_log = false;
     @Option(category = "tweaks", key = "complain_about_bad_names", comment = "Post one message per mod in the log if that mod is registering bad GameRegistry names.")
     public boolean complain_about_bad_names = true;
-    @Option(category = "tweaks", key = "silence_cant_keep_up")
+    @DeprecatedOption(category = "tweaks", key = "silence_cant_keep_up")
     public boolean silence_cant_keep_up = false;
-    @Option(category = "scripting", key = "use_community_scripts", comment = "Download community scripts from web. Disable if offline.", value = true)
+    @DeprecatedOption(category = "scripting", key = "use_community_scripts")
     public boolean use_community_scripts = false;
 
     public PropertiesHolder(Configuration config) {
