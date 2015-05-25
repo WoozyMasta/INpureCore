@@ -88,7 +88,7 @@ public class NEIObject {
     }
 
     public void override_with_nbt(String modid, String name) {
-        NEIINpureConfig.logger.debug("%s called. Params: %s, %s, %s", "override_with_nbt", modid, name);
+        NEIINpureConfig.logger.debug("%s called. Params: %s, %s", "override_with_nbt", modid, name);
         for (String s : this.find(modid, name)) {
             this.override_with_nbt_impl(this.getStack(s));
         }
