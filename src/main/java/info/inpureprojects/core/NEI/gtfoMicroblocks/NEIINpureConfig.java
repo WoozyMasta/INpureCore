@@ -30,6 +30,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -57,6 +58,14 @@ public class NEIINpureConfig implements IConfigureNEI {
     public static ArrayList<ItemStack> buildStackList(ItemStack stack, int[] metas) {
         ArrayList<ItemStack> stacks = new ArrayList();
         for (int i : metas) {
+            stacks.add(new ItemStack(stack.getItem(), 1, i));
+        }
+        return stacks;
+    }
+
+    public static ArrayList<ItemStack> buildStackList(ItemStack stack, HashSet<Integer> metas){
+        ArrayList<ItemStack> stacks = new ArrayList();
+        for (int i : metas){
             stacks.add(new ItemStack(stack.getItem(), 1, i));
         }
         return stacks;

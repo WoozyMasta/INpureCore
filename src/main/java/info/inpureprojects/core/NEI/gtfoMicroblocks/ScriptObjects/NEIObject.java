@@ -12,6 +12,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -87,11 +88,48 @@ public class NEIObject {
         API.setItemListEntries(i.getItem(), NEIINpureConfig.buildStackList(i, metas));
     }
 
+    public void override_invert(String modid, String name, int[] metas) {
+        NEIINpureConfig.logger.debug("%s called. Params: %s, %s, %s", "override_invert", modid, name, NEIINpureConfig.logger.IntArrayToString(metas));
+        for (String s : find(modid, name)) {
+            this.override_invert_impl(this.getStack(s), metas);
+        }
+    }
+
+    public void override_invert(String domain, int[] metas) {
+        UniqueIDSettable id = getUniqueID(domain);
+        this.override_invert(id.getModId(), id.getName(), metas);
+    }
+
+    private void override_invert_impl(ItemStack i, int[] metas) {
+        if (i == null || metas == null) {
+            return;
+        }
+        HashSet<Integer> valid = new HashSet<Integer>();
+        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+        i.getItem().getSubItems(i.getItem(), null, stacks);
+        for (ItemStack s : stacks) {
+            if (s != null) {
+                valid.add(s.getItemDamage());
+            }
+        }
+        for (int m : metas) {
+            if (valid.contains(m)) {
+                valid.remove(m);
+            }
+        }
+        API.setItemListEntries(i.getItem(), NEIINpureConfig.buildStackList(i, valid));
+    }
+
     public void override_with_nbt(String modid, String name) {
         NEIINpureConfig.logger.debug("%s called. Params: %s, %s", "override_with_nbt", modid, name);
         for (String s : this.find(modid, name)) {
             this.override_with_nbt_impl(this.getStack(s));
         }
+    }
+
+    public void override_with_nbt(String domain) {
+        UniqueIDSettable id = getUniqueID(domain);
+        this.override_with_nbt(id.getModId(), id.getName());
     }
 
     private void override_with_nbt_impl(ItemStack i) {
